@@ -22,7 +22,10 @@ export function dim(text) {
 /** execute a command asynchronously */
 export function execAsync(cmd, args, options) {
   return new Promise((resolve, reject) => {
-    const child = spawn(cmd, args, options);
+    const child = spawn(cmd, args, {
+      ...options,
+      shell: options?.shell ?? process.platform === 'win32',
+    });
 
     if (!options?.silent) {
       child.stdout?.on('data', (data) => process.stdout.write(data));

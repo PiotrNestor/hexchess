@@ -1,4 +1,16 @@
+import fs from 'node:fs'
 import { copy, execAsync, read, resolve, write } from './utils.js'
+
+function resolveCliPath(...candidates) {
+  for (const candidate of candidates) {
+    const file = resolve(candidate)
+    if (fs.existsSync(file)) {
+      return file
+    }
+  }
+
+  throw new Error(`Unable to locate CLI script. Tried: ${candidates.join(', ')}`)
+}
 
 /** build js library for npm */
 export async function buildJs(options) {
@@ -9,12 +21,14 @@ export async function buildJs(options) {
   })
 
   // generate types
-  await execAsync('tsc', ['--project', './tsconfig.json', '--emitDeclarationOnly'], {
+  const tscPath = resolveCliPath('js/node_modules/typescript/bin/tsc', 'node_modules/typescript/bin/tsc')
+  await execAsync(process.execPath, [tscPath, '--project', './tsconfig.json', '--emitDeclarationOnly'], {
     cwd: 'js',
   })
 
   // build npm package
-  await execAsync('npx', ['rollup', '--config', 'rollup.config.ts', '--configPlugin', '@rollup/plugin-typescript'], {
+  const rollupPath = resolveCliPath('js/node_modules/rollup/dist/bin/rollup', 'node_modules/rollup/dist/bin/rollup')
+  await execAsync(process.execPath, [rollupPath, '--config', 'rollup.config.ts', '--configPlugin', '@rollup/plugin-typescript'], {
     cwd: 'js',
   })
 

@@ -6,6 +6,8 @@ layout: doc
 
 The game engine is designed for [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API), with a NPM package to facilitate communication with the worker. To get started, install [`@bedard/hexchess-engine`](https://www.npmjs.com/package/@bedard/hexchess-engine).
 
+The repository also includes a Python variant in `pyengine`, powered by [FastAPI](https://fastapi.tiangolo.com/). It keeps the same command interface (`hexchess/evaluate` and `hexchess/ping`) and execute payload shape.
+
 ```sh
 npm install @bedard/hexchess-engine
 ```

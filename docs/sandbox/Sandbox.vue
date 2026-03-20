@@ -5,7 +5,19 @@
       name="fen"
       select-all />
 
-    <div class="flex gap-x-6 mt-4">
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4">
+      <label class="flex items-center gap-x-2 text-sm tracking-wide">
+        Engine
+
+        <select
+          v-model="engineKind"
+          class="border rounded-md px-2 py-1 bg-transparent"
+        >
+          <option value="rust-worker">Rust (WASM Worker)</option>
+          <option value="python-api">Python (FastAPI)</option>
+        </select>
+      </label>
+
       <button
         class="flex gap-x-1.5 items-center text-sm tracking-wide hover:text-(--vp-code-color)!"
         @click="onResetClick">
@@ -53,7 +65,7 @@
       <EvaluationResult
         class="absolute top-2"
         v-model:depth="depth"
-        :evaluation />
+        :evaluation="evaluation" />
     </div>
 
     <Hexboard
@@ -61,9 +73,9 @@
       active
       autoselect
       ignore-turn
-      :flipped
-      :hexchess
-      :highlight
+      :flipped="flipped"
+      :hexchess="hexchess"
+      :highlight="highlight"
       :playing="true"
       @move="onMove"
       @click-position="onClickPosition">
@@ -90,16 +102,20 @@
 import { computed, onMounted, ref } from 'vue'
 import { Hexboard } from '@bedard/hexboard'
 import { Hexchess, San } from '../../js/src'
-import { useEngine } from './use-engine'
+import { useEngine, type SearchResult } from './use-engine'
 import { useEventListener } from '@vueuse/core'
+// @ts-ignore Vue SFC default export is provided by Vue tooling
 import EvaluationResult from './EvaluationResult.vue'
+// @ts-ignore Vue SFC default export is provided by Vue tooling
 import Input from '../components/Input.vue'
+// @ts-ignore Vue SFC default export is provided by Vue tooling
 import PromotionPiece from '../components/PromotionPiece.vue'
+// @ts-ignore Vue SFC default export is provided by Vue tooling
 import Spinner from '../components/Spinner.vue'
-import type { EvaluateResponse } from '../../engine/index'
+// @ts-ignore Vue SFC default export is provided by Vue tooling
 import X from '../components/icons/X.vue'
 
-const { evaluate, loading } = useEngine()
+const { engineKind, evaluate, loading } = useEngine()
 
 //
 // state
@@ -115,7 +131,7 @@ const hexchess = ref(Hexchess.init())
 
 const selected = ref<number | null>(null)
 
-const evaluation = ref<EvaluateResponse | null>(null)
+const evaluation = ref<SearchResult | null>(null)
 
 //
 // computed
@@ -207,6 +223,7 @@ function onClickPosition(position: number) {
 }
 
 function onResetClick() {
+  evaluation.value = null
   hexchess.value = Hexchess.init()
   highlight.value = []
 }

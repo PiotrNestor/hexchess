@@ -6,6 +6,9 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   title: 'Hexchess',
   description: 'The brain of hexchess.club',
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/hexchess.svg' }],
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

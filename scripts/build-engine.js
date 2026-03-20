@@ -15,14 +15,14 @@ export async function buildEngine(options) {
   `).slice(0, 7)
 
   const pkg = resolve('./engine/pkg')
-  const tsc = resolve('./node_modules/.bin/tsc')
-  const wasmPack = resolve('./node_modules/.bin/wasm-pack')
+  const tsc = resolve('./node_modules/typescript/bin/tsc')
+  const wasmPack = resolve('./node_modules/wasm-pack/run.js')
   const workerPath = resolve('docs/public/engine/worker.js')
 
   // rebuild wasm package
   rmSync(pkg, { recursive: true, force: true })
 
-  await execAsync(wasmPack, ['build', '--release', '--target', 'web'], { cwd: 'engine' })
+  await execAsync(process.execPath, [wasmPack, 'build', '--release', '--target', 'web'], { cwd: 'engine' })
 
   // remove unnecessary files
   for (const file of [
@@ -50,5 +50,5 @@ export async function buildEngine(options) {
   copy('README.md', resolve(pkg, 'README.md'))
 
   // build library interface and copy a local version for docs to use
-  await execAsync(tsc, ['--project', resolve('engine/tsconfig.json')], { cwd: 'engine' })
+  await execAsync(process.execPath, [tsc, '--project', resolve('engine/tsconfig.json')], { cwd: 'engine' })
 }
