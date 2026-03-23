@@ -1118,6 +1118,11 @@ def move_key(san: San) -> tuple[int, int, PromotionPiece | None]:
     return (san.from_index, san.to_index, san.promotion)
 
 
+TranspositionMove = tuple[int, int, PromotionPiece | None]
+TranspositionEntry = tuple[int, str, float, TranspositionMove | None]
+PVS_WINDOW = 1e-9
+
+
 def is_tactical_move(hexchess: Hexchess, san: San) -> bool:
     moved_piece = hexchess.board[san.from_index]
     if moved_piece is None:
@@ -1177,9 +1182,13 @@ def optimize_for_branch_pruning(
     depth: int,
     killer_moves: dict[int, tuple[tuple[int, int, PromotionPiece | None], ...]],
     history_table: dict[tuple[int, int, PromotionPiece | None], int],
+    tt_move: TranspositionMove | None = None,
 ) -> None:
     sans.sort(
-        key=lambda san: move_order_score(hexchess, san, depth, killer_moves, history_table),
+        key=lambda san: (
+            move_key(san) == tt_move,
+            move_order_score(hexchess, san, depth, killer_moves, history_table),
+        ),
         reverse=True,
     )
 
@@ -1192,6 +1201,25 @@ def record_killer_move(
     key = move_key(san)
     current = tuple(existing for existing in killer_moves.get(depth, ()) if existing != key)
     killer_moves[depth] = (key, *current)[:2]
+
+
+def should_reduce_late_move(
+    hexchess: Hexchess,
+    san: San,
+    depth: int,
+    move_index: int,
+    in_check: bool,
+) -> bool:
+    if depth < 3:
+        return False
+
+    if move_index < 3:
+        return False
+
+    if in_check:
+        return False
+
+    return not is_tactical_move(hexchess, san)
 
 
 def quiescence(
@@ -1237,7 +1265,7 @@ def quiescence(
 
 
 def negamax(
-    table: dict[int, tuple[int, str, float]],
+    table: dict[int, TranspositionEntry],
     hexchess: Hexchess,
     depth: int,
     ply: int,
@@ -1251,9 +1279,10 @@ def negamax(
     alpha_orig = alpha
     key = hexchess.position_key()
     entry = table.get(key)
+    tt_move = entry[3] if entry is not None else None
 
     if entry is not None:
-        entry_depth, flag, value = entry
+        entry_depth, flag, value, _ = entry
         if entry_depth >= depth:
             if flag == 'exact':
                 return value
@@ -1273,30 +1302,71 @@ def negamax(
     if depth == 0:
         return quiescence(hexchess, alpha, beta, evaluations, options)
 
-    optimize_for_branch_pruning(hexchess, current_moves, ply, killer_moves, history_table)
+    in_check = hexchess.is_check()
+    optimize_for_branch_pruning(hexchess, current_moves, ply, killer_moves, history_table, tt_move)
     value = float('-inf')
+    best_move: San | None = None
 
-    for san in current_moves:
+    for move_index, san in enumerate(current_moves):
         undo = hexchess.make_move_unsafe(san)
-        child_value = -negamax(
-            table,
-            hexchess,
-            depth - 1,
-            ply + 1,
-            -beta,
-            -alpha,
-            evaluations,
-            options,
-            killer_moves,
-            history_table,
-        )
+
+        reduced_depth = depth - 1
+        if should_reduce_late_move(hexchess, san, depth, move_index, in_check):
+            reduced_depth = max(0, depth - 2)
+
+        if move_index == 0:
+            child_value = -negamax(
+                table,
+                hexchess,
+                depth - 1,
+                ply + 1,
+                -beta,
+                -alpha,
+                evaluations,
+                options,
+                killer_moves,
+                history_table,
+            )
+        else:
+            child_value = -negamax(
+                table,
+                hexchess,
+                reduced_depth,
+                ply + 1,
+                -alpha - PVS_WINDOW,
+                -alpha,
+                evaluations,
+                options,
+                killer_moves,
+                history_table,
+            )
+
+            if alpha < child_value < beta:
+                child_value = -negamax(
+                    table,
+                    hexchess,
+                    depth - 1,
+                    ply + 1,
+                    -beta,
+                    -alpha,
+                    evaluations,
+                    options,
+                    killer_moves,
+                    history_table,
+                )
+
         hexchess.unmake_move(undo)
-        value = max(value, child_value)
+
+        if child_value > value:
+            value = child_value
+            best_move = san
+
         alpha = max(alpha, value)
         if alpha >= beta:
             if not is_tactical_move(hexchess, san):
                 record_killer_move(killer_moves, ply, san)
                 history_table[move_key(san)] = history_table.get(move_key(san), 0) + depth * depth
+            best_move = san
             break
 
     flag = 'exact'
@@ -1304,7 +1374,7 @@ def negamax(
         flag = 'upper'
     elif value >= beta:
         flag = 'lower'
-    table[key] = (depth, flag, value)
+    table[key] = (depth, flag, value, move_key(best_move) if best_move is not None else None)
     return value
 
 
@@ -1313,7 +1383,7 @@ def search(hexchess: Hexchess, depth: int, options: EvalOptions | None = None) -
         error(f'invalid depth: {depth}')
 
     evaluation_options = options or EvalOptions()
-    table: dict[int, tuple[int, str, float]] = {}
+    table: dict[int, TranspositionEntry] = {}
     killer_moves: dict[int, tuple[tuple[int, int, PromotionPiece | None], ...]] = {}
     history_table: dict[tuple[int, int, PromotionPiece | None], int] = {}
     evaluations = [0]
@@ -1336,6 +1406,7 @@ def search(hexchess: Hexchess, depth: int, options: EvalOptions | None = None) -
             killer_moves=killer_moves,
             history_table=history_table,
         )
+
         hexchess.unmake_move(undo)
         sans.append({'san': str(san), 'score': score})
 
