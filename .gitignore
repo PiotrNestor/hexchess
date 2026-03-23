@@ -1,5 +1,6 @@
 .DS_Store
 .php-cs-fixer.cache
+**/__pycache__/
 **/*.rs.bk
 bin
 coverage
