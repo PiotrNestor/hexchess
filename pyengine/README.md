@@ -1,6 +1,6 @@
 # pyengine
 
-Python API wrapper for the existing hexchess Rust/WASM engine.
+Native Python implementation of the hexchess search engine, exposed through the same HTTP contract used by the worker-based engine.
 
 ## Install
 
@@ -15,6 +15,11 @@ pip install -r pyengine/requirements.txt
 ```bash
 uvicorn pyengine.main:app --reload --host 127.0.0.1 --port 8000
 ```
+
+## Notes
+
+- The engine logic now runs directly in Python. Node.js is no longer required for evaluation requests.
+- The HTTP API keeps the same `command` / `options` / `response` envelope used by the existing worker integration.
 
 ## API
 

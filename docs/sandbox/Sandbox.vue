@@ -18,6 +18,13 @@
         </select>
       </label>
 
+      <div
+        v-if="engineKind === 'python-api'"
+        class="text-xs tracking-wide opacity-75"
+      >
+          Python engine is currently much slower at higher depths.
+      </div>
+
       <button
         class="flex gap-x-1.5 items-center text-sm tracking-wide hover:text-(--vp-code-color)!"
         @click="onResetClick">

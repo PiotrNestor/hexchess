@@ -1,20 +1,12 @@
 from __future__ import annotations
 
-import asyncio
-import json
-import os
-import shutil
-import subprocess
-from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 
-
-ROOT_DIR = Path(__file__).resolve().parent.parent
-BRIDGE_PATH = Path(__file__).resolve().parent / "engine_bridge.mjs"
+from pyengine.native_engine import NativeEngineError, execute_command
 
 
 class EngineError(BaseModel):
@@ -60,59 +52,6 @@ app.add_middleware(
 )
 
 
-async def run_bridge(payload: ExecuteRequest) -> dict[str, Any]:
-    node_executable = shutil.which("node")
-
-    if not node_executable:
-        raise HTTPException(
-            status_code=500,
-            detail=(
-                "Unable to start bridge: 'node' executable was not found in PATH. "
-                "Ensure Node.js is installed and available in the environment running uvicorn."
-            ),
-        )
-
-    def run_node_bridge() -> subprocess.CompletedProcess[str]:
-        return subprocess.run(
-            [node_executable, str(BRIDGE_PATH)],
-            input=json.dumps(payload.model_dump()),
-            capture_output=True,
-            text=True,
-            cwd=str(ROOT_DIR),
-            check=False,
-            env=os.environ.copy(),
-        )
-
-    try:
-        process = await asyncio.to_thread(run_node_bridge)
-    except OSError as exc:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Unable to execute bridge process: {exc}",
-        ) from exc
-
-    output = process.stdout.strip()
-    err_output = process.stderr.strip()
-
-    if not output:
-        raise HTTPException(status_code=500, detail=f"pyengine bridge returned empty output: {err_output}")
-
-    try:
-        data = json.loads(output)
-    except json.JSONDecodeError as exc:
-        raise HTTPException(status_code=500, detail=f"pyengine bridge returned invalid JSON: {output}") from exc
-
-    if process.returncode != 0:
-        message = (
-            data.get("error", {}).get("message")
-            if isinstance(data, dict)
-            else None
-        ) or err_output or "Unknown pyengine bridge error"
-        raise HTTPException(status_code=500, detail=message)
-
-    return data
-
-
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
@@ -120,30 +59,29 @@ async def health() -> dict[str, str]:
 
 @app.post("/execute", response_model=ExecuteResponse)
 async def execute(payload: ExecuteRequest) -> ExecuteResponse:
-    data = await run_bridge(payload)
-
-    if "error" in data:
+    try:
+        response = execute_command(payload.command, payload.options)
+    except NativeEngineError as exc:
         error = ExecuteFailure(
             id=payload.id,
             options=payload.options,
-            error=EngineError(message=str(data["error"].get("message", "Unknown engine error"))),
+            error=EngineError(message=str(exc)),
         )
-        raise HTTPException(status_code=400, detail=error.model_dump())
+        raise HTTPException(status_code=400, detail=error.model_dump()) from exc
 
     return ExecuteResponse(
         id=payload.id,
-        command=str(data.get("command", payload.command)),
-        options=dict(data.get("options", payload.options)),
-        response=dict(data.get("response", {})),
+        command=payload.command,
+        options=payload.options,
+        response=response,
     )
 
 
 @app.get("/hexchess/ping")
 async def ping() -> ExecuteResponse:
-    payload = ExecuteRequest(command="hexchess/ping", options={})
-    data = await run_bridge(payload)
+    response = execute_command("hexchess/ping", {})
     return ExecuteResponse(
         command="hexchess/ping",
         options={},
-        response=dict(data.get("response", {})),
+        response=response,
     )
