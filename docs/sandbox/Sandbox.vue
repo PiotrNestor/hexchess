@@ -219,7 +219,7 @@
               historyIndex === row.white.index && 'bg-(--vp-c-bg-soft)',
             ]"
             @click="jumpToHistory(row.white.index)">
-            {{ row.white.san }}<span v-if="row.white.evaluations !== null || row.white.duration !== null" class="opacity-70"> ({{ row.white.evaluations?.toLocaleString() ?? 0 }} evals, {{ row.white.duration?.toFixed(0) ?? 0 }}ms)</span>
+            <span v-if="moveSourceLabel(row.white.source)" class="opacity-70">[{{ moveSourceLabel(row.white.source) }}]</span> {{ row.white.san }}<span v-if="row.white.evaluations !== null || row.white.duration !== null" class="opacity-70"> ({{ row.white.evaluations?.toLocaleString() ?? 0 }} evals, {{ row.white.duration?.toFixed(0) ?? 0 }}ms)</span>
           </button>
           <div v-else />
 
@@ -230,7 +230,7 @@
               historyIndex === row.black.index && 'bg-(--vp-c-bg-soft)',
             ]"
             @click="jumpToHistory(row.black.index)">
-            {{ row.black.san }}<span v-if="row.black.evaluations !== null || row.black.duration !== null" class="opacity-70"> ({{ row.black.evaluations?.toLocaleString() ?? 0 }} evals, {{ row.black.duration?.toFixed(0) ?? 0 }}ms)</span>
+            <span v-if="moveSourceLabel(row.black.source)" class="opacity-70">[{{ moveSourceLabel(row.black.source) }}]</span> {{ row.black.san }}<span v-if="row.black.evaluations !== null || row.black.duration !== null" class="opacity-70"> ({{ row.black.evaluations?.toLocaleString() ?? 0 }} evals, {{ row.black.duration?.toFixed(0) ?? 0 }}ms)</span>
           </button>
           <div v-else />
         </div>
@@ -264,8 +264,11 @@ import Spinner from '../components/Spinner.vue'
 // @ts-ignore Vue SFC default export is provided by Vue tooling
 import X from '../components/icons/X.vue'
 
+type MoveSource = EngineKind | 'manual'
+
 interface SavedGameMove {
   san: string
+  source?: MoveSource | null
   evaluations?: number | null
   duration?: number | null
 }
@@ -275,6 +278,15 @@ interface SavedGameFile {
   startFen: string
   historyIndex: number
   moves: SavedGameMove[]
+}
+
+interface RestoreHistoryResult {
+  invalidMove: {
+    index: number
+    san: string
+    message: string
+  } | null
+  loadedMoves: number
 }
 
 const { engineKind, evaluate, evaluateWith, loading } = useEngine()
@@ -311,6 +323,7 @@ const moveHistory = ref<Array<{
   to: number
   beforeFen: string
   afterFen: string
+  source: MoveSource | null
   evaluations: number | null
   duration: number | null
 }>>([])
@@ -336,32 +349,48 @@ const fen = computed({
 const matchBlackEngine = computed<EngineKind>(() => matchWhiteEngine.value === 'rust-worker' ? 'python-api' : 'rust-worker')
 
 const groupedMoves = computed(() => {
+  const start = Hexchess.parse(historyStartFen.value)
   const result: Array<{
     number: number
-    white: { index: number, san: string, evaluations: number | null, duration: number | null } | null
-    black: { index: number, san: string, evaluations: number | null, duration: number | null } | null
+    white: { index: number, san: string, source: MoveSource | null, evaluations: number | null, duration: number | null } | null
+    black: { index: number, san: string, source: MoveSource | null, evaluations: number | null, duration: number | null } | null
   }> = []
 
-  for (let i = 0; i < moveHistory.value.length; i += 2) {
-    result.push({
-      number: Math.floor(i / 2) + 1,
-      white: moveHistory.value[i]
-        ? {
-          index: i + 1,
-          san: moveHistory.value[i].san,
-          evaluations: moveHistory.value[i].evaluations,
-          duration: moveHistory.value[i].duration,
-        }
-        : null,
-      black: moveHistory.value[i + 1]
-        ? {
-          index: i + 2,
-          san: moveHistory.value[i + 1].san,
-          evaluations: moveHistory.value[i + 1].evaluations,
-          duration: moveHistory.value[i + 1].duration,
-        }
-        : null,
-    })
+  let nextTurn: 'w' | 'b' = start.turn
+  let moveNumber = start.fullmove
+  let currentRow: {
+    number: number
+    white: { index: number, san: string, source: MoveSource | null, evaluations: number | null, duration: number | null } | null
+    black: { index: number, san: string, source: MoveSource | null, evaluations: number | null, duration: number | null } | null
+  } | null = null
+
+  for (let i = 0; i < moveHistory.value.length; i += 1) {
+    const entry = {
+      index: i + 1,
+      san: moveHistory.value[i].san,
+      source: moveHistory.value[i].source,
+      evaluations: moveHistory.value[i].evaluations,
+      duration: moveHistory.value[i].duration,
+    }
+
+    if (currentRow === null || currentRow.number !== moveNumber) {
+      currentRow = {
+        number: moveNumber,
+        white: null,
+        black: null,
+      }
+      result.push(currentRow)
+    }
+
+    if (nextTurn === 'w') {
+      currentRow.white = entry
+      nextTurn = 'b'
+    } else {
+      currentRow.black = entry
+      nextTurn = 'w'
+      moveNumber += 1
+      currentRow = null
+    }
   }
 
   return result
@@ -412,26 +441,41 @@ function replacePosition(next: Hexchess) {
   highlight.value = []
 }
 
-function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryIndex: number) {
+function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryIndex: number): RestoreHistoryResult {
   let current = Hexchess.parse(startFen)
-  const nextHistory = moves.map((move) => {
-    const san = San.from(move.san)
-    const beforeFen = current.toString()
-    const next = current.clone()
+  const nextHistory: typeof moveHistory.value = []
+  let invalidMove: RestoreHistoryResult['invalidMove'] = null
 
-    next.applyMove(san)
-    current = next
+  for (let index = 0; index < moves.length; index += 1) {
+    const move = moves[index]
 
-    return {
-      san: san.toString(),
-      from: san.from,
-      to: san.to,
-      beforeFen,
-      afterFen: next.toString(),
-      evaluations: move.evaluations ?? null,
-      duration: move.duration ?? null,
+    try {
+      const san = San.from(move.san)
+      const beforeFen = current.toString()
+      const next = current.clone()
+
+      next.applyMove(san)
+      current = next
+
+      nextHistory.push({
+        san: san.toString(),
+        from: san.from,
+        to: san.to,
+        beforeFen,
+        afterFen: next.toString(),
+        source: move.source ?? null,
+        evaluations: move.evaluations ?? null,
+        duration: move.duration ?? null,
+      })
+    } catch (err) {
+      invalidMove = {
+        index: index + 1,
+        san: move.san,
+        message: err instanceof Error ? err.message : String(err),
+      }
+      break
     }
-  })
+  }
 
   const boundedIndex = Math.max(0, Math.min(nextHistoryIndex, nextHistory.length))
   const entry = boundedIndex > 0 ? nextHistory[boundedIndex - 1] : null
@@ -444,6 +488,11 @@ function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryInd
   hexchess.value = Hexchess.parse(entry?.afterFen ?? startFen)
   highlight.value = entry ? [entry.from, entry.to] : []
   selected.value = null
+
+  return {
+    invalidMove,
+    loadedMoves: nextHistory.length,
+  }
 }
 
 function saveTextFile(fileName: string, content: string) {
@@ -465,12 +514,12 @@ function formatExportTimestamp() {
   return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
 }
 
-function applyMoveToHistory(san: San, meta: { evaluations?: number | null, duration?: number | null } = {}) {
+function applyMoveToHistory(san: San, meta: { source?: MoveSource | null, evaluations?: number | null, duration?: number | null } = {}) {
   const current = hexchess.value.clone()
   const beforeFen = current.toString()
   const next = current.clone()
 
-  next.applyMoveUnsafe(san)
+  next.applyMove(san)
 
   if (historyIndex.value < moveHistory.value.length) {
     moveHistory.value = moveHistory.value.slice(0, historyIndex.value)
@@ -484,6 +533,7 @@ function applyMoveToHistory(san: San, meta: { evaluations?: number | null, durat
       to: san.to,
       beforeFen,
       afterFen: next.toString(),
+      source: meta.source ?? null,
       evaluations: meta.evaluations ?? null,
       duration: meta.duration ?? null,
     },
@@ -531,6 +581,22 @@ function engineLabel(kind: EngineKind) {
   return kind === 'python-api' ? 'Python' : 'Rust'
 }
 
+function moveSourceLabel(source: MoveSource | null | undefined) {
+  if (source === 'python-api') {
+    return 'Py'
+  }
+
+  if (source === 'rust-worker') {
+    return 'Rust'
+  }
+
+  if (source === 'manual') {
+    return 'Manual'
+  }
+
+  return null
+}
+
 function stopMatch() {
   matchRunning.value = false
   matchToken += 1
@@ -546,6 +612,18 @@ function onFlipClick() {
   flipped.value = !flipped.value
 }
 
+function reportIllegalEngineMove(kind: EngineKind, san: San) {
+  const message = `${engineLabel(kind)} engine returned illegal move ${san.toString()} for position ${hexchess.value.toString()}`
+
+  console.error('[hexchess-sandbox] illegal engine move', {
+    kind,
+    move: san.toString(),
+    position: hexchess.value.toString(),
+  })
+
+  window.alert(message)
+}
+
 function onSaveGameClick() {
   const payload: SavedGameFile = {
     version: 1,
@@ -553,6 +631,7 @@ function onSaveGameClick() {
     historyIndex: historyIndex.value,
     moves: moveHistory.value.map((move) => ({
       san: move.san,
+      source: move.source,
       evaluations: move.evaluations,
       duration: move.duration,
     })),
@@ -581,7 +660,18 @@ async function onGameFileChange(evt: Event) {
       throw new Error('Invalid game file format')
     }
 
-    restoreHistory(parsed.startFen, parsed.moves, typeof parsed.historyIndex === 'number' ? parsed.historyIndex : parsed.moves.length)
+    const result = restoreHistory(
+      parsed.startFen,
+      parsed.moves,
+      typeof parsed.historyIndex === 'number' ? parsed.historyIndex : parsed.moves.length,
+    )
+
+    if (result.invalidMove) {
+      console.warn('[hexchess-sandbox] loaded partial game history', result)
+      window.alert(
+        `Loaded ${result.loadedMoves} moves. Stopped at invalid saved move ${result.invalidMove.index} (${result.invalidMove.san}).`,
+      )
+    }
   } catch (err) {
     console.error('[hexchess-sandbox] failed to load moves', err)
     window.alert('Failed to load game moves file.')
@@ -595,10 +685,11 @@ async function onGameFileChange(evt: Event) {
 function onMove(san: San) {
   stopMatch()
   evaluation.value = null
-  applyMoveToHistory(san)
+  applyMoveToHistory(san, { source: 'manual' })
 }
 
 async function onPlayClick() {
+  const kind = engineKind.value
   const data = await evaluate({
     depth: depth.value,
     position: hexchess.value.toString(),
@@ -616,10 +707,12 @@ async function onPlayClick() {
 
     try {
       applyMoveToHistory(san, {
+        source: kind,
         evaluations: data.response.evaluations,
         duration: data.response.duration,
       })
     } catch {
+      reportIllegalEngineMove(kind, san)
       return
     }
   }
@@ -656,11 +749,13 @@ async function playBestMove(kind: EngineKind) {
 
   try {
     applyMoveToHistory(san, {
+      source: kind,
       evaluations: data.response.evaluations,
       duration: data.response.duration,
     })
     return true
   } catch {
+    reportIllegalEngineMove(kind, san)
     return false
   }
 }
