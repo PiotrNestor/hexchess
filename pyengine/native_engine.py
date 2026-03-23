@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import time
+from random import Random
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
@@ -212,6 +213,13 @@ for source in range(91):
         if second is not None:
             _knight_attack_sources[second].add(source)
 KNIGHT_ATTACK_SOURCES = tuple(tuple(sorted(sources)) for sources in _knight_attack_sources)
+_zobrist_random = Random(0)
+ZOBRIST_PIECES = tuple(
+    tuple(_zobrist_random.getrandbits(64) for _ in range(91))
+    for _ in range(12)
+)
+ZOBRIST_TURN = _zobrist_random.getrandbits(64)
+ZOBRIST_EP = tuple(_zobrist_random.getrandbits(64) for _ in range(91))
 WHITE_ADVANCEMENT_BONUS = {
     POSITION_TO_INDEX[name]: scalar * scalar * 2.0
     for name, scalar in WHITE_ADVANCEMENT_SCALARS.items()
@@ -220,10 +228,64 @@ BLACK_ADVANCEMENT_BONUS = {
     POSITION_TO_INDEX[name]: scalar * scalar * 2.0
     for name, scalar in BLACK_ADVANCEMENT_SCALARS.items()
 }
+PIECE_VALUES = {
+    'p': 10,
+    'n': 30,
+    'b': 30,
+    'r': 50,
+    'q': 90,
+    'k': 0,
+}
+PAWN_ATTACK_PENALTY = {
+    'n': 8.0,
+    'b': 8.0,
+    'r': 12.0,
+    'q': 20.0,
+}
+PROMOTION_ORDER_BONUS = {
+    'q': 1000,
+    'r': 800,
+    'b': 700,
+    'n': 700,
+}
+PIECE_TO_ZOBRIST_INDEX = {
+    'p': 0,
+    'r': 1,
+    'n': 2,
+    'b': 3,
+    'q': 4,
+    'k': 5,
+    'P': 6,
+    'R': 7,
+    'N': 8,
+    'B': 9,
+    'Q': 10,
+    'K': 11,
+}
 
 
 def piece_color(piece: Piece) -> Color:
     return 'b' if piece.islower() else 'w'
+
+
+def piece_hash(piece: Piece, square: int) -> int:
+    return ZOBRIST_PIECES[PIECE_TO_ZOBRIST_INDEX[piece]][square]
+
+
+def compute_zobrist_hash(board: Board, turn: Color, ep: int | None) -> int:
+    value = 0
+
+    for square, piece in enumerate(board):
+        if piece is not None:
+            value ^= piece_hash(piece, square)
+
+    if turn == 'b':
+        value ^= ZOBRIST_TURN
+
+    if ep is not None:
+        value ^= ZOBRIST_EP[ep]
+
+    return value
 
 
 def index(position: str) -> int:
@@ -338,10 +400,27 @@ class MoveUndo:
     previous_fullmove: int
     previous_white_king: int | None
     previous_black_king: int | None
+    previous_hash: int
 
 
 def create_board() -> Board:
     return [None] * 91
+
+
+def compute_piece_lists(board: Board) -> tuple[set[int], set[int]]:
+    white_pieces: set[int] = set()
+    black_pieces: set[int] = set()
+
+    for square, piece in enumerate(board):
+        if piece is None:
+            continue
+
+        if piece.isupper():
+            white_pieces.add(square)
+        else:
+            black_pieces.add(square)
+
+    return white_pieces, black_pieces
 
 
 def parse_board(source: str) -> Board:
@@ -442,6 +521,9 @@ class Hexchess:
     fullmove: int
     white_king: int | None
     black_king: int | None
+    white_pieces: set[int]
+    black_pieces: set[int]
+    zobrist_hash: int
 
     def __init__(self, fen: str = EMPTY_POSITION) -> None:
         if not fen:
@@ -460,6 +542,7 @@ class Hexchess:
         self.board = parse_board(board_source)
         self.white_king = self.board.index('K') if 'K' in self.board else None
         self.black_king = self.board.index('k') if 'k' in self.board else None
+        self.white_pieces, self.black_pieces = compute_piece_lists(self.board)
 
         if turn not in {'w', 'b'}:
             error(f'invalid turn color: {turn}')
@@ -490,6 +573,7 @@ class Hexchess:
         if parsed_fullmove == 0:
             error(f'invalid fullmove: {fullmove}')
         self.fullmove = parsed_fullmove
+        self.zobrist_hash = compute_zobrist_hash(self.board, self.turn, self.ep)
 
     @classmethod
     def from_state(
@@ -501,6 +585,9 @@ class Hexchess:
         fullmove: int,
         white_king: int | None,
         black_king: int | None,
+        white_pieces: set[int],
+        black_pieces: set[int],
+        zobrist_hash: int,
     ) -> 'Hexchess':
         hexchess = cls.__new__(cls)
         hexchess.board = board
@@ -510,6 +597,9 @@ class Hexchess:
         hexchess.fullmove = fullmove
         hexchess.white_king = white_king
         hexchess.black_king = black_king
+        hexchess.white_pieces = white_pieces
+        hexchess.black_pieces = black_pieces
+        hexchess.zobrist_hash = zobrist_hash
         return hexchess
 
     @classmethod
@@ -538,6 +628,11 @@ class Hexchess:
         self.turn = clone.turn
         self.halfmove = clone.halfmove
         self.fullmove = clone.fullmove
+        self.white_king = clone.white_king
+        self.black_king = clone.black_king
+        self.white_pieces = clone.white_pieces.copy()
+        self.black_pieces = clone.black_pieces.copy()
+        self.zobrist_hash = clone.zobrist_hash
         return self
 
     def clone(self) -> 'Hexchess':
@@ -549,10 +644,13 @@ class Hexchess:
             self.fullmove,
             self.white_king,
             self.black_king,
+            self.white_pieces.copy(),
+            self.black_pieces.copy(),
+            self.zobrist_hash,
         )
 
-    def position_key(self) -> tuple[tuple[Piece | None, ...], int | None, Color, int, int]:
-        return (tuple(self.board), self.ep, self.turn, self.halfmove, self.fullmove)
+    def position_key(self) -> int:
+        return self.zobrist_hash
 
     def find_king(self, color: Color) -> int | None:
         return self.black_king if color == 'b' else self.white_king
@@ -561,7 +659,7 @@ class Hexchess:
         return self.board[index(position)]
 
     def get_color(self, color: Color) -> list[int]:
-        return [board_index for board_index, piece in enumerate(self.board) if piece and piece_color(piece) == color]
+        return sorted(self.white_pieces if color == 'w' else self.black_pieces)
 
     def current_moves(self) -> list[San]:
         result: list[San] = []
@@ -652,6 +750,17 @@ class Hexchess:
 
         return False
 
+    def is_square_attacked_by_pawn(self, square: int, by_color: Color) -> bool:
+        pawn_piece = 'P' if by_color == 'w' else 'p'
+        pawn_directions = (reverse_direction(10), reverse_direction(2)) if by_color == 'w' else (reverse_direction(4), reverse_direction(8))
+
+        for direction in pawn_directions:
+            source = step(square, direction)
+            if source is not None and self.board[source] == pawn_piece:
+                return True
+
+        return False
+
     def moves_from(self, from_value: int | str) -> list[San]:
         from_index = index(from_value) if isinstance(from_value, str) else from_value
         piece = self.board[from_index]
@@ -706,6 +815,9 @@ class Hexchess:
         if piece is None:
             error(f'cannot apply move from empty position: {move.from_index}')
 
+        moving_piece_list = self.white_pieces if piece.isupper() else self.black_pieces
+        enemy_piece_list = self.black_pieces if piece.isupper() else self.white_pieces
+
         target_piece = self.board[move.to_index]
         undo = MoveUndo(
             move=move,
@@ -718,7 +830,11 @@ class Hexchess:
             previous_fullmove=self.fullmove,
             previous_white_king=self.white_king,
             previous_black_king=self.black_king,
+            previous_hash=self.zobrist_hash,
         )
+
+        if self.ep is not None:
+            self.zobrist_hash ^= ZOBRIST_EP[self.ep]
 
         if target_piece is not None or piece.lower() == 'p':
             self.halfmove = 0
@@ -732,7 +848,11 @@ class Hexchess:
         else:
             self.turn = 'b'
 
+        self.zobrist_hash ^= ZOBRIST_TURN
+        self.zobrist_hash ^= piece_hash(piece, move.from_index)
+
         self.board[move.from_index] = None
+        moving_piece_list.remove(move.from_index)
         if move.promotion is None:
             self.board[move.to_index] = piece
         elif color == 'b':
@@ -743,12 +863,25 @@ class Hexchess:
         captured_piece = target_piece
         captured_index: int | None = None
 
+        if target_piece is not None:
+            self.zobrist_hash ^= piece_hash(target_piece, move.to_index)
+            enemy_piece_list.remove(move.to_index)
+
         if move.to_index == undo.previous_ep and target_piece is None:
             captured = step(move.to_index, 0) if piece == 'p' else step(move.to_index, 6) if piece == 'P' else None
             if captured is not None:
                 captured_index = captured
                 captured_piece = self.board[captured]
+                if captured_piece is not None:
+                    self.zobrist_hash ^= piece_hash(captured_piece, captured)
+                    enemy_piece_list.remove(captured)
                 self.board[captured] = None
+
+        placed_piece = self.board[move.to_index]
+        if placed_piece is None:
+            error('failed to apply move: destination piece missing')
+        moving_piece_list.add(move.to_index)
+        self.zobrist_hash ^= piece_hash(placed_piece, move.to_index)
 
         if piece == 'K':
             self.white_king = move.to_index
@@ -767,6 +900,9 @@ class Hexchess:
         else:
             self.ep = None
 
+        if self.ep is not None:
+            self.zobrist_hash ^= ZOBRIST_EP[self.ep]
+
         return MoveUndo(
             move=undo.move,
             moved_piece=undo.moved_piece,
@@ -778,6 +914,7 @@ class Hexchess:
             previous_fullmove=undo.previous_fullmove,
             previous_white_king=undo.previous_white_king,
             previous_black_king=undo.previous_black_king,
+            previous_hash=undo.previous_hash,
         )
 
     def unmake_move(self, undo: MoveUndo) -> None:
@@ -787,12 +924,23 @@ class Hexchess:
         self.fullmove = undo.previous_fullmove
         self.white_king = undo.previous_white_king
         self.black_king = undo.previous_black_king
+        self.zobrist_hash = undo.previous_hash
+
+        moving_piece_list = self.white_pieces if undo.moved_piece.isupper() else self.black_pieces
+        enemy_piece_list = self.black_pieces if undo.moved_piece.isupper() else self.white_pieces
 
         self.board[undo.move.from_index] = undo.moved_piece
         self.board[undo.move.to_index] = None if undo.captured_index is not None else undo.captured_piece
+        moving_piece_list.remove(undo.move.to_index)
+        moving_piece_list.add(undo.move.from_index)
+
+        if undo.captured_index is None and undo.captured_piece is not None:
+            enemy_piece_list.add(undo.move.to_index)
 
         if undo.captured_index is not None:
             self.board[undo.captured_index] = undo.captured_piece
+            if undo.captured_piece is not None:
+                enemy_piece_list.add(undo.captured_index)
 
     def to_string(self) -> str:
         en_passant = '-' if self.ep is None else POSITIONS[self.ep]
@@ -949,6 +1097,10 @@ def score_material(hexchess: Hexchess, options: EvalOptions) -> float:
         else:
             score += color_sign * options.king_value
 
+        pawn_attack_penalty = PAWN_ATTACK_PENALTY.get(lower)
+        if pawn_attack_penalty is not None and hexchess.is_square_attacked_by_pawn(board_index, other_color(piece_color(piece))):
+            score -= color_sign * pawn_attack_penalty
+
     return score
 
 
@@ -957,18 +1109,144 @@ def evaluate(hexchess: Hexchess, options: EvalOptions | None = None) -> float:
     return score_material(hexchess, evaluation_options)
 
 
-def optimize_for_branch_pruning(_hexchess: Hexchess, sans: list[San]) -> None:
-    sans.sort(key=lambda _: 0, reverse=True)
+def static_eval_for_turn(hexchess: Hexchess, options: EvalOptions) -> float:
+    score = evaluate(hexchess, options)
+    return score if hexchess.turn == 'w' else -score
 
 
-def negamax(
-    table: dict[tuple[tuple[Piece | None, ...], int | None, Color, int, int], tuple[int, str, float]],
+def move_key(san: San) -> tuple[int, int, PromotionPiece | None]:
+    return (san.from_index, san.to_index, san.promotion)
+
+
+def is_tactical_move(hexchess: Hexchess, san: San) -> bool:
+    moved_piece = hexchess.board[san.from_index]
+    if moved_piece is None:
+        return False
+
+    if san.promotion is not None:
+        return True
+
+    if hexchess.board[san.to_index] is not None:
+        return True
+
+    return moved_piece.lower() == 'p' and hexchess.ep == san.to_index
+
+
+def move_order_score(
     hexchess: Hexchess,
+    san: San,
     depth: int,
+    killer_moves: dict[int, tuple[tuple[int, int, PromotionPiece | None], ...]],
+    history_table: dict[tuple[int, int, PromotionPiece | None], int],
+) -> int:
+    moved_piece = hexchess.board[san.from_index]
+    if moved_piece is None:
+        return 0
+
+    score = 0
+    key = move_key(san)
+    moved_value = PIECE_VALUES[moved_piece.lower()]
+    captured_piece = hexchess.board[san.to_index]
+
+    if captured_piece is None and moved_piece.lower() == 'p' and hexchess.ep == san.to_index:
+        captured_index = step(san.to_index, 0) if moved_piece == 'p' else step(san.to_index, 6)
+        if captured_index is not None:
+            captured_piece = hexchess.board[captured_index]
+
+    if captured_piece is not None:
+        captured_value = PIECE_VALUES[captured_piece.lower()]
+        score += 10_000 + (captured_value * 100) - moved_value
+
+    if san.promotion is not None:
+        score += PROMOTION_ORDER_BONUS[san.promotion]
+
+    if moved_piece.lower() == 'p' and captured_piece is None:
+        score += 5
+
+    if key in killer_moves.get(depth, ()):
+        score += 9_000
+
+    score += history_table.get(key, 0)
+
+    return score
+
+
+def optimize_for_branch_pruning(
+    hexchess: Hexchess,
+    sans: list[San],
+    depth: int,
+    killer_moves: dict[int, tuple[tuple[int, int, PromotionPiece | None], ...]],
+    history_table: dict[tuple[int, int, PromotionPiece | None], int],
+) -> None:
+    sans.sort(
+        key=lambda san: move_order_score(hexchess, san, depth, killer_moves, history_table),
+        reverse=True,
+    )
+
+
+def record_killer_move(
+    killer_moves: dict[int, tuple[tuple[int, int, PromotionPiece | None], ...]],
+    depth: int,
+    san: San,
+) -> None:
+    key = move_key(san)
+    current = tuple(existing for existing in killer_moves.get(depth, ()) if existing != key)
+    killer_moves[depth] = (key, *current)[:2]
+
+
+def quiescence(
+    hexchess: Hexchess,
     alpha: float,
     beta: float,
     evaluations: list[int],
     options: EvalOptions,
+) -> float:
+    evaluations[0] += 1
+    stand_pat = static_eval_for_turn(hexchess, options)
+
+    if stand_pat >= beta:
+        return stand_pat
+
+    if stand_pat > alpha:
+        alpha = stand_pat
+
+    tactical_moves = [san for san in hexchess.current_moves() if is_tactical_move(hexchess, san)]
+
+    if not tactical_moves:
+        return stand_pat
+
+    tactical_moves.sort(key=lambda san: move_order_score(hexchess, san, 0, {}, {}), reverse=True)
+
+    value = stand_pat
+
+    for san in tactical_moves:
+        undo = hexchess.make_move_unsafe(san)
+        child_value = -quiescence(hexchess, -beta, -alpha, evaluations, options)
+        hexchess.unmake_move(undo)
+
+        if child_value >= beta:
+            return child_value
+
+        if child_value > value:
+            value = child_value
+
+        if child_value > alpha:
+            alpha = child_value
+
+    return value
+
+
+def negamax(
+    table: dict[int, tuple[int, str, float]],
+    hexchess: Hexchess,
+    depth: int,
+    ply: int,
+    alpha: float,
+    beta: float,
+    evaluations: list[int],
+    options: EvalOptions,
+    killer_moves: dict[int, tuple[tuple[int, int, PromotionPiece | None], ...]],
+    history_table: dict[tuple[int, int, PromotionPiece | None], int],
 ) -> float:
     alpha_orig = alpha
     key = hexchess.position_key()
@@ -993,20 +1271,32 @@ def negamax(
         return options.stalemate_value if hexchess.turn == 'w' else -options.stalemate_value
 
     if depth == 0:
-        evaluations[0] += 1
-        if hexchess.turn == 'w':
-            return evaluate(hexchess, options)
-        return -evaluate(hexchess, options)
+        return quiescence(hexchess, alpha, beta, evaluations, options)
 
-    optimize_for_branch_pruning(hexchess, current_moves)
+    optimize_for_branch_pruning(hexchess, current_moves, ply, killer_moves, history_table)
     value = float('-inf')
 
     for san in current_moves:
         undo = hexchess.make_move_unsafe(san)
-        value = max(value, -negamax(table, hexchess, depth - 1, -beta, -alpha, evaluations, options))
+        child_value = -negamax(
+            table,
+            hexchess,
+            depth - 1,
+            ply + 1,
+            -beta,
+            -alpha,
+            evaluations,
+            options,
+            killer_moves,
+            history_table,
+        )
         hexchess.unmake_move(undo)
+        value = max(value, child_value)
         alpha = max(alpha, value)
         if alpha >= beta:
+            if not is_tactical_move(hexchess, san):
+                record_killer_move(killer_moves, ply, san)
+                history_table[move_key(san)] = history_table.get(move_key(san), 0) + depth * depth
             break
 
     flag = 'exact'
@@ -1023,13 +1313,29 @@ def search(hexchess: Hexchess, depth: int, options: EvalOptions | None = None) -
         error(f'invalid depth: {depth}')
 
     evaluation_options = options or EvalOptions()
-    table: dict[tuple[tuple[Piece | None, ...], int | None, Color, int, int], tuple[int, str, float]] = {}
+    table: dict[int, tuple[int, str, float]] = {}
+    killer_moves: dict[int, tuple[tuple[int, int, PromotionPiece | None], ...]] = {}
+    history_table: dict[tuple[int, int, PromotionPiece | None], int] = {}
     evaluations = [0]
     sans: list[dict[str, object]] = []
 
-    for san in hexchess.current_moves():
+    root_moves = hexchess.current_moves()
+    optimize_for_branch_pruning(hexchess, root_moves, 0, killer_moves, history_table)
+
+    for san in root_moves:
         undo = hexchess.make_move_unsafe(san)
-        score = negamax(hexchess=hexchess, table=table, depth=depth - 1, alpha=float('-inf'), beta=float('inf'), evaluations=evaluations, options=evaluation_options)
+        score = negamax(
+            hexchess=hexchess,
+            table=table,
+            depth=depth - 1,
+            ply=1,
+            alpha=float('-inf'),
+            beta=float('inf'),
+            evaluations=evaluations,
+            options=evaluation_options,
+            killer_moves=killer_moves,
+            history_table=history_table,
+        )
         hexchess.unmake_move(undo)
         sans.append({'san': str(san), 'score': score})
 

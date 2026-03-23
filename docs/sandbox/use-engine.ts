@@ -27,6 +27,7 @@ export function useEngine() {
   let worker: Worker | null = null
 
   const engineKind = ref<EngineKind>('rust-worker')
+  const pendingRequests = ref(0)
 
   const ensureWorker = () => {
     if (worker || typeof window === 'undefined' || typeof Worker === 'undefined') {
@@ -77,26 +78,27 @@ export function useEngine() {
 
   const loading = ref(false)
 
-  const evaluate = async (options: EvaluateOptions) => {
-    if (loading.value) {
-      return
-    }
+  const setLoading = (delta: 1 | -1) => {
+    pendingRequests.value = Math.max(0, pendingRequests.value + delta)
+    loading.value = pendingRequests.value > 0
+  }
 
-    loading.value = true
+  const evaluateWith = async (kind: EngineKind, options: EvaluateOptions) => {
+    setLoading(1)
 
     try {
-      log('evaluate:start', options)
+      log('evaluate:start', { kind, ...options })
       const startedAt = performance.now()
 
       let result: ExecuteResponse<EvaluateResponse>
 
-      if (engineKind.value === 'python-api') {
+      if (kind === 'python-api') {
         result = await executePython('hexchess/evaluate', options)
       } else {
         const currentWorker = ensureWorker()
 
         if (!currentWorker) {
-          loading.value = false
+          setLoading(-1)
           return
         }
 
@@ -115,16 +117,18 @@ export function useEngine() {
         duration,
       }
 
-      loading.value = false
       return {
         ...result,
         response,
       } as ExecuteResponse<SearchResult>
     } catch (err) {
       console.error('[hexchess-engine] evaluate failed', err)
-      loading.value = false
+    } finally {
+      setLoading(-1)
     }
   }
+
+  const evaluate = async (options: EvaluateOptions) => evaluateWith(engineKind.value, options)
 
   onUnmounted(() => {
     worker?.terminate()
@@ -134,6 +138,7 @@ export function useEngine() {
   return {
     engineKind,
     evaluate,
+    evaluateWith,
     loading,
   }
 }

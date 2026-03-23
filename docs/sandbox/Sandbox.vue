@@ -18,6 +18,18 @@
         </select>
       </label>
 
+      <label class="flex items-center gap-x-2 text-sm tracking-wide">
+        Match White
+
+        <select
+          v-model="matchWhiteEngine"
+          class="border rounded-md px-2 py-1 bg-transparent"
+        >
+          <option value="rust-worker">Rust</option>
+          <option value="python-api">Python</option>
+        </select>
+      </label>
+
       <div
         v-if="engineKind === 'python-api'"
         class="text-xs tracking-wide opacity-75"
@@ -50,6 +62,22 @@
       </button>
 
       <button
+        class="flex gap-x-1.5 items-center text-sm tracking-wide hover:text-(--vp-code-color)!"
+        @click="onSaveGameClick">
+        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+
+        Save Moves
+      </button>
+
+      <button
+        class="flex gap-x-1.5 items-center text-sm tracking-wide hover:text-(--vp-code-color)!"
+        @click="onLoadGameClick">
+        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="m17 14-5-5-5 5"/><path d="M19 3H5"/></svg>
+
+        Load Moves
+      </button>
+
+      <button
         :class="[
           'flex gap-x-1.5 items-center text-sm tracking-wide hover:text-(--vp-code-color)!',
           loading && 'opacity-50 pointer-events-none',
@@ -66,11 +94,39 @@
         
         Play
       </button>
+
+      <button
+        :class="[
+          'flex gap-x-1.5 items-center text-sm tracking-wide hover:text-(--vp-code-color)!',
+          loading && !matchRunning && 'opacity-50 pointer-events-none',
+        ]"
+        :disabled="loading && !matchRunning"
+        @click="onMatchClick">
+        <Spinner
+          v-if="loading && matchRunning"
+          class="size-4" />
+
+        <svg
+          v-else
+          class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+
+        {{ matchRunning ? 'Stop Match' : 'Rust vs Python' }}
+      </button>
+    </div>
+      <input
+        ref="gameFileInput"
+        type="file"
+        accept=".yaml,.yml,text/yaml,application/yaml"
+        class="hidden"
+        @change="onGameFileChange">
+
+
+    <div class="mt-2 text-xs tracking-wide opacity-75">
+      Match pairing: White {{ engineLabel(matchWhiteEngine) }}, Black {{ engineLabel(matchBlackEngine) }}.
     </div>
 
-    <div class="h-12 relative">
+    <div class="mt-3">
       <EvaluationResult
-        class="absolute top-2"
         v-model:depth="depth"
         :evaluation="evaluation" />
     </div>
@@ -102,14 +158,100 @@
         </div>
       </template>
     </Hexboard>
+
+    <div class="mt-4 rounded-lg border p-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="text-sm tracking-wide">
+          Move history: {{ moveHistory.length }}
+          <span class="opacity-70">
+            {{ currentMoveLabel }}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2 text-sm tracking-wide">
+          <button
+            class="rounded border px-2 py-1 hover:text-(--vp-code-color)! disabled:opacity-40"
+            :disabled="historyIndex === 0"
+            @click="jumpToStart">
+            |&lt;
+          </button>
+
+          <button
+            class="rounded border px-2 py-1 hover:text-(--vp-code-color)! disabled:opacity-40"
+            :disabled="historyIndex === 0"
+            @click="stepBackward">
+            &lt;
+          </button>
+
+          <button
+            class="rounded border px-2 py-1 hover:text-(--vp-code-color)! disabled:opacity-40"
+            :disabled="historyIndex >= moveHistory.length"
+            @click="stepForward">
+            &gt;
+          </button>
+
+          <button
+            class="rounded border px-2 py-1 hover:text-(--vp-code-color)! disabled:opacity-40"
+            :disabled="historyIndex >= moveHistory.length"
+            @click="jumpToLatest">
+            &gt;|
+          </button>
+        </div>
+      </div>
+
+      <div
+        v-if="groupedMoves.length > 0"
+        class="mt-3 max-h-48 overflow-y-auto rounded-md border px-2 py-1 text-sm"
+      >
+        <div
+          v-for="row in groupedMoves"
+          :key="row.number"
+          class="grid grid-cols-[3rem_1fr_1fr] items-center gap-2 py-1"
+        >
+          <div class="opacity-70">
+            {{ row.number }}.
+          </div>
+
+          <button
+            v-if="row.white"
+            :class="[
+              'rounded px-2 py-1 text-left hover:text-(--vp-code-color)!',
+              historyIndex === row.white.index && 'bg-(--vp-c-bg-soft)',
+            ]"
+            @click="jumpToHistory(row.white.index)">
+            {{ row.white.san }}<span v-if="row.white.evaluations !== null || row.white.duration !== null" class="opacity-70"> ({{ row.white.evaluations?.toLocaleString() ?? 0 }} evals, {{ row.white.duration?.toFixed(0) ?? 0 }}ms)</span>
+          </button>
+          <div v-else />
+
+          <button
+            v-if="row.black"
+            :class="[
+              'rounded px-2 py-1 text-left hover:text-(--vp-code-color)!',
+              historyIndex === row.black.index && 'bg-(--vp-c-bg-soft)',
+            ]"
+            @click="jumpToHistory(row.black.index)">
+            {{ row.black.san }}<span v-if="row.black.evaluations !== null || row.black.duration !== null" class="opacity-70"> ({{ row.black.evaluations?.toLocaleString() ?? 0 }} evals, {{ row.black.duration?.toFixed(0) ?? 0 }}ms)</span>
+          </button>
+          <div v-else />
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="mt-3 text-sm opacity-70"
+      >
+        No moves recorded yet.
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml'
 import { Hexboard } from '@bedard/hexboard'
 import { Hexchess, San } from '../../js/src'
-import { useEngine, type SearchResult } from './use-engine'
+import { useEngine, type EngineKind, type SearchResult } from './use-engine'
 import { useEventListener } from '@vueuse/core'
 // @ts-ignore Vue SFC default export is provided by Vue tooling
 import EvaluationResult from './EvaluationResult.vue'
@@ -122,7 +264,20 @@ import Spinner from '../components/Spinner.vue'
 // @ts-ignore Vue SFC default export is provided by Vue tooling
 import X from '../components/icons/X.vue'
 
-const { engineKind, evaluate, loading } = useEngine()
+interface SavedGameMove {
+  san: string
+  evaluations?: number | null
+  duration?: number | null
+}
+
+interface SavedGameFile {
+  version: 1
+  startFen: string
+  historyIndex: number
+  moves: SavedGameMove[]
+}
+
+const { engineKind, evaluate, evaluateWith, loading } = useEngine()
 
 //
 // state
@@ -140,6 +295,28 @@ const selected = ref<number | null>(null)
 
 const evaluation = ref<SearchResult | null>(null)
 
+const gameFileInput = ref<HTMLInputElement | null>(null)
+
+const matchRunning = ref(false)
+
+const matchWhiteEngine = ref<EngineKind>('rust-worker')
+
+const historyStartFen = ref(Hexchess.init().toString())
+
+const historyIndex = ref(0)
+
+const moveHistory = ref<Array<{
+  san: string
+  from: number
+  to: number
+  beforeFen: string
+  afterFen: string
+  evaluations: number | null
+  duration: number | null
+}>>([])
+
+let matchToken = 0
+
 //
 // computed
 //
@@ -150,10 +327,54 @@ const fen = computed({
     if (value) {
       try {
         const next = Hexchess.parse(value)
-        hexchess.value = next
+        replacePosition(next)
       } catch { }
     }
   }
+})
+
+const matchBlackEngine = computed<EngineKind>(() => matchWhiteEngine.value === 'rust-worker' ? 'python-api' : 'rust-worker')
+
+const groupedMoves = computed(() => {
+  const result: Array<{
+    number: number
+    white: { index: number, san: string, evaluations: number | null, duration: number | null } | null
+    black: { index: number, san: string, evaluations: number | null, duration: number | null } | null
+  }> = []
+
+  for (let i = 0; i < moveHistory.value.length; i += 2) {
+    result.push({
+      number: Math.floor(i / 2) + 1,
+      white: moveHistory.value[i]
+        ? {
+          index: i + 1,
+          san: moveHistory.value[i].san,
+          evaluations: moveHistory.value[i].evaluations,
+          duration: moveHistory.value[i].duration,
+        }
+        : null,
+      black: moveHistory.value[i + 1]
+        ? {
+          index: i + 2,
+          san: moveHistory.value[i + 1].san,
+          evaluations: moveHistory.value[i + 1].evaluations,
+          duration: moveHistory.value[i + 1].duration,
+        }
+        : null,
+    })
+  }
+
+  return result
+})
+
+const currentMoveLabel = computed(() => {
+  if (historyIndex.value === 0) {
+    return '(start position)'
+  }
+
+  const current = moveHistory.value[historyIndex.value - 1]
+
+  return current ? `(showing ${current.san})` : '(latest position)'
 })
 
 //
@@ -183,19 +404,198 @@ function deselect() {
   selected.value = null
 }
 
-function onClearClick() {
-  evaluation.value = null
-  hexchess.value = new Hexchess()
+function replacePosition(next: Hexchess) {
+  hexchess.value = next
+  historyStartFen.value = next.toString()
+  historyIndex.value = 0
+  moveHistory.value = []
   highlight.value = []
+}
+
+function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryIndex: number) {
+  let current = Hexchess.parse(startFen)
+  const nextHistory = moves.map((move) => {
+    const san = San.from(move.san)
+    const beforeFen = current.toString()
+    const next = current.clone()
+
+    next.applyMove(san)
+    current = next
+
+    return {
+      san: san.toString(),
+      from: san.from,
+      to: san.to,
+      beforeFen,
+      afterFen: next.toString(),
+      evaluations: move.evaluations ?? null,
+      duration: move.duration ?? null,
+    }
+  })
+
+  const boundedIndex = Math.max(0, Math.min(nextHistoryIndex, nextHistory.length))
+  const entry = boundedIndex > 0 ? nextHistory[boundedIndex - 1] : null
+
+  stopMatch()
+  evaluation.value = null
+  historyStartFen.value = startFen
+  moveHistory.value = nextHistory
+  historyIndex.value = boundedIndex
+  hexchess.value = Hexchess.parse(entry?.afterFen ?? startFen)
+  highlight.value = entry ? [entry.from, entry.to] : []
+  selected.value = null
+}
+
+function saveTextFile(fileName: string, content: string) {
+  const blob = new Blob([content], { type: 'text/yaml' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+
+  link.href = url
+  link.download = fileName
+  link.click()
+
+  URL.revokeObjectURL(url)
+}
+
+function formatExportTimestamp() {
+  const now = new Date()
+  const pad = (value: number) => value.toString().padStart(2, '0')
+
+  return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
+}
+
+function applyMoveToHistory(san: San, meta: { evaluations?: number | null, duration?: number | null } = {}) {
+  const current = hexchess.value.clone()
+  const beforeFen = current.toString()
+  const next = current.clone()
+
+  next.applyMoveUnsafe(san)
+
+  if (historyIndex.value < moveHistory.value.length) {
+    moveHistory.value = moveHistory.value.slice(0, historyIndex.value)
+  }
+
+  moveHistory.value = [
+    ...moveHistory.value,
+    {
+      san: san.toString(),
+      from: san.from,
+      to: san.to,
+      beforeFen,
+      afterFen: next.toString(),
+      evaluations: meta.evaluations ?? null,
+      duration: meta.duration ?? null,
+    },
+  ]
+
+  historyIndex.value = moveHistory.value.length
+  hexchess.value = next
+  highlight.value = [san.from, san.to]
+}
+
+function jumpToHistory(index: number) {
+  const bounded = Math.max(0, Math.min(index, moveHistory.value.length))
+  const entry = bounded > 0 ? moveHistory.value[bounded - 1] : null
+  const fen = entry?.afterFen ?? historyStartFen.value
+
+  stopMatch()
+  evaluation.value = null
+  hexchess.value = Hexchess.parse(fen)
+  historyIndex.value = bounded
+  highlight.value = entry ? [entry.from, entry.to] : []
+  selected.value = null
+}
+
+function jumpToStart() {
+  jumpToHistory(0)
+}
+
+function jumpToLatest() {
+  jumpToHistory(moveHistory.value.length)
+}
+
+function stepBackward() {
+  jumpToHistory(historyIndex.value - 1)
+}
+
+function stepForward() {
+  jumpToHistory(historyIndex.value + 1)
+}
+
+function engineForTurn(turn: 'w' | 'b'): EngineKind {
+  return turn === 'w' ? matchWhiteEngine.value : matchBlackEngine.value
+}
+
+function engineLabel(kind: EngineKind) {
+  return kind === 'python-api' ? 'Python' : 'Rust'
+}
+
+function stopMatch() {
+  matchRunning.value = false
+  matchToken += 1
+}
+
+function onClearClick() {
+  stopMatch()
+  evaluation.value = null
+  replacePosition(new Hexchess())
 }
 
 function onFlipClick() {
   flipped.value = !flipped.value
 }
 
+function onSaveGameClick() {
+  const payload: SavedGameFile = {
+    version: 1,
+    startFen: historyStartFen.value,
+    historyIndex: historyIndex.value,
+    moves: moveHistory.value.map((move) => ({
+      san: move.san,
+      evaluations: move.evaluations,
+      duration: move.duration,
+    })),
+  }
+
+  saveTextFile(`hexchess-game-${formatExportTimestamp()}.yaml`, stringifyYaml(payload))
+}
+
+function onLoadGameClick() {
+  gameFileInput.value?.click()
+}
+
+async function onGameFileChange(evt: Event) {
+  const input = evt.target as HTMLInputElement | null
+  const file = input?.files?.[0]
+
+  if (!file) {
+    return
+  }
+
+  try {
+    const raw = await file.text()
+    const parsed = parseYaml(raw) as Partial<SavedGameFile>
+
+    if (parsed.version !== 1 || typeof parsed.startFen !== 'string' || !Array.isArray(parsed.moves)) {
+      throw new Error('Invalid game file format')
+    }
+
+    restoreHistory(parsed.startFen, parsed.moves, typeof parsed.historyIndex === 'number' ? parsed.historyIndex : parsed.moves.length)
+  } catch (err) {
+    console.error('[hexchess-sandbox] failed to load moves', err)
+    window.alert('Failed to load game moves file.')
+  } finally {
+    if (input) {
+      input.value = ''
+    }
+  }
+}
+
 function onMove(san: San) {
-  hexchess.value.applyMoveUnsafe(san)
-  highlight.value = [san.from, san.to]
+  stopMatch()
+  evaluation.value = null
+  applyMoveToHistory(san)
 }
 
 async function onPlayClick() {
@@ -213,12 +613,12 @@ async function onPlayClick() {
   if (data.response.sans.length > 0) {
     const best = data.response.sans[0]
     const san = San.from(best.san)
-    const next = hexchess.value.clone()
 
     try {
-      next.applyMoveUnsafe(san)
-      hexchess.value = next
-      highlight.value = [san.from, san.to]
+      applyMoveToHistory(san, {
+        evaluations: data.response.evaluations,
+        duration: data.response.duration,
+      })
     } catch {
       return
     }
@@ -230,8 +630,72 @@ function onClickPosition(position: number) {
 }
 
 function onResetClick() {
+  stopMatch()
   evaluation.value = null
-  hexchess.value = Hexchess.init()
-  highlight.value = []
+  replacePosition(Hexchess.init())
+}
+
+async function playBestMove(kind: EngineKind) {
+  const data = await evaluateWith(kind, {
+    depth: depth.value,
+    position: hexchess.value.toString(),
+  })
+
+  if (!data) {
+    return false
+  }
+
+  evaluation.value = data.response
+
+  if (data.response.sans.length === 0) {
+    return false
+  }
+
+  const best = data.response.sans[0]
+  const san = San.from(best.san)
+
+  try {
+    applyMoveToHistory(san, {
+      evaluations: data.response.evaluations,
+      duration: data.response.duration,
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function onMatchClick() {
+  if (matchRunning.value) {
+    stopMatch()
+    return
+  }
+
+  const token = ++matchToken
+  matchRunning.value = true
+
+  try {
+    for (let ply = 0; ply < 400; ply += 1) {
+      if (token !== matchToken) {
+        return
+      }
+
+      const current = hexchess.value
+
+      if (current.isCheckmate() || current.isStalemate()) {
+        return
+      }
+
+      const moved = await playBestMove(engineForTurn(current.turn))
+
+      if (!moved) {
+        return
+      }
+    }
+  } finally {
+    if (token === matchToken) {
+      matchRunning.value = false
+    }
+  }
 }
 </script>
