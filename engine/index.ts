@@ -3,6 +3,10 @@ export interface EvaluateOptions {
   position: string
 }
 
+export interface WorkerCommandOptions {
+  timeoutMs?: number
+}
+
 export interface EvaluateResponse {
   depth: number
   evaluations: number
@@ -94,8 +98,8 @@ export function execute<T extends Record<string, any> = {}>(
 }
 
 /** evaluate a position */
-export function evaluate(worker: Worker, options: EvaluateOptions) {
-  return execute<EvaluateResponse>(worker, 'hexchess/evaluate', options)
+export function evaluate(worker: Worker, options: EvaluateOptions, commandOptions: WorkerCommandOptions = {}) {
+  return execute<EvaluateResponse>(worker, 'hexchess/evaluate', options, commandOptions.timeoutMs)
 }
 
 /** test for a connection with the engine worker */

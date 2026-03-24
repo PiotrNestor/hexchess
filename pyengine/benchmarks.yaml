@@ -35,6 +35,36 @@ benchmarks:
     fen: k/3/5/7/9/11/11/11/3q7/11/5K5 w - 0 1
     notes: Side to move is in check and must find a narrow defensive reply set.
 
+  - name: pinned-defense
+    category: defense
+    fen: k/3/5/7/9/11/11/5r5/11/5N5/5K5 w - 0 1
+    notes: Pinned minor piece with a small legal move set. Good for legal-filter overhead.
+
+  - name: double-check-defense
+    category: defense
+    fen: k/3/5/7/9/11/11/11/4qr5/11/5K5 w - 0 1
+    notes: Double-check position where only king moves are legal.
+
+  - name: en-passant-legal
+    category: regression
+    fen: 1/K2/5/7/9/10k/4Pp5/11/11/11/11 w f6 0 1
+    notes: Direct en passant legality path where the capture is allowed.
+
+  - name: en-passant-illegal
+    category: regression
+    fen: 1/K2/5/7/9/10k/4Pp5/4r6/11/11/11 w f6 0 1
+    notes: Direct en passant legality path where the capture is rejected because it exposes the king.
+
+  - name: promotion-race
+    category: endgame
+    fen: 1/1Pr/5/7/9/10k/11/11/11/5p5/K10 w - 0 1
+    notes: Promotion-heavy position with both quiet and capture promotions available.
+
+  - name: capture-storm-qsearch
+    category: tactics
+    fen: 1/3/5/7/4r4/6p3k/5Q1p3/11/11/11/K10 w - 0 1
+    notes: Capture-dense position intended to stress tactical generation and qsearch.
+
   - name: endgame-light
     category: endgame
     fen: k/3/5/4r2/9/11/11/4Q6/11/11/5K5 w - 0 1

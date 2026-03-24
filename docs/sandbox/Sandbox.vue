@@ -14,7 +14,7 @@
           class="border rounded-md px-2 py-1 bg-transparent"
         >
           <option value="rust-worker">Rust (WASM Worker)</option>
-          <option value="python-api">Python (FastAPI)</option>
+          <option value="python-api">Pythonic (FastAPI)</option>
           <option value="cyengine-api">Cython (FastAPI)</option>
         </select>
       </label>
@@ -27,7 +27,7 @@
           class="border rounded-md px-2 py-1 bg-transparent"
         >
           <option value="rust-worker">Rust</option>
-          <option value="python-api">Python</option>
+          <option value="python-api">Pythonic</option>
           <option value="cyengine-api">Cython</option>
         </select>
       </label>
@@ -350,7 +350,7 @@ const fen = computed({
 
 const matchBlackEngine = computed<EngineKind>(() => {
   if (matchWhiteEngine.value === 'rust-worker') {
-    return engineKind.value === 'rust-worker' ? 'cyengine-api' : engineKind.value
+    return engineKind.value === 'rust-worker' ? 'python-api' : engineKind.value
   }
 
   return 'rust-worker'
@@ -587,7 +587,7 @@ function engineForTurn(turn: 'w' | 'b'): EngineKind {
 
 function engineLabel(kind: EngineKind) {
   if (kind === 'python-api') {
-    return 'Python'
+    return 'Pythonic'
   }
 
   if (kind === 'cyengine-api') {
