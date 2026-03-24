@@ -1,0 +1,278 @@
+version: 1
+kind: pyengine2-benchmark-suite
+suite: stage1-baseline
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-24T18:05:22.842163+00:00'
+topCount: 3
+entries:
+- mode: eval
+  filter: quiet-endgame-eval
+  repeat: 50
+  cases:
+  - name: quiet-endgame-eval
+    category: endgame
+    notes: Quiet low-material position intended to make evaluation cost easier to
+      isolate.
+    summary:
+      name: quiet-endgame-eval
+      category: endgame
+      mode: eval
+      medianMs: 0.002
+      units: 50
+      unitsLabel: evals
+      unitsPerMs: 24999.809639
+      notes: Quiet low-material position intended to make evaluation cost easier to
+        isolate.
+      staticEval: 90.0
+- mode: moves
+  filter: slider-mobility-open
+  repeat: 10
+  cases:
+  - name: slider-mobility-open
+    category: middlegame
+    notes: Open-board slider position intended to stress bishop, rook, and queen generation.
+    summary:
+      name: slider-mobility-open
+      category: middlegame
+      mode: moves
+      medianMs: 0.04165
+      units: 114
+      unitsLabel: moves
+      unitsPerMs: 2737.085472
+      notes: Open-board slider position intended to stress bishop, rook, and queen
+        generation.
+      sampleMoves:
+      - a1b3
+      - a1a2
+      - a1b2
+- mode: tactical-moves
+  filter: capture-storm-qsearch
+  repeat: 10
+  cases:
+  - name: capture-storm-qsearch
+    category: tactics
+    notes: Capture-dense position intended to stress tactical generation and qsearch.
+    summary:
+      name: capture-storm-qsearch
+      category: tactics
+      mode: tactical-moves
+      medianMs: 0.01855
+      units: 3
+      unitsLabel: moves
+      unitsPerMs: 161.724343
+      notes: Capture-dense position intended to stress tactical generation and qsearch.
+      sampleMoves:
+      - f5f7
+      - f5g6
+      - f5h5
+- mode: search
+  filter: tt-transposition-midgame
+  repeat: 3
+  cases:
+  - name: tt-transposition-midgame
+    category: middlegame
+    notes: Symmetric tactical middlegame intended to increase transposition-table
+      reuse.
+    summaries:
+    - name: tt-transposition-midgame
+      category: middlegame
+      mode: search
+      medianMs: 1147.8355
+      units: 29818
+      unitsLabel: evals
+      unitsPerMs: 25.97759
+      notes: Symmetric tactical middlegame intended to increase transposition-table
+        reuse.
+      depth: 4
+      topMoves:
+      - san: f5f7
+        score: -130.0
+      - san: g5l1
+        score: -119.92
+      - san: f5h3
+        score: -109.84
+      metrics:
+        wallMs: 1162.2835001908243
+        evalsPerMs: 25.654670306430802
+        rootMoves: 57
+        negamaxNodes: 36231
+        quiescenceNodes: 30919
+        movegenCalls: 35976
+        tacticalMovegenCalls: 8951
+        legalContextCalls: 35976
+        ttHits: 10949
+        ttCutoffs: 10308
+        betaCutoffs: 6931
+        ttEntries: 32119
+    - name: tt-transposition-midgame
+      category: middlegame
+      mode: search
+      medianMs: 5108.4886
+      units: 97117
+      unitsLabel: evals
+      unitsPerMs: 19.010907
+      notes: Symmetric tactical middlegame intended to increase transposition-table
+        reuse.
+      depth: 5
+      topMoves:
+      - san: f5f7
+        score: -130.0
+      - san: g5l1
+        score: -119.92
+      - san: f5h3
+        score: -109.84
+      metrics:
+        wallMs: 5146.557299885899
+        evalsPerMs: 18.870284413651262
+        rootMoves: 57
+        negamaxNodes: 161851
+        quiescenceNodes: 100431
+        movegenCalls: 155717
+        tacticalMovegenCalls: 40541
+        legalContextCalls: 155717
+        ttHits: 51364
+        ttCutoffs: 50156
+        betaCutoffs: 38211
+        ttEntries: 110184
+  depths:
+  - 4
+  - 5
+- mode: search
+  filter: capture-storm-qsearch
+  repeat: 3
+  cases:
+  - name: capture-storm-qsearch
+    category: tactics
+    notes: Capture-dense position intended to stress tactical generation and qsearch.
+    summaries:
+    - name: capture-storm-qsearch
+      category: tactics
+      mode: search
+      medianMs: 346.7397
+      units: 8880
+      unitsLabel: evals
+      unitsPerMs: 25.609989
+      notes: Capture-dense position intended to stress tactical generation and qsearch.
+      depth: 4
+      topMoves:
+      - san: f5f7
+        score: -79.68
+      - san: f5h3
+        score: -69.6
+      - san: f5c8
+        score: -19.200000000000003
+      metrics:
+        wallMs: 342.4387997947633
+        evalsPerMs: 25.931640939409096
+        rootMoves: 36
+        negamaxNodes: 16672
+        quiescenceNodes: 9247
+        movegenCalls: 12842
+        tacticalMovegenCalls: 2146
+        legalContextCalls: 12842
+        ttHits: 7064
+        ttCutoffs: 6355
+        betaCutoffs: 2281
+        ttEntries: 9903
+    - name: capture-storm-qsearch
+      category: tactics
+      mode: search
+      medianMs: 1077.5411
+      units: 20123
+      unitsLabel: evals
+      unitsPerMs: 18.674926
+      notes: Capture-dense position intended to stress tactical generation and qsearch.
+      depth: 5
+      topMoves:
+      - san: f5f7
+        score: -79.68
+      - san: f5h3
+        score: -69.6
+      - san: f5g4
+        score: -19.599999999999994
+      metrics:
+        wallMs: 1067.2490997239947
+        evalsPerMs: 18.855017076335866
+        rootMoves: 36
+        negamaxNodes: 56199
+        quiescenceNodes: 20167
+        movegenCalls: 40385
+        tacticalMovegenCalls: 9567
+        legalContextCalls: 40385
+        ttHits: 28040
+        ttCutoffs: 25503
+        betaCutoffs: 10487
+        ttEntries: 22145
+  depths:
+  - 4
+  - 5
+- mode: search
+  filter: initial-position
+  repeat: 3
+  cases:
+  - name: initial-position
+    category: opening
+    notes: High-branching opening baseline.
+    summaries:
+    - name: initial-position
+      category: opening
+      mode: search
+      medianMs: 6778.365
+      units: 140300
+      unitsLabel: evals
+      unitsPerMs: 20.698207
+      notes: High-branching opening baseline.
+      depth: 4
+      topMoves:
+      - san: d3d5
+        score: -0.0
+      - san: h3h5
+        score: -0.0
+      - san: c2c4
+        score: -0.0
+      metrics:
+        wallMs: 6742.516300175339
+        evalsPerMs: 20.808255220139625
+        rootMoves: 51
+        negamaxNodes: 162671
+        quiescenceNodes: 141994
+        movegenCalls: 157279
+        tacticalMovegenCalls: 28238
+        legalContextCalls: 157279
+        ttHits: 36537
+        ttCutoffs: 35325
+        betaCutoffs: 18645
+        ttEntries: 141817
+    - name: initial-position
+      category: opening
+      mode: search
+      medianMs: 42528.2669
+      units: 1012033
+      unitsLabel: evals
+      unitsPerMs: 23.796714
+      notes: High-branching opening baseline.
+      depth: 5
+      topMoves:
+      - san: d3d5
+        score: -0.32000000000000006
+      - san: h3h5
+        score: -0.32000000000000006
+      - san: c2c4
+        score: -0.32000000000000006
+      metrics:
+        wallMs: 42388.883099891245
+        evalsPerMs: 23.87496263147817
+        rootMoves: 51
+        negamaxNodes: 572449
+        quiescenceNodes: 1082998
+        movegenCalls: 1095773
+        tacticalMovegenCalls: 638608
+        legalContextCalls: 1095773
+        ttHits: 196814
+        ttCutoffs: 186250
+        betaCutoffs: 386926
+        ttEntries: 1027483
+  depths:
+  - 4
+  - 5

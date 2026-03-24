@@ -13,7 +13,7 @@ from cyengine.native_engine import Hexchess, search
 
 
 ROOT_DIR = Path(__file__).resolve().parent
-DEFAULT_BENCHMARK_FILE = ROOT_DIR.parent / 'pyengine' / 'benchmarks.yaml'
+DEFAULT_BENCHMARK_FILE = ROOT_DIR.parent / 'pyengine2' / 'benchmark' / 'benchmarks.yaml'
 
 
 @dataclass(frozen=True, slots=True)

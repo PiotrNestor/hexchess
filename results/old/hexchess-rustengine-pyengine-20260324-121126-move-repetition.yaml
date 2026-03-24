@@ -1,0 +1,176 @@
+version: 1
+startFen: b/qbk/n1b1n/r5r/ppppppppp/11/5P5/4P1P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 1
+historyIndex: 43
+moves:
+  - san: e4e5
+    source: manual
+    evaluations: null
+    duration: null
+  - san: g7g6
+    source: manual
+    evaluations: null
+    duration: null
+  - san: d3d5
+    source: rust-worker
+    evaluations: 1247053
+    duration: 50217.09999990463
+  - san: i7i5
+    source: python-api
+    evaluations: 310095
+    duration: 22841.799999713898
+  - san: k1k3
+    source: rust-worker
+    evaluations: 1215691
+    duration: 48967.2999997139
+  - san: h7h5
+    source: python-api
+    evaluations: 311910
+    duration: 22109.700000286102
+  - san: f5f6
+    source: rust-worker
+    evaluations: 1269815
+    duration: 52530.699999809265
+  - san: g6f6
+    source: python-api
+    evaluations: 503623
+    duration: 28685.599999904633
+  - san: e5f6
+    source: rust-worker
+    evaluations: 975875
+    duration: 39618.5
+  - san: i5i4
+    source: python-api
+    evaluations: 364180
+    duration: 23481
+  - san: f2e3
+    source: rust-worker
+    evaluations: 925151
+    duration: 37268.89999961853
+  - san: i8i7
+    source: python-api
+    evaluations: 259169
+    duration: 17832.5
+  - san: f1e2
+    source: rust-worker
+    evaluations: 1015387
+    duration: 41076.09999990463
+  - san: f10h6
+    source: python-api
+    evaluations: 278140
+    duration: 20102.199999809265
+  - san: k3i4
+    source: rust-worker
+    evaluations: 2761815
+    duration: 115537.10000038147
+  - san: h6e2
+    source: python-api
+    evaluations: 270869
+    duration: 18416.699999809265
+  - san: e1e2
+    source: rust-worker
+    evaluations: 5497158
+    duration: 210055.59999990463
+  - san: h5i4
+    source: python-api
+    evaluations: 304665
+    duration: 18910.099999904633
+  - san: e3d4
+    source: rust-worker
+    evaluations: 1370170
+    duration: 58178.09999990463
+  - san: k7k5
+    source: python-api
+    evaluations: 451267
+    duration: 28233.5
+  - san: e2g5
+    source: rust-worker
+    evaluations: 2180533
+    duration: 108245.59999990463
+  - san: h9g7
+    source: python-api
+    evaluations: 52770
+    duration: 2977.5
+  - san: g5h6
+    source: rust-worker
+    evaluations: 1446730
+    duration: 77535.80000019073
+  - san: i7h7
+    source: python-api
+    evaluations: 325898
+    duration: 19118.599999904633
+  - san: h6l6
+    source: rust-worker
+    evaluations: 584901
+    duration: 25967.800000190735
+  - san: h7h9
+    source: python-api
+    evaluations: 44916
+    duration: 3054.5999999046326
+  - san: l6i6
+    source: rust-worker
+    evaluations: 606731
+    duration: 25198.400000095367
+  - san: f9h8
+    source: python-api
+    evaluations: 38826
+    duration: 2074.7000002861023
+  - san: i6g8
+    source: rust-worker
+    evaluations: 779309
+    duration: 34409
+  - san: d9g9
+    source: python-api
+    evaluations: 36967
+    duration: 1945
+  - san: d4g9
+    source: rust-worker
+    evaluations: 694607
+    duration: 31587.700000286102
+  - san: h9g9
+    source: python-api
+    evaluations: 230609
+    duration: 13490.900000095367
+  - san: g8l6
+    source: rust-worker
+    evaluations: 231565
+    duration: 12450.099999904633
+  - san: g9h9
+    source: python-api
+    evaluations: 31413
+    duration: 2001.6999998092651
+  - san: l6g8
+    source: rust-worker
+    evaluations: 570146
+    duration: 22547.39999961853
+  - san: h9g9
+    source: python-api
+    evaluations: 11623
+    duration: 686.9000000953674
+  - san: g8l6
+    source: rust-worker
+    evaluations: 231565
+    duration: 12558.199999809265
+  - san: g9h9
+    source: python-api
+    evaluations: 31413
+    duration: 1953.4000000953674
+  - san: l6g8
+    source: rust-worker
+    evaluations: 570146
+    duration: 22602
+  - san: h9g9
+    source: python-api
+    evaluations: 11623
+    duration: 619.2999997138977
+  - san: g8l6
+    source: rust-worker
+    evaluations: 231565
+    duration: 12629.5
+  - san: g9h9
+    source: python-api
+    evaluations: 31413
+    duration: 1886
+  - san: l6g8
+    source: rust-worker
+    evaluations: 570146
+    duration: 22807

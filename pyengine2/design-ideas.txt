@@ -1,0 +1,87 @@
+1. Generic requirements for the design and for a fast engine
+- keep the project communication API exactly as-is
+- do not call into the Rust core
+- make the internal engine genuinely more native and fast
+
+2. Initial design ideas
+
+Native numeric position core
+
+bitboards or equivalent packed integer representation
+no Python strings or Python sets in the search core
+Packed internal move representation
+
+integer move codes internally
+SAN only at the API boundary
+Precomputed attack/move masks
+
+especially for knights, kings, pawn attacks, line masks
+Incremental make/unmake on fixed-size state
+
+no Python container churn
+small undo structs
+Zobrist-keyed transposition table
+
+integer key, not full state as hash key
+Thin API adapter layer
+
+preserve the existing command/options/response contract
+translate only at the boundary
+
+Python engine core design features:
+
+- numeric bitboards
+- packed move ints
+- integer piece codes
+- fixed-state undo records
+
+
+3. The existing FastAPI wrappers in pyengine/main.py and cyengine/main.py already show the right separation:
+
+parse request
+call execute_command
+return the same contract
+
+But create a new engine package, separate from current pyengine/cyengine internals.
+Start a new internal core, because the target design is different enough:
+
+new board representation
+new move representation
+new search-state handling
+new attack/move generation strategy
+
+
+3. Architecture
+- keep the project communication API exactly as-is.
+The existing FastAPI wrappers in pyengine/main.py and cyengine/main.py already show the right separation:
+parse request
+call execute_command
+return the same contract
+
+- Implement a new internal representation in pure Python but extract the hexchess game rules from the Rust implementation
+numeric piece codes
+packed board state
+typed arrays or bitboards
+integer moves only in search
+
+- Keep three layers:
+API layer
+unchanged request/response contract
+thin wrapper only
+same command names and payloads as today
+
+Engine boundary layer
+parse FEN / serialize SAN / translate engine output
+this can still expose ergonomic Python classes if useful
+
+Numeric core
+bitboards as int
+occupancy masks
+piece masks per side/type
+packed move ints
+make/unmake with tiny undo records
+search and move ordering entirely numeric
+
+
+5. When the design and implementation is ready / mature --> Compile the critical / hot parts to Cython.
+Cython is best used after the core model is correct.

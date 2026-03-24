@@ -3,10 +3,30 @@ export interface EvaluateOptions {
   position: string
 }
 
+export interface WorkerCommandOptions {
+  timeoutMs?: number
+}
+
+export interface SearchMetrics {
+  wallMs: number
+  evalsPerMs: number
+  rootMoves: number
+  negamaxNodes: number
+  quiescenceNodes: number
+  movegenCalls: number
+  tacticalMovegenCalls: number
+  legalContextCalls: number
+  ttHits: number
+  ttCutoffs: number
+  betaCutoffs: number
+  ttEntries: number
+}
+
 export interface EvaluateResponse {
   depth: number
   evaluations: number
   sans: { san: string, score: number }[]
+  metrics?: SearchMetrics
 }
 
 export interface PingResponse {
@@ -94,8 +114,8 @@ export function execute<T extends Record<string, any> = {}>(
 }
 
 /** evaluate a position */
-export function evaluate(worker: Worker, options: EvaluateOptions) {
-  return execute<EvaluateResponse>(worker, 'hexchess/evaluate', options)
+export function evaluate(worker: Worker, options: EvaluateOptions, commandOptions: WorkerCommandOptions = {}) {
+  return execute<EvaluateResponse>(worker, 'hexchess/evaluate', options, commandOptions.timeoutMs)
 }
 
 /** test for a connection with the engine worker */

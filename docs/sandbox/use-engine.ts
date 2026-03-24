@@ -5,7 +5,10 @@ import {
   type EvaluateOptions,
   type EvaluateResponse,
   type ExecuteResponse,
+  type SearchMetrics,
 } from '../../engine/index'
+
+export type { SearchMetrics }
 
 export interface SearchResult extends EvaluateResponse {
   duration: number
@@ -21,8 +24,34 @@ function log(...args: unknown[]) {
 
 export type EngineKind = 'rust-worker' | 'python-api' | 'cyengine-api'
 
+const ENGINE_MAX_DEPTH: Record<EngineKind, number | null> = {
+  'rust-worker': 4,
+  'python-api': null,
+  'cyengine-api': null,
+}
+
+export function getEngineMaxDepth(kind: EngineKind) {
+  return ENGINE_MAX_DEPTH[kind]
+}
+
+export function clampDepthForEngine(kind: EngineKind, depth: number) {
+  const normalizedDepth = Math.max(1, depth)
+  const maxDepth = getEngineMaxDepth(kind)
+
+  return maxDepth === null ? normalizedDepth : Math.min(normalizedDepth, maxDepth)
+}
+
 const PYENGINE_BASE_URL = 'http://127.0.0.1:8000'
 const CYENGINE_BASE_URL = 'http://127.0.0.1:8001'
+
+function timeoutMsFor(kind: EngineKind, options: EvaluateOptions) {
+  if (kind !== 'rust-worker') {
+    return 120000
+  }
+
+  const depth = Math.max(1, options.depth)
+  return Math.max(120000, depth * 120000)
+}
 
 export function useEngine() {
   let worker: Worker | null = null
@@ -55,6 +84,11 @@ export function useEngine() {
       })
 
     return worker
+  }
+
+  const resetWorker = () => {
+    worker?.terminate()
+    worker = null
   }
 
   const executeApiEngine = async (
@@ -99,7 +133,7 @@ export function useEngine() {
       let result: ExecuteResponse<EvaluateResponse>
 
       if (kind === 'python-api') {
-        result = await executeApiEngine(PYENGINE_BASE_URL, 'Python engine', 'hexchess/evaluate', options)
+        result = await executeApiEngine(PYENGINE_BASE_URL, 'Pythonic engine', 'hexchess/evaluate', options)
       } else if (kind === 'cyengine-api') {
         result = await executeApiEngine(CYENGINE_BASE_URL, 'Cython engine', 'hexchess/evaluate', options)
       } else {
@@ -110,7 +144,9 @@ export function useEngine() {
           return
         }
 
-        result = await evaluateCommand(currentWorker, options)
+        result = await evaluateCommand(currentWorker, options, {
+          timeoutMs: timeoutMsFor(kind, options),
+        })
       }
 
       const duration = performance.now() - startedAt
@@ -130,6 +166,9 @@ export function useEngine() {
         response,
       } as ExecuteResponse<SearchResult>
     } catch (err) {
+      if (kind === 'rust-worker' && err instanceof Error && err.message.includes('timed out after')) {
+        resetWorker()
+      }
       console.error('[hexchess-engine] evaluate failed', err)
     } finally {
       setLoading(-1)
@@ -139,8 +178,7 @@ export function useEngine() {
   const evaluate = async (options: EvaluateOptions) => evaluateWith(engineKind.value, options)
 
   onUnmounted(() => {
-    worker?.terminate()
-    worker = null
+    resetWorker()
   })
 
   return {

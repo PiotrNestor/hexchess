@@ -41,8 +41,6 @@ uvicorn cyengine.main:app --reload --host 127.0.0.1 --port 8001
 - Build the extension with `pip install -e ./cyengine` from the repository root.
 - The editable install compiles `cyengine._native_engine` in place.
 - If the extension has not been built yet, importing `cyengine.native_engine` raises a clear error that tells you how to build it.
-- Benchmark with `python cyengine/benchmark.py --depths 3 4 --repeat 3` to compare the compiled engine against the shared benchmark corpus in `pyengine/benchmarks.yaml`.
-- Compare both engines directly with `python cyengine/compare_benchmark.py --depths 3 4 --repeat 3`.
 
 ## Caveats
 
