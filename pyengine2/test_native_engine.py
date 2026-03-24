@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from pyengine2.native_engine import CHAR_TO_PIECE, Hexchess, INITIAL_POSITION, San, create_board, evaluate, index, search, stringify_board
+from pyengine2.native_engine import CHAR_TO_PIECE, EvalOptions, Hexchess, INITIAL_POSITION, San, _passes_qsearch_delta_prune, create_board, evaluate, index, search, stringify_board
 
 
 def build_position(turn: str, pieces: dict[str, str], ep: str = '-') -> Hexchess:
@@ -129,6 +129,22 @@ class NativeEngine2Tests(unittest.TestCase):
         tactical_moves = tactical_move_strings(position)
 
         self.assertSetEqual(tactical_moves, {'f5f7', 'f5g6', 'f5h5'})
+
+    def test_qsearch_delta_prune_skips_low_value_capture_when_alpha_is_far_above(self) -> None:
+        position = build_position('w', {'a1': 'K', 'l6': 'k', 'f5': 'Q', 'g6': 'p'})
+        move = San.parse('f5g6').encode()
+
+        self.assertFalse(_passes_qsearch_delta_prune(position, move, stand_pat=0.0, alpha=40.0, tt_move=None, options=EvalOptions()))
+
+    def test_qsearch_delta_prune_never_skips_promotion_or_tt_move(self) -> None:
+        promotion_position = build_position('w', {'a1': 'K', 'l6': 'k', 'f10': 'P'})
+        promotion_move = San.parse('f10f11q').encode()
+        capture_position = build_position('w', {'a1': 'K', 'l6': 'k', 'f5': 'Q', 'g6': 'p'})
+        tt_move = San.parse('f5g6').encode()
+
+        options = EvalOptions()
+        self.assertTrue(_passes_qsearch_delta_prune(promotion_position, promotion_move, stand_pat=0.0, alpha=100.0, tt_move=None, options=options))
+        self.assertTrue(_passes_qsearch_delta_prune(capture_position, tt_move, stand_pat=0.0, alpha=100.0, tt_move=tt_move, options=options))
 
 
 if __name__ == '__main__':

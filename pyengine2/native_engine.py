@@ -136,7 +136,9 @@ PROMOTION_ORDER_BONUS = {
     3: 1000,
     4: 800,
 }
+PIECE_ORDER_VALUES = tuple(PIECE_VALUES[PIECE_KIND[piece]] if piece in PIECE_KIND else 0 for piece in range(BK + 1))
 ALL_BOARD_MASK = (1 << 91) - 1
+ALL_PIN_MASKS = (ALL_BOARD_MASK,) * 91
 PAWN_FORWARD_TARGETS = (
     tuple(-1 if GRAPH[square][0] is None else GRAPH[square][0] for square in range(91)),
     tuple(-1 if GRAPH[square][6] is None else GRAPH[square][6] for square in range(91)),
@@ -524,6 +526,10 @@ def _move_promotion(move_code: int) -> int:
     return move_code & 0x7
 
 
+MAX_MOVE_CODE = _encode_move(90, 90, 7)
+MOVE_CODE_CAPACITY = MAX_MOVE_CODE + 1
+
+
 @dataclass(frozen=True, slots=True)
 class San:
     from_index: int
@@ -569,7 +575,7 @@ class San:
 
 
 MoveUndo = tuple[int, int, int, int, int, int, int, int, int, int, int]
-LegalContext = tuple[int, int, int, list[int]]
+LegalContext = tuple[int, int, int, list[int], bool]
 RayScanEntry = tuple[int, int, int]
 
 
@@ -589,9 +595,33 @@ class EvalOptions:
 @dataclass(slots=True)
 class SearchState:
     move_buffers: list[list[int]]
+    pin_mask_buffers: list[list[int]]
+    killer_primary: list[int]
+    killer_secondary: list[int]
+    history_scores: list[int]
+    negamax_nodes: int
+    quiescence_nodes: int
+    movegen_calls: int
+    tactical_movegen_calls: int
+    legal_context_calls: int
+    tt_hits: int
+    tt_cutoffs: int
+    beta_cutoffs: int
 
     def __init__(self) -> None:
         self.move_buffers = []
+        self.pin_mask_buffers = []
+        self.killer_primary = []
+        self.killer_secondary = []
+        self.history_scores = [0] * MOVE_CODE_CAPACITY
+        self.negamax_nodes = 0
+        self.quiescence_nodes = 0
+        self.movegen_calls = 0
+        self.tactical_movegen_calls = 0
+        self.legal_context_calls = 0
+        self.tt_hits = 0
+        self.tt_cutoffs = 0
+        self.beta_cutoffs = 0
 
     def buffer_for(self, ply: int) -> list[int]:
         while len(self.move_buffers) <= ply:
@@ -599,6 +629,40 @@ class SearchState:
         buffer = self.move_buffers[ply]
         buffer.clear()
         return buffer
+
+    def pin_masks_for(self, ply: int) -> list[int]:
+        while len(self.pin_mask_buffers) <= ply:
+            self.pin_mask_buffers.append([ALL_BOARD_MASK] * 91)
+        return self.pin_mask_buffers[ply]
+
+    def killer_moves_for(self, ply: int) -> tuple[int, int]:
+        while len(self.killer_primary) <= ply:
+            self.killer_primary.append(-1)
+            self.killer_secondary.append(-1)
+        return self.killer_primary[ply], self.killer_secondary[ply]
+
+    def record_killer(self, ply: int, move_code: int) -> None:
+        first, second = self.killer_moves_for(ply)
+        if move_code == first:
+            return
+        self.killer_primary[ply] = move_code
+        self.killer_secondary[ply] = first if first != move_code else second
+
+    def metrics_dict(self, root_moves: int, wall_ms: float, evaluations: int, tt_entries: int) -> dict[str, int | float]:
+        return {
+            'wallMs': wall_ms,
+            'evalsPerMs': evaluations / wall_ms if wall_ms > 0 else 0.0,
+            'rootMoves': root_moves,
+            'negamaxNodes': self.negamax_nodes,
+            'quiescenceNodes': self.quiescence_nodes,
+            'movegenCalls': self.movegen_calls,
+            'tacticalMovegenCalls': self.tactical_movegen_calls,
+            'legalContextCalls': self.legal_context_calls,
+            'ttHits': self.tt_hits,
+            'ttCutoffs': self.tt_cutoffs,
+            'betaCutoffs': self.beta_cutoffs,
+            'ttEntries': tt_entries,
+        }
 
 
 @dataclass(slots=True)
@@ -769,9 +833,14 @@ class Hexchess:
     def _friendly_piece_codes(self, color: int) -> tuple[int, ...]:
         return (WP, WR, WN, WB, WQ, WK) if color == WHITE else (BP, BR, BN, BB, BQ, BK)
 
-    def _fill_current_moves(self, result: list[int], tactical_only: bool = False, stable_order: bool = False) -> list[int]:
-        legal_context = self._compute_legal_context(self.turn)
-        _, check_count, evasion_mask, pin_masks = legal_context
+    def _fill_current_moves(self, result: list[int], tactical_only: bool = False, stable_order: bool = False, pin_masks: list[int] | None = None, stats: SearchState | None = None) -> list[int]:
+        if stats is not None:
+            stats.movegen_calls += 1
+            if tactical_only:
+                stats.tactical_movegen_calls += 1
+            stats.legal_context_calls += 1
+        legal_context = self._compute_legal_context(self.turn, pin_masks=pin_masks)
+        _, check_count, evasion_mask, pin_masks, has_pins = legal_context
         board = self.board
         turn = self.turn
         occupied = self.color_masks[WHITE] | self.color_masks[BLACK]
@@ -811,6 +880,43 @@ class Hexchess:
             self._append_king_moves(result, (king_squares & -king_squares).bit_length() - 1, turn, tactical_only)
 
         if check_count > 1:
+            return result
+
+        if check_count == 0 and not has_pins:
+            pawn_squares = self.piece_masks[pawn_piece]
+            while pawn_squares:
+                square_bit = pawn_squares & -pawn_squares
+                square = square_bit.bit_length() - 1
+                self._append_pawn_moves_unfiltered(result, square, turn, tactical_only, occupied)
+                pawn_squares ^= square_bit
+
+            knight_squares = self.piece_masks[knight_piece]
+            while knight_squares:
+                square_bit = knight_squares & -knight_squares
+                square = square_bit.bit_length() - 1
+                self._append_knight_moves(result, square, turn, tactical_only, ALL_BOARD_MASK)
+                knight_squares ^= square_bit
+
+            bishop_squares = self.piece_masks[bishop_piece]
+            while bishop_squares:
+                square_bit = bishop_squares & -bishop_squares
+                square = square_bit.bit_length() - 1
+                self._append_bishop_moves(result, square, ALL_BOARD_MASK, occupied, target_mask_base)
+                bishop_squares ^= square_bit
+
+            rook_squares = self.piece_masks[rook_piece]
+            while rook_squares:
+                square_bit = rook_squares & -rook_squares
+                square = square_bit.bit_length() - 1
+                self._append_rook_moves(result, square, ALL_BOARD_MASK, occupied, target_mask_base)
+                rook_squares ^= square_bit
+
+            queen_squares = self.piece_masks[queen_piece]
+            while queen_squares:
+                square_bit = queen_squares & -queen_squares
+                square = square_bit.bit_length() - 1
+                self._append_queen_moves(result, square, ALL_BOARD_MASK, occupied, target_mask_base)
+                queen_squares ^= square_bit
             return result
 
         pawn_squares = self.piece_masks[pawn_piece]
@@ -949,6 +1055,48 @@ class Hexchess:
                             append_move(_encode_move(from_index, capture_b, 0))
                 elif capture_b == ep:
                     self._append_en_passant_if_legal(result, from_index, capture_b, color, enemy_color, king, occupied)
+
+    def _append_pawn_moves_unfiltered(self, result: list[int], from_index: int, color: int, tactical_only: bool, occupied: int) -> None:
+        board = self.board
+        append_move = result.append
+        ep = self.ep
+        promotion_mask = PAWN_PROMOTION_MASKS[color]
+
+        advance1 = PAWN_FORWARD_TARGETS[color][from_index]
+        if advance1 != -1 and board[advance1] == EMPTY:
+            if promotion_mask[advance1]:
+                self._append_promotion_moves(result, from_index, advance1)
+            elif not tactical_only:
+                append_move(_encode_move(from_index, advance1, 0))
+                advance2 = PAWN_DOUBLE_TARGETS[color][from_index]
+                if advance2 != -1 and board[advance2] == EMPTY:
+                    append_move(_encode_move(from_index, advance2, 0))
+
+        enemy_color = _other_color(color)
+        king = self.white_king if color == WHITE else self.black_king
+        capture_a, capture_b = PAWN_CAPTURE_TARGETS[color][from_index]
+
+        if capture_a != -1:
+            target_piece = board[capture_a]
+            if target_piece != EMPTY:
+                if PIECE_COLOR[target_piece] == enemy_color:
+                    if promotion_mask[capture_a]:
+                        self._append_promotion_moves(result, from_index, capture_a)
+                    else:
+                        append_move(_encode_move(from_index, capture_a, 0))
+            elif capture_a == ep:
+                self._append_en_passant_if_legal(result, from_index, capture_a, color, enemy_color, king, occupied)
+
+        if capture_b != -1:
+            target_piece = board[capture_b]
+            if target_piece != EMPTY:
+                if PIECE_COLOR[target_piece] == enemy_color:
+                    if promotion_mask[capture_b]:
+                        self._append_promotion_moves(result, from_index, capture_b)
+                    else:
+                        append_move(_encode_move(from_index, capture_b, 0))
+            elif capture_b == ep:
+                self._append_en_passant_if_legal(result, from_index, capture_b, color, enemy_color, king, occupied)
 
     def _append_knight_moves(self, result: list[int], from_index: int, color: int, tactical_only: bool, allowed_mask: int) -> None:
         append_move = result.append
@@ -1106,10 +1254,12 @@ class Hexchess:
                 append_move(_encode_move(from_index, target, 0))
             targets ^= target_bit
 
-    def _compute_legal_context(self, color: int) -> LegalContext:
+    def _compute_legal_context(self, color: int, pin_masks: list[int] | None = None) -> LegalContext:
         king = self.find_king(color)
         if king is None:
-            return -1, 0, ALL_BOARD_MASK, [ALL_BOARD_MASK] * 91
+            next_pin_masks = pin_masks if pin_masks is not None else [ALL_BOARD_MASK] * 91
+            next_pin_masks[:] = ALL_PIN_MASKS
+            return -1, 0, ALL_BOARD_MASK, next_pin_masks, False
 
         enemy_color = _other_color(color)
         occupied = self._occupied()
@@ -1118,7 +1268,9 @@ class Hexchess:
         ray_attacks = RAY_ATTACK_TABLES[king]
         check_count = 0
         evasion_mask = ALL_BOARD_MASK
-        pin_masks = [ALL_BOARD_MASK] * 91
+        next_pin_masks = pin_masks if pin_masks is not None else [ALL_BOARD_MASK] * 91
+        next_pin_masks[:] = ALL_PIN_MASKS
+        has_pins = False
 
         pawn_attackers = self.piece_masks[WP if enemy_color == WHITE else BP] & PAWN_ATTACK_SOURCES[enemy_color][king]
         while pawn_attackers:
@@ -1175,7 +1327,8 @@ class Hexchess:
                 else:
                     is_slider = is_slider or second_piece == bishop_piece
                 if PIECE_COLOR[second_piece] == enemy_color and is_slider:
-                    pin_masks[first_blocker] = xray_attack_mask
+                    next_pin_masks[first_blocker] = xray_attack_mask
+                    has_pins = True
                 continue
 
             is_slider = first_piece == queen_piece
@@ -1194,7 +1347,7 @@ class Hexchess:
         elif check_count > 1:
             evasion_mask = 0
 
-        return king, check_count, evasion_mask, pin_masks
+        return king, check_count, evasion_mask, next_pin_masks, has_pins
 
     def _legal_king_moves(self, from_index: int, moves: list[int], tactical_only: bool) -> list[int]:
         legal_moves: list[int] = []
@@ -1333,7 +1486,7 @@ class Hexchess:
         color = PIECE_COLOR[piece]
         if legal_context is None:
             legal_context = self._compute_legal_context(color)
-        king, check_count, evasion_mask, pin_masks = legal_context
+        king, check_count, evasion_mask, pin_masks, _ = legal_context
         pseudo_moves = self._moves_from_unsafe_codes(from_index, tactical_only=tactical_only, piece=piece)
 
         if PIECE_KIND[piece] == KING:
@@ -1565,88 +1718,217 @@ def _is_tactical_move(hexchess: Hexchess, move_code: int) -> bool:
     return PIECE_KIND[piece] == PAWN and hexchess.ep == to_index
 
 
-def _move_order_score(hexchess: Hexchess, move_code: int, depth: int, killer_moves: dict[int, tuple[int, ...]], history_table: dict[int, int]) -> int:
+def _captured_piece_for_move(hexchess: Hexchess, move_code: int, piece: int | None = None) -> int:
     from_index = _move_from(move_code)
     to_index = _move_to(move_code)
-    piece = hexchess.board[from_index]
-    if piece == EMPTY:
-        return 0
-    score = 0
-    moved_value = PIECE_VALUES[PIECE_KIND[piece]]
+    moving_piece = piece if piece is not None else hexchess.board[from_index]
+    if moving_piece == EMPTY:
+        return EMPTY
+
     captured_piece = hexchess.board[to_index]
-    if captured_piece == EMPTY and PIECE_KIND[piece] == PAWN and hexchess.ep == to_index:
-        captured_square = GRAPH[to_index][0] if piece == BP else GRAPH[to_index][6]
-        if captured_square is not None:
-            captured_piece = hexchess.board[captured_square]
     if captured_piece != EMPTY:
-        score += 10_000 + (PIECE_VALUES[PIECE_KIND[captured_piece]] * 100) - moved_value
-    promotion_code = _move_promotion(move_code)
-    if promotion_code:
-        score += PROMOTION_ORDER_BONUS[promotion_code]
-    if PIECE_KIND[piece] == PAWN and captured_piece == EMPTY:
-        score += 5
-    if move_code in killer_moves.get(depth, ()): 
-        score += 9_000
-    score += history_table.get(move_code, 0)
-    return score
+        return captured_piece
+
+    if PIECE_KIND[moving_piece] != PAWN or hexchess.ep != to_index:
+        return EMPTY
+
+    captured_square = GRAPH[to_index][0] if moving_piece == BP else GRAPH[to_index][6]
+    if captured_square is None:
+        return EMPTY
+    return hexchess.board[captured_square]
 
 
-def _tactical_move_order_score(hexchess: Hexchess, move_code: int) -> int:
-    from_index = _move_from(move_code)
-    to_index = _move_to(move_code)
-    piece = hexchess.board[from_index]
-    if piece == EMPTY:
-        return 0
-
-    score = 0
-    captured_piece = hexchess.board[to_index]
-    if captured_piece == EMPTY and PIECE_KIND[piece] == PAWN and hexchess.ep == to_index:
-        captured_square = GRAPH[to_index][0] if piece == BP else GRAPH[to_index][6]
-        if captured_square is not None:
-            captured_piece = hexchess.board[captured_square]
-    if captured_piece != EMPTY:
-        score += (PIECE_VALUES[PIECE_KIND[captured_piece]] * 100) - PIECE_VALUES[PIECE_KIND[piece]]
+def _passes_qsearch_delta_prune(
+    hexchess: Hexchess,
+    move_code: int,
+    stand_pat: float,
+    alpha: float,
+    tt_move: int | None,
+    options: EvalOptions,
+) -> bool:
+    if move_code == tt_move:
+        return True
 
     promotion_code = _move_promotion(move_code)
     if promotion_code:
-        score += PROMOTION_ORDER_BONUS[promotion_code]
-    return score
+        return True
+
+    from_index = _move_from(move_code)
+    piece = hexchess.board[from_index]
+    if piece == EMPTY:
+        return False
+
+    captured_piece = _captured_piece_for_move(hexchess, move_code, piece)
+    if captured_piece == EMPTY:
+        return False
+
+    # Conservative delta pruning: skip low-value tactical continuations that cannot
+    # realistically raise alpha above the current stand-pat plus a small margin.
+    delta_margin = (options.pawn_value * 2.0) + options.check_value
+    optimistic_gain = PIECE_ORDER_VALUES[captured_piece]
+    return stand_pat + optimistic_gain + delta_margin > alpha
 
 
-def optimize_for_branch_pruning(hexchess: Hexchess, moves: list[int], depth: int, killer_moves: dict[int, tuple[int, ...]], history_table: dict[int, int], tt_move: int | None = None) -> None:
+def _promote_move_to_front(moves: list[int], prioritized_move: int | None) -> None:
+    if prioritized_move is None or len(moves) < 2:
+        return
+    try:
+        move_index = moves.index(prioritized_move)
+    except ValueError:
+        return
+    if move_index > 0:
+        moves[0], moves[move_index] = moves[move_index], moves[0]
+
+
+def store_transposition_entry(
+    table: dict[int, TranspositionEntry],
+    key: int,
+    depth: int,
+    flag: str,
+    value: float,
+    best_move: int | None,
+) -> None:
+    existing = table.get(key)
+    if existing is not None and existing[0] > depth:
+        return
+    table[key] = (depth, flag, value, best_move)
+
+
+def optimize_for_branch_pruning(hexchess: Hexchess, moves: list[int], depth: int, state: SearchState, tt_move: int | None = None) -> None:
     if len(moves) < 2:
         return
-    moves.sort(key=lambda move_code: (move_code == tt_move, _move_order_score(hexchess, move_code, depth, killer_moves, history_table)), reverse=True)
+    board = hexchess.board
+    ep = hexchess.ep
+    history_scores = state.history_scores
+    killer_a, killer_b = state.killer_moves_for(depth)
+
+    def move_score(move_code: int) -> int:
+        from_index = _move_from(move_code)
+        to_index = _move_to(move_code)
+        piece = board[from_index]
+        if piece == EMPTY:
+            return 0
+
+        score = history_scores[move_code]
+        moved_value = PIECE_ORDER_VALUES[piece]
+        captured_piece = board[to_index]
+        piece_kind = PIECE_KIND[piece]
+        if captured_piece == EMPTY and piece_kind == PAWN and ep == to_index:
+            captured_square = GRAPH[to_index][0] if piece == BP else GRAPH[to_index][6]
+            if captured_square is not None:
+                captured_piece = board[captured_square]
+        if captured_piece != EMPTY:
+            score += 10_000 + (PIECE_ORDER_VALUES[captured_piece] * 100) - moved_value
+        promotion_code = _move_promotion(move_code)
+        if promotion_code:
+            score += PROMOTION_ORDER_BONUS[promotion_code]
+        if piece_kind == PAWN and captured_piece == EMPTY:
+            score += 5
+        if move_code == killer_a or move_code == killer_b:
+            score += 9_000
+        return score
+
+    moves.sort(key=move_score, reverse=True)
+    _promote_move_to_front(moves, tt_move)
 
 
-def record_killer_move(killer_moves: dict[int, tuple[int, ...]], depth: int, move_code: int) -> None:
-    current = tuple(existing for existing in killer_moves.get(depth, ()) if existing != move_code)
-    killer_moves[depth] = (move_code, *current)[:2]
+def optimize_tactical_moves(hexchess: Hexchess, moves: list[int], tt_move: int | None = None) -> None:
+    if len(moves) < 2:
+        return
+    board = hexchess.board
+    ep = hexchess.ep
+
+    def move_score(move_code: int) -> int:
+        from_index = _move_from(move_code)
+        to_index = _move_to(move_code)
+        piece = board[from_index]
+        if piece == EMPTY:
+            return 0
+
+        captured_piece = board[to_index]
+        if captured_piece == EMPTY and PIECE_KIND[piece] == PAWN and ep == to_index:
+            captured_square = GRAPH[to_index][0] if piece == BP else GRAPH[to_index][6]
+            if captured_square is not None:
+                captured_piece = board[captured_square]
+
+        score = 0
+        if captured_piece != EMPTY:
+            score += (PIECE_ORDER_VALUES[captured_piece] * 100) - PIECE_ORDER_VALUES[piece]
+
+        promotion_code = _move_promotion(move_code)
+        if promotion_code:
+            score += PROMOTION_ORDER_BONUS[promotion_code]
+        return score
+
+    moves.sort(key=move_score, reverse=True)
+    _promote_move_to_front(moves, tt_move)
 
 
-def quiescence(hexchess: Hexchess, state: SearchState, ply: int, alpha: float, beta: float, evaluations: list[int], options: EvalOptions) -> float:
+def quiescence(
+    hexchess: Hexchess,
+    state: SearchState,
+    table: dict[int, TranspositionEntry],
+    ply: int,
+    alpha: float,
+    beta: float,
+    evaluations: list[int],
+    options: EvalOptions,
+) -> float:
+    state.quiescence_nodes += 1
+    alpha_orig = alpha
+    key = hexchess.position_key()
+    entry = table.get(key)
+    tt_move = entry[3] if entry is not None else None
+    if entry is not None:
+        state.tt_hits += 1
+        entry_depth, flag, value, _ = entry
+        if entry_depth >= 0:
+            if flag == 'exact':
+                state.tt_cutoffs += 1
+                return value
+            if flag == 'lower' and value >= beta:
+                state.tt_cutoffs += 1
+                return value
+            if flag == 'upper' and value <= alpha:
+                state.tt_cutoffs += 1
+                return value
+
     evaluations[0] += 1
     stand_pat = static_eval_for_turn(hexchess, options)
     if stand_pat >= beta:
+        store_transposition_entry(table, key, 0, 'lower', stand_pat, tt_move)
         return stand_pat
     if stand_pat > alpha:
         alpha = stand_pat
-    tactical_moves = hexchess._fill_current_moves(state.buffer_for(ply), tactical_only=True)
+    tactical_moves = hexchess._fill_current_moves(state.buffer_for(ply), tactical_only=True, pin_masks=state.pin_masks_for(ply), stats=state)
     if not tactical_moves:
         return stand_pat
-    if len(tactical_moves) > 1:
-        tactical_moves.sort(key=lambda move_code: _tactical_move_order_score(hexchess, move_code), reverse=True)
+    optimize_tactical_moves(hexchess, tactical_moves, tt_move)
     value = stand_pat
+    best_move: int | None = None
+    delta_prune_active = alpha > stand_pat + options.rook_value + options.check_value
+    in_check = hexchess.is_check() if delta_prune_active else False
     for move_code in tactical_moves:
+        if delta_prune_active and not in_check and not _passes_qsearch_delta_prune(hexchess, move_code, stand_pat, alpha, tt_move, options):
+            continue
         undo = hexchess.make_move_unsafe(move_code)
-        child_value = -quiescence(hexchess, state, ply + 1, -beta, -alpha, evaluations, options)
+        child_value = -quiescence(hexchess, state, table, ply + 1, -beta, -alpha, evaluations, options)
         hexchess.unmake_move(undo)
         if child_value >= beta:
+            state.beta_cutoffs += 1
+            store_transposition_entry(table, key, 0, 'lower', child_value, move_code)
             return child_value
         if child_value > value:
             value = child_value
+            best_move = move_code
         if child_value > alpha:
             alpha = child_value
+    flag = 'exact'
+    if value <= alpha_orig:
+        flag = 'upper'
+    elif value >= beta:
+        flag = 'lower'
+    store_transposition_entry(table, key, 0, flag, value, best_move)
     return value
 
 
@@ -1660,45 +1942,54 @@ def negamax(
     beta: float,
     evaluations: list[int],
     options: EvalOptions,
-    killer_moves: dict[int, tuple[int, ...]],
-    history_table: dict[int, int],
 ) -> float:
+    state.negamax_nodes += 1
     alpha_orig = alpha
     key = hexchess.position_key()
     entry = table.get(key)
     tt_move = entry[3] if entry is not None else None
     if entry is not None:
+        state.tt_hits += 1
         entry_depth, flag, value, _ = entry
         if entry_depth >= depth:
             if flag == 'exact':
+                state.tt_cutoffs += 1
                 return value
             if flag == 'lower' and value >= beta:
+                state.tt_cutoffs += 1
                 return value
             if flag == 'upper' and value <= alpha:
+                state.tt_cutoffs += 1
                 return value
-    current_moves = hexchess._fill_current_moves(state.buffer_for(ply), tactical_only=False)
+    current_moves = hexchess._fill_current_moves(state.buffer_for(ply), tactical_only=False, pin_masks=state.pin_masks_for(ply), stats=state)
     if not current_moves:
         evaluations[0] += 1
         if hexchess.is_check():
             return options.checkmate_value if hexchess.turn == WHITE else -options.checkmate_value
         return options.stalemate_value if hexchess.turn == WHITE else -options.stalemate_value
     if depth == 0:
-        return quiescence(hexchess, state, ply, alpha, beta, evaluations, options)
-    optimize_for_branch_pruning(hexchess, current_moves, ply, killer_moves, history_table, tt_move)
+        return quiescence(hexchess, state, table, ply, alpha, beta, evaluations, options)
+    optimize_for_branch_pruning(hexchess, current_moves, ply, state, tt_move)
     value = float('-inf')
     best_move: int | None = None
-    for move_code in current_moves:
+    for move_index, move_code in enumerate(current_moves):
         undo = hexchess.make_move_unsafe(move_code)
-        child_value = -negamax(state, table, hexchess, depth - 1, ply + 1, -beta, -alpha, evaluations, options, killer_moves, history_table)
+        if move_index == 0:
+            child_value = -negamax(state, table, hexchess, depth - 1, ply + 1, -beta, -alpha, evaluations, options)
+        else:
+            child_value = -negamax(state, table, hexchess, depth - 1, ply + 1, -alpha - 1, -alpha, evaluations, options)
+            if child_value > alpha and child_value < beta:
+                child_value = -negamax(state, table, hexchess, depth - 1, ply + 1, -beta, -alpha, evaluations, options)
         hexchess.unmake_move(undo)
         if child_value > value:
             value = child_value
             best_move = move_code
         alpha = max(alpha, value)
         if alpha >= beta:
+            state.beta_cutoffs += 1
             if not _is_tactical_move(hexchess, move_code):
-                record_killer_move(killer_moves, ply, move_code)
-                history_table[move_code] = history_table.get(move_code, 0) + depth * depth
+                state.record_killer(ply, move_code)
+                state.history_scores[move_code] += depth * depth
             best_move = move_code
             break
     flag = 'exact'
@@ -1706,29 +1997,34 @@ def negamax(
         flag = 'upper'
     elif value >= beta:
         flag = 'lower'
-    table[key] = (depth, flag, value, best_move)
+    store_transposition_entry(table, key, depth, flag, value, best_move)
     return value
 
 
 def search(hexchess: Hexchess, depth: int, options: EvalOptions | None = None) -> dict[str, object]:
     if depth < 1:
         error(f'invalid depth: {depth}')
+    started_at = time.perf_counter()
     evaluation_options = options or EvalOptions()
     table: dict[int, TranspositionEntry] = {}
-    killer_moves: dict[int, tuple[int, ...]] = {}
-    history_table: dict[int, int] = {}
     evaluations = [0]
     state = SearchState()
     sans: list[dict[str, object]] = []
-    root_moves = hexchess._fill_current_moves(state.buffer_for(0), tactical_only=False)
-    optimize_for_branch_pruning(hexchess, root_moves, 0, killer_moves, history_table)
+    root_moves = hexchess._fill_current_moves(state.buffer_for(0), tactical_only=False, pin_masks=state.pin_masks_for(0), stats=state)
+    optimize_for_branch_pruning(hexchess, root_moves, 0, state)
     for move_code in root_moves:
         undo = hexchess.make_move_unsafe(move_code)
-        score = negamax(state, table, hexchess, depth - 1, 1, float('-inf'), float('inf'), evaluations, evaluation_options, killer_moves, history_table)
+        score = negamax(state, table, hexchess, depth - 1, 1, float('-inf'), float('inf'), evaluations, evaluation_options)
         hexchess.unmake_move(undo)
         sans.append({'san': str(San.from_code(move_code)), 'score': score})
     sans.sort(key=lambda item: item['score'])
-    return {'depth': depth, 'evaluations': evaluations[0], 'sans': sans}
+    wall_ms = (time.perf_counter() - started_at) * 1000.0
+    return {
+        'depth': depth,
+        'evaluations': evaluations[0],
+        'sans': sans,
+        'metrics': state.metrics_dict(len(root_moves), wall_ms, evaluations[0], len(table)),
+    }
 
 
 def ping_response() -> dict[str, int]:

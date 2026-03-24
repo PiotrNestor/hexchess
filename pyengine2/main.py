@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 
 from pyengine2.native_engine import NativeEngineError, execute_command
+from pyengine2.version import PYENGINE2_VERSION
 
 
 class EngineError(BaseModel):
@@ -38,7 +39,7 @@ class ExecuteFailure(BaseModel):
     error: EngineError
 
 
-app = FastAPI(title="hexchess pyengine2", version="0.1.0")
+app = FastAPI(title="hexchess pyengine2", version=PYENGINE2_VERSION)
 
 app.add_middleware(
     CORSMiddleware,

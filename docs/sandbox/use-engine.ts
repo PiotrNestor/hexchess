@@ -5,7 +5,10 @@ import {
   type EvaluateOptions,
   type EvaluateResponse,
   type ExecuteResponse,
+  type SearchMetrics,
 } from '../../engine/index'
+
+export type { SearchMetrics }
 
 export interface SearchResult extends EvaluateResponse {
   duration: number
@@ -20,6 +23,23 @@ function log(...args: unknown[]) {
 }
 
 export type EngineKind = 'rust-worker' | 'python-api' | 'cyengine-api'
+
+const ENGINE_MAX_DEPTH: Record<EngineKind, number | null> = {
+  'rust-worker': 4,
+  'python-api': null,
+  'cyengine-api': null,
+}
+
+export function getEngineMaxDepth(kind: EngineKind) {
+  return ENGINE_MAX_DEPTH[kind]
+}
+
+export function clampDepthForEngine(kind: EngineKind, depth: number) {
+  const normalizedDepth = Math.max(1, depth)
+  const maxDepth = getEngineMaxDepth(kind)
+
+  return maxDepth === null ? normalizedDepth : Math.min(normalizedDepth, maxDepth)
+}
 
 const PYENGINE_BASE_URL = 'http://127.0.0.1:8000'
 const CYENGINE_BASE_URL = 'http://127.0.0.1:8001'

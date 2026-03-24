@@ -1,0 +1,120 @@
+version: 1
+benchmarks:
+- name: initial-position
+  category: opening
+  fen: b/qbk/n1b1n/r5r/ppppppppp/11/5P5/4P1P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 1
+  notes: High-branching opening baseline.
+- name: opening-4-ply
+  category: opening
+  sequence: d3d5 c7c5 h3h5 i7i5
+  notes: Early opening after both sides expand pawns.
+- name: opening-8-ply
+  category: opening
+  sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5
+  notes: Early tactical opening structure from Sandbox play.
+- name: midgame-12-ply
+  category: middlegame
+  sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5 b3a4 c8c6 e1b4 c6c2
+  notes: Real self-play middlegame with active pieces and captures.
+- name: midgame-24-ply
+  category: middlegame
+  sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5 b3a4 c8c6 e1b4 c6c2 a4c2 e10b4
+    b5d3 i5i4 g4g6 f7g6 f3e1 b4b6 c2d4 b6b7 d4e6 h7h6
+  notes: Wider middlegame with more forcing lines.
+- name: midgame-34-ply
+  category: middlegame
+  sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5 b3a4 c8c6 e1b4 c6c2 a4c2 e10b4
+    b5d3 i5i4 g4g6 f7g6 f3e1 b4b6 c2d4 b6b7 d4e6 h7h6 h3h4 i4h4 c1h4 b7b1 e6g6 h6g6
+    d3h9 f10h9 h4d2 k7k5
+  notes: Deep self-play middlegame used during illegal-move debugging.
+- name: in-check-defense
+  category: defense
+  fen: k/3/5/7/9/11/11/11/3q7/11/5K5 w - 0 1
+  notes: Side to move is in check and must find a narrow defensive reply set.
+- name: pinned-defense
+  category: defense
+  fen: k/3/5/7/9/11/11/5r5/11/5N5/5K5 w - 0 1
+  notes: Pinned minor piece with a small legal move set. Good for legal-filter overhead.
+- name: double-check-defense
+  category: defense
+  fen: k/3/5/7/9/11/11/11/4qr5/11/5K5 w - 0 1
+  notes: Double-check position where only king moves are legal.
+- name: en-passant-legal
+  category: regression
+  fen: 1/K2/5/7/9/10k/4Pp5/11/11/11/11 w f6 0 1
+  notes: Direct en passant legality path where the capture is allowed.
+- name: en-passant-illegal
+  category: regression
+  fen: 1/K2/5/7/9/10k/4Pp5/4r6/11/11/11 w f6 0 1
+  notes: Direct en passant legality path where the capture is rejected because it
+    exposes the king.
+- name: promotion-race
+  category: endgame
+  fen: 1/1Pr/5/7/9/10k/11/11/11/5p5/K10 w - 0 1
+  notes: Promotion-heavy position with both quiet and capture promotions available.
+- name: capture-storm-qsearch
+  category: tactics
+  fen: 1/3/5/7/4r4/6p3k/5Q1p3/11/11/11/K10 w - 0 1
+  notes: Capture-dense position intended to stress tactical generation and qsearch.
+- name: tt-transposition-midgame
+  category: middlegame
+  fen: 1/3/5/7/3brb3/4p1p3k/4RQR4/11/11/11/K10 w - 0 1
+  notes: Symmetric tactical middlegame intended to increase transposition-table reuse.
+- name: quiet-endgame-eval
+  category: endgame
+  fen: 1/3/5/6k/2p3p2/11/5Q5/4P1P4/11/2K8/11 w - 0 1
+  notes: Quiet low-material position intended to make evaluation cost easier to isolate.
+- name: slider-mobility-open
+  category: middlegame
+  fen: 1/3/5/7/9/4R1R3k/5Q5/2B5B2/11/11/K10 w - 0 1
+  notes: Open-board slider position intended to stress bishop, rook, and queen generation.
+- name: endgame-light
+  category: endgame
+  fen: k/3/5/4r2/9/11/11/4Q6/11/11/5K5 w - 0 1
+  notes: Low-material endgame with long-range pieces.
+- name: pawn-attack-regression
+  category: regression
+  fen: k/3/5/7/5p3/11/6Q4/11/11/11/5K5 w - 0 1
+  notes: Regression case for pawn-attack awareness.
+- name: harvested-hexchess-game-20260324-175232-ply-018-tt-heavy
+  category: harvested
+  fen: b/q1k/n1b1n/r4r1/pppp1p3/3b1PN4/7p3/6P1pp1/3P1B1P3/2P2B2P2/QPRN1BK1RP1 b -
+    3 9
+  notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 18 (b9 h8g8).
+    tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy,
+    wide-root. wallMs=189338.8, negamaxNodes=1111688, quiescenceNodes=6124234, ttHits=827664,
+    movegenCalls=3423357.'
+- name: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+  category: harvested
+  fen: 1/2k/2b1n/r2n3/pppp1pr2/3bN1P4/7p3/2P3P1p2/3P3P1p1/5B1BP2/1PR2BK1RP1 b c3 0
+    17
+  notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 34 (b17 b7b5).
+    tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=62024.1,
+    negamaxNodes=521388, quiescenceNodes=1852281, ttHits=264785, movegenCalls=1396834.'
+- name: harvested-hexchess-game-20260324-175232-ply-024-wide-root
+  category: harvested
+  fen: 1/q1k/n1b1n/r3r2/pppp1p3/3b2P4/7p3/4Q1P1pp1/3P1B1P3/2P2B2P2/1PRN1BK1RP1 b -
+    0 12
+  notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 24 (b12 e10l5).
+    tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy,
+    wide-root. wallMs=80946.8, negamaxNodes=923651, quiescenceNodes=2007940, ttHits=527660,
+    movegenCalls=1448831.'
+- name: harvested-hexchess-game-20260324-175232-ply-004-node-heavy
+  category: harvested
+  fen: b/qbk/n1b1n/r5r/pppp1pppp/4Q6/5P5/6P4/3P1B1P3/2P2B2P2/1PRN1BKNRP1 b - 0 2
+  notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 4 (b2 h7h5).
+    tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+    wallMs=132733.5, negamaxNodes=1122032, quiescenceNodes=3740444, ttHits=795469,
+    movegenCalls=2284733.'
+- name: harvested-hexchess-game-20260324-175232-ply-074-low-throughput
+  category: harvested
+  fen: 1/2k/4n/3n3/r2p1p3/6P4/4b5R/6P1p2/4B3Pp1/1p9/4KB3P1 b - 3 37
+  notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 74 (b37 b2b1q).
+    tags: low-throughput. wallMs=21115.0, negamaxNodes=355012, quiescenceNodes=443761,
+    ttHits=172651, movegenCalls=437826.'
+- name: harvested-hexchess-game-20260324-175232-ply-010-node-heavy
+  category: harvested
+  fen: b/qbk/n1b1n/r4r1/pppp1p2p/5P5/7pp2/6P4/3P1B1P3/2P2B2P2/QPRN1BKNRP1 b - 0 5
+  notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 10 (b5 k7k5).
+    tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+    wallMs=97689.2, negamaxNodes=921501, quiescenceNodes=2646313, ttHits=548905, movegenCalls=1773051.'

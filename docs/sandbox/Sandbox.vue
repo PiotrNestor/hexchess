@@ -127,9 +127,47 @@
       Match pairing: White {{ engineLabel(matchWhiteEngine) }}, Black {{ engineLabel(matchBlackEngine) }}.
     </div>
 
+    <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm tracking-wide">
+      <span class="opacity-75">Engine depths:</span>
+
+      <div
+        v-for="kind in engineKinds"
+        :key="kind"
+        class="flex items-center gap-x-2 rounded border px-2 py-1"
+      >
+        <span>{{ engineLabel(kind) }}</span>
+
+        <button
+          class="cursor-pointer hover:text-(--vp-code-color)! disabled:opacity-40 disabled:pointer-events-none"
+          title="Decrease depth"
+          :disabled="getEngineDepth(kind) <= 1"
+          @click="decrementEngineDepth(kind)"
+        >
+          <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+        </button>
+
+        <span>
+          {{ getEngineDepth(kind) }}
+          <template v-if="getEngineMaxDepth(kind) !== null">
+            / {{ getEngineMaxDepth(kind) }}
+          </template>
+        </span>
+
+        <button
+          class="cursor-pointer hover:text-(--vp-code-color)! disabled:opacity-40 disabled:pointer-events-none"
+          title="Increase depth"
+          :disabled="!canIncrementEngineDepth(kind)"
+          @click="incrementEngineDepth(kind)"
+        >
+          <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </button>
+      </div>
+    </div>
+
     <div class="mt-3">
       <EvaluationResult
-        v-model:depth="depth"
+        v-model:depth="selectedEngineDepth"
+        :max-depth="selectedEngineMaxDepth"
         :evaluation="evaluation" />
     </div>
 
@@ -253,7 +291,14 @@ import { computed, onMounted, ref } from 'vue'
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml'
 import { Hexboard } from '@bedard/hexboard'
 import { Hexchess, San } from '../../js/src'
-import { useEngine, type EngineKind, type SearchResult } from './use-engine'
+import {
+  clampDepthForEngine,
+  getEngineMaxDepth,
+  useEngine,
+  type EngineKind,
+  type SearchMetrics,
+  type SearchResult,
+} from './use-engine'
 import { useEventListener } from '@vueuse/core'
 // @ts-ignore Vue SFC default export is provided by Vue tooling
 import EvaluationResult from './EvaluationResult.vue'
@@ -270,9 +315,11 @@ type MoveSource = EngineKind | 'manual'
 
 interface SavedGameMove {
   san: string
+  beforeFen?: string | null
   source?: MoveSource | null
   evaluations?: number | null
   duration?: number | null
+  metrics?: SearchMetrics | null
 }
 
 interface SavedGameFile {
@@ -288,16 +335,23 @@ interface RestoreHistoryResult {
     san: string
     message: string
   } | null
+  fenMismatches: number
   loadedMoves: number
 }
 
 const { engineKind, evaluate, evaluateWith, loading } = useEngine()
 
+const engineKinds: EngineKind[] = ['rust-worker', 'python-api', 'cyengine-api']
+
 //
 // state
 //
 
-const depth = ref(3)
+const engineDepths = ref<Record<EngineKind, number>>({
+  'rust-worker': 3,
+  'python-api': 3,
+  'cyengine-api': 3,
+})
 
 const flipped = ref(false)
 
@@ -328,6 +382,7 @@ const moveHistory = ref<Array<{
   source: MoveSource | null
   evaluations: number | null
   duration: number | null
+  metrics: SearchMetrics | null
 }>>([])
 
 let matchToken = 0
@@ -414,6 +469,15 @@ const currentMoveLabel = computed(() => {
   return current ? `(showing ${current.san})` : '(latest position)'
 })
 
+const selectedEngineMaxDepth = computed(() => getEngineMaxDepth(engineKind.value))
+
+const selectedEngineDepth = computed({
+  get: () => engineDepths.value[engineKind.value],
+  set: (value) => {
+    setEngineDepth(engineKind.value, value)
+  },
+})
+
 //
 // lifecycle
 //
@@ -453,6 +517,7 @@ function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryInd
   let current = Hexchess.parse(startFen)
   const nextHistory: typeof moveHistory.value = []
   let invalidMove: RestoreHistoryResult['invalidMove'] = null
+  let fenMismatches = 0
 
   for (let index = 0; index < moves.length; index += 1) {
     const move = moves[index]
@@ -460,6 +525,15 @@ function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryInd
     try {
       const san = San.from(move.san)
       const beforeFen = current.toString()
+      if (typeof move.beforeFen === 'string' && move.beforeFen !== beforeFen) {
+        fenMismatches += 1
+        console.warn('[hexchess-sandbox] saved beforeFen mismatch', {
+          index: index + 1,
+          san: move.san,
+          savedBeforeFen: move.beforeFen,
+          replayBeforeFen: beforeFen,
+        })
+      }
       const next = current.clone()
 
       next.applyMove(san)
@@ -474,6 +548,7 @@ function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryInd
         source: move.source ?? null,
         evaluations: move.evaluations ?? null,
         duration: move.duration ?? null,
+        metrics: move.metrics ?? null,
       })
     } catch (err) {
       invalidMove = {
@@ -499,6 +574,7 @@ function restoreHistory(startFen: string, moves: SavedGameMove[], nextHistoryInd
 
   return {
     invalidMove,
+    fenMismatches,
     loadedMoves: nextHistory.length,
   }
 }
@@ -522,7 +598,7 @@ function formatExportTimestamp() {
   return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
 }
 
-function applyMoveToHistory(san: San, meta: { source?: MoveSource | null, evaluations?: number | null, duration?: number | null } = {}) {
+function applyMoveToHistory(san: San, meta: { source?: MoveSource | null, evaluations?: number | null, duration?: number | null, metrics?: SearchMetrics | null } = {}) {
   const current = hexchess.value.clone()
   const beforeFen = current.toString()
   const next = current.clone()
@@ -544,6 +620,7 @@ function applyMoveToHistory(san: San, meta: { source?: MoveSource | null, evalua
       source: meta.source ?? null,
       evaluations: meta.evaluations ?? null,
       duration: meta.duration ?? null,
+      metrics: meta.metrics ?? null,
     },
   ]
 
@@ -595,6 +672,31 @@ function engineLabel(kind: EngineKind) {
   }
 
   return 'Rust'
+}
+
+function getEngineDepth(kind: EngineKind) {
+  return engineDepths.value[kind]
+}
+
+function setEngineDepth(kind: EngineKind, value: number) {
+  engineDepths.value = {
+    ...engineDepths.value,
+    [kind]: clampDepthForEngine(kind, value),
+  }
+}
+
+function incrementEngineDepth(kind: EngineKind) {
+  setEngineDepth(kind, getEngineDepth(kind) + 1)
+}
+
+function decrementEngineDepth(kind: EngineKind) {
+  setEngineDepth(kind, getEngineDepth(kind) - 1)
+}
+
+function canIncrementEngineDepth(kind: EngineKind) {
+  const maxDepth = getEngineMaxDepth(kind)
+
+  return maxDepth === null || getEngineDepth(kind) < maxDepth
 }
 
 function moveSourceLabel(source: MoveSource | null | undefined) {
@@ -651,9 +753,11 @@ function onSaveGameClick() {
     historyIndex: historyIndex.value,
     moves: moveHistory.value.map((move) => ({
       san: move.san,
+      beforeFen: move.beforeFen,
       source: move.source,
       evaluations: move.evaluations,
       duration: move.duration,
+      metrics: move.metrics,
     })),
   }
 
@@ -691,6 +795,8 @@ async function onGameFileChange(evt: Event) {
       window.alert(
         `Loaded ${result.loadedMoves} moves. Stopped at invalid saved move ${result.invalidMove.index} (${result.invalidMove.san}).`,
       )
+    } else if (result.fenMismatches > 0) {
+      console.warn('[hexchess-sandbox] loaded game with beforeFen mismatches', result)
     }
   } catch (err) {
     console.error('[hexchess-sandbox] failed to load moves', err)
@@ -711,7 +817,7 @@ function onMove(san: San) {
 async function onPlayClick() {
   const kind = engineKind.value
   const data = await evaluate({
-    depth: depth.value,
+    depth: getEngineDepth(kind),
     position: hexchess.value.toString(),
   })
 
@@ -730,6 +836,7 @@ async function onPlayClick() {
         source: kind,
         evaluations: data.response.evaluations,
         duration: data.response.duration,
+        metrics: data.response.metrics ?? null,
       })
     } catch {
       reportIllegalEngineMove(kind, san)
@@ -750,7 +857,7 @@ function onResetClick() {
 
 async function playBestMove(kind: EngineKind) {
   const data = await evaluateWith(kind, {
-    depth: depth.value,
+    depth: getEngineDepth(kind),
     position: hexchess.value.toString(),
   })
 
@@ -772,6 +879,7 @@ async function playBestMove(kind: EngineKind) {
       source: kind,
       evaluations: data.response.evaluations,
       duration: data.response.duration,
+      metrics: data.response.metrics ?? null,
     })
     return true
   } catch {
