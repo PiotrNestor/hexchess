@@ -1,0 +1,46 @@
+version: 1
+benchmarks:
+  - name: initial-position
+    category: opening
+    fen: b/qbk/n1b1n/r5r/ppppppppp/11/5P5/4P1P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 1
+    notes: High-branching opening baseline.
+
+  - name: opening-4-ply
+    category: opening
+    sequence: d3d5 c7c5 h3h5 i7i5
+    notes: Early opening after both sides expand pawns.
+
+  - name: opening-8-ply
+    category: opening
+    sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5
+    notes: Early tactical opening structure from Sandbox play.
+
+  - name: midgame-12-ply
+    category: middlegame
+    sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5 b3a4 c8c6 e1b4 c6c2
+    notes: Real self-play middlegame with active pieces and captures.
+
+  - name: midgame-24-ply
+    category: middlegame
+    sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5 b3a4 c8c6 e1b4 c6c2 a4c2 e10b4 b5d3 i5i4 g4g6 f7g6 f3e1 b4b6 c2d4 b6b7 d4e6 h7h6
+    notes: Wider middlegame with more forcing lines.
+
+  - name: midgame-34-ply
+    category: middlegame
+    sequence: f2c5 b7b5 c5b3 i7i5 d3d5 c7c5 f1b5 c5d5 b3a4 c8c6 e1b4 c6c2 a4c2 e10b4 b5d3 i5i4 g4g6 f7g6 f3e1 b4b6 c2d4 b6b7 d4e6 h7h6 h3h4 i4h4 c1h4 b7b1 e6g6 h6g6 d3h9 f10h9 h4d2 k7k5
+    notes: Deep self-play middlegame used during illegal-move debugging.
+
+  - name: in-check-defense
+    category: defense
+    fen: k/3/5/7/9/11/11/11/3q7/11/5K5 w - 0 1
+    notes: Side to move is in check and must find a narrow defensive reply set.
+
+  - name: endgame-light
+    category: endgame
+    fen: k/3/5/4r2/9/11/11/4Q6/11/11/5K5 w - 0 1
+    notes: Low-material endgame with long-range pieces.
+
+  - name: pawn-attack-regression
+    category: regression
+    fen: k/3/5/7/5p3/11/6Q4/11/11/11/5K5 w - 0 1
+    notes: Regression case for pawn-attack awareness.

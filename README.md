@@ -26,6 +26,7 @@ Depending on which library you're working on, you'll need to install a few depen
 - [Rust](https://www.rust-lang.org/tools/install)
 - [PHP](https://www.php.net/)
 - [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/installation)
+- [Python](https://www.python.org/) (for the optional FastAPI engine)
 
 First, clone the repository, and setup the CLI.
 
@@ -63,6 +64,33 @@ Commands:
   version:check [options]      Check the versions of the dependencies
   help [command]               display help for command
 ```
+
+### Python engine
+
+The `pyengine` package exposes the same engine command interface over FastAPI.
+
+```sh
+python -m venv .venv
+.venv/Scripts/activate
+pip install -r pyengine/requirements.txt
+uvicorn pyengine.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Then open the docs sandbox and pick `Python (FastAPI)` from the engine selector.
+
+### Cython engine
+
+The `cyengine` package is a compiled Cython variant of the Python engine. It keeps the same FastAPI contract and engine command shape, but builds the core engine module as a native extension.
+
+```sh
+python -m venv .venv
+.venv/Scripts/activate
+pip install -r cyengine/requirements.txt
+pip install -e ./cyengine
+uvicorn cyengine.main:app --reload --host 127.0.0.1 --port 8001
+```
+
+Run `python -m unittest cyengine.test_native_engine` after building to validate the compiled engine.
 
 ## License
 

@@ -1,6 +1,17 @@
 /* tslint:disable */
 /* eslint-disable */
 export function evaluate(options: EvaluateOptions): EvaluateResponse;
+export interface ScoredSan {
+    /**
+     * fen of the position
+     */
+    san: San;
+    /**
+     * score of the position
+     */
+    score: number;
+}
+
 export interface EvaluateResponse {
     /**
      * depth of search
@@ -14,6 +25,18 @@ export interface EvaluateResponse {
      * ordered list of possible sans, sorted by score best to worst
      */
     sans: ScoredSan[];
+}
+
+export interface EvalOptions {
+    bishop_value: number;
+    king_value: number;
+    knight_value: number;
+    pawn_value: number;
+    queen_value: number;
+    rook_value: number;
+    check_value: number;
+    checkmate_value: number;
+    stalemate_value: number;
 }
 
 export interface SearchResult {
@@ -42,32 +65,9 @@ export interface ScoredSan {
     score: number;
 }
 
-export interface ScoredSan {
-    /**
-     * fen of the position
-     */
-    san: San;
-    /**
-     * score of the position
-     */
-    score: number;
-}
-
 export interface EvaluateOptions {
     depth: number;
     position: string;
-}
-
-export interface EvalOptions {
-    bishop_value: number;
-    king_value: number;
-    knight_value: number;
-    pawn_value: number;
-    queen_value: number;
-    rook_value: number;
-    check_value: number;
-    checkmate_value: number;
-    stalemate_value: number;
 }
 
 
