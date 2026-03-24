@@ -19,9 +19,10 @@ function log(...args: unknown[]) {
   }
 }
 
-export type EngineKind = 'rust-worker' | 'python-api'
+export type EngineKind = 'rust-worker' | 'python-api' | 'cyengine-api'
 
 const PYENGINE_BASE_URL = 'http://127.0.0.1:8000'
+const CYENGINE_BASE_URL = 'http://127.0.0.1:8001'
 
 export function useEngine() {
   let worker: Worker | null = null
@@ -56,8 +57,13 @@ export function useEngine() {
     return worker
   }
 
-  const executePython = async (command: string, options: EvaluateOptions | Record<string, unknown>) => {
-    const response = await fetch(`${PYENGINE_BASE_URL}/execute`, {
+  const executeApiEngine = async (
+    baseUrl: string,
+    engineName: string,
+    command: string,
+    options: EvaluateOptions | Record<string, unknown>,
+  ) => {
+    const response = await fetch(`${baseUrl}/execute`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +76,7 @@ export function useEngine() {
 
     if (!response.ok) {
       const body = await response.text()
-      throw new Error(`Python engine request failed (${response.status}): ${body}`)
+      throw new Error(`${engineName} request failed (${response.status}): ${body}`)
     }
 
     return response.json() as Promise<ExecuteResponse<EvaluateResponse>>
@@ -93,7 +99,9 @@ export function useEngine() {
       let result: ExecuteResponse<EvaluateResponse>
 
       if (kind === 'python-api') {
-        result = await executePython('hexchess/evaluate', options)
+        result = await executeApiEngine(PYENGINE_BASE_URL, 'Python engine', 'hexchess/evaluate', options)
+      } else if (kind === 'cyengine-api') {
+        result = await executeApiEngine(CYENGINE_BASE_URL, 'Cython engine', 'hexchess/evaluate', options)
       } else {
         const currentWorker = ensureWorker()
 

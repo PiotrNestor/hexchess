@@ -7,6 +7,13 @@ coverage
 dist
 docs/.vitepress/cache
 docs/.vitepress/dist
+cyengine/.eggs
+cyengine/*.c
+cyengine/*.egg-info
+cyengine/*.html
+cyengine/*.pyd
+cyengine/*.so
+cyengine/build
 engine/*.d.ts
 engine/*.js
 engine/pkg

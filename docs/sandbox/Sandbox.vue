@@ -15,6 +15,7 @@
         >
           <option value="rust-worker">Rust (WASM Worker)</option>
           <option value="python-api">Python (FastAPI)</option>
+          <option value="cyengine-api">Cython (FastAPI)</option>
         </select>
       </label>
 
@@ -27,14 +28,15 @@
         >
           <option value="rust-worker">Rust</option>
           <option value="python-api">Python</option>
+          <option value="cyengine-api">Cython</option>
         </select>
       </label>
 
       <div
-        v-if="engineKind === 'python-api'"
+        v-if="engineKind === 'python-api' || engineKind === 'cyengine-api'"
         class="text-xs tracking-wide opacity-75"
       >
-          Python engine is currently much slower at higher depths.
+          API-backed engines are slower than the in-browser Rust worker at higher depths.
       </div>
 
       <button
@@ -110,7 +112,7 @@
           v-else
           class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
 
-        {{ matchRunning ? 'Stop Match' : 'Rust vs Python' }}
+        {{ matchRunning ? 'Stop Match' : 'Engine Match' }}
       </button>
     </div>
       <input
@@ -346,7 +348,13 @@ const fen = computed({
   }
 })
 
-const matchBlackEngine = computed<EngineKind>(() => matchWhiteEngine.value === 'rust-worker' ? 'python-api' : 'rust-worker')
+const matchBlackEngine = computed<EngineKind>(() => {
+  if (matchWhiteEngine.value === 'rust-worker') {
+    return engineKind.value === 'rust-worker' ? 'cyengine-api' : engineKind.value
+  }
+
+  return 'rust-worker'
+})
 
 const groupedMoves = computed(() => {
   const start = Hexchess.parse(historyStartFen.value)
@@ -578,12 +586,24 @@ function engineForTurn(turn: 'w' | 'b'): EngineKind {
 }
 
 function engineLabel(kind: EngineKind) {
-  return kind === 'python-api' ? 'Python' : 'Rust'
+  if (kind === 'python-api') {
+    return 'Python'
+  }
+
+  if (kind === 'cyengine-api') {
+    return 'Cython'
+  }
+
+  return 'Rust'
 }
 
 function moveSourceLabel(source: MoveSource | null | undefined) {
   if (source === 'python-api') {
     return 'Py'
+  }
+
+  if (source === 'cyengine-api') {
+    return 'Cy'
   }
 
   if (source === 'rust-worker') {

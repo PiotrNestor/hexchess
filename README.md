@@ -78,6 +78,20 @@ uvicorn pyengine.main:app --reload --host 127.0.0.1 --port 8000
 
 Then open the docs sandbox and pick `Python (FastAPI)` from the engine selector.
 
+### Cython engine
+
+The `cyengine` package is a compiled Cython variant of the Python engine. It keeps the same FastAPI contract and engine command shape, but builds the core engine module as a native extension.
+
+```sh
+python -m venv .venv
+.venv/Scripts/activate
+pip install -r cyengine/requirements.txt
+pip install -e ./cyengine
+uvicorn cyengine.main:app --reload --host 127.0.0.1 --port 8001
+```
+
+Run `python -m unittest cyengine.test_native_engine` after building to validate the compiled engine.
+
 ## License
 
 [MIT](https://github.com/scottbedard/hexchess/blob/main/LICENSE)
