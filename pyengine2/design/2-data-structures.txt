@@ -1,0 +1,113 @@
+Question:
+Before continuing with further tuning, are we good with the core data-structure(s) and associated computation actions.
+Is there anything elese or differnt that could be done to speed up even more?
+
+I’m checking a few exact anchors in the engine so the answer is tied to the current implementation rather than a generic optimization list.
+
+Searched for regex `class SearchState|class Hexchess|def _compute_legal_context|def optimize_tactical_moves|def quiescence\(|def make_move_unsafe|def position_key` (`**/pyengine2/native_engine.py`), 7 results
+
+Searched for regex `quiescenceNodes|tacticalMovegenCalls|legalContextCalls|ttHits|ttCutoffs` (`**/results/2.1.003/stage1-baseline.yaml`), 30 results
+
+Short answer: the core data structures are good enough for Stage 1, but they are not the final ceiling.
+
+What is already solid
+- The board and piece state are already in the right shape for a Python engine:
+  - numeric board state and synchronized masks in native_engine.py
+  - reusable search scratch state in native_engine.py
+  - Zobrist position keying in native_engine.py
+  - integer move ordering in native_engine.py
+- Those are not “toy” structures. They are the right base for continued tuning.
+- The benchmark data also says the engine is mostly losing time in repeated search work, not because the board representation is fundamentally wrong:
+  - opening depth 5 still shows very high quiescence, tactical movegen, and legal-context counts in stage1-baseline.yaml
+  - TT is already active and useful in the same baseline in stage1-baseline.yaml
+
+What is not yet ideal
+- The expensive parts now are mostly Python object and control overhead around the core structures:
+  - full legal-context rebuilds in native_engine.py
+  - move undo tuple creation in native_engine.py
+  - dictionary-based TT entries around native_engine.py
+  - per-node sorting and move scoring in native_engine.py
+- That is why the last two experiments failed:
+  - they changed the movegen path, but replaced one form of overhead with another
+  - they did not reduce total Python work enough on the broad baseline
+
+My assessment
+- For Stage 1: yes, the core structures are good enough to keep.
+- For larger speedups beyond the current incremental slices: yes, there are still different things worth doing.
+
+Best “different” things that could speed it up more
+1. Replace the transposition table dict with a fixed-size array-backed TT
+- This is the biggest structural candidate still available in pure Python.
+- Right now TT is a Python dict mapping key to tuple entries.
+- A fixed-size TT with direct index masking and overwrite policy would cut:
+  - dict hash overhead
+  - tuple churn
+  - allocation pressure
+- This is the first thing I would look at if you want a more structural Stage 1.5 improvement.
+
+2. Replace undo tuples with reusable per-ply undo storage
+- native_engine.py creates undo tuples constantly.
+- A reusable per-ply undo stack or packed list-based undo record would likely help more than another movegen micro-optimization.
+- This is lower risk than a whole new legality path and attacks a very hot make/unmake loop.
+
+3. Split qsearch TT policy from full-search TT policy
+- Not a whole new structure, but a different use of the current one.
+- Qsearch may benefit from:
+  - shallower or separate replacement policy
+  - cheaper entry payload
+  - avoiding some storage on low-value nodes
+- That could reduce common-path TT overhead without weakening full-search reuse.
+
+4. Introduce a compact no-pin/no-check legal-context representation
+- Not the failed sparse-reset experiment.
+- A more promising version is to change the representation itself:
+  - fast sentinel for no pins
+  - sparse pinned-piece map only when needed
+- The current full mask representation in native_engine.py is convenient but still heavy.
+
+5. Reduce sorting frequency in qsearch
+- native_engine.py sorts every tactical move list.
+- If lists are often very small, a manual best-first selection or one-pass TT/promotion/capture bucketing may beat full sort.
+- This is smaller than the TT and undo ideas, but still plausible.
+
+What I would not change yet
+- I would not replace the board representation.
+- I would not replace piece masks.
+- I would not move away from packed move codes.
+- I would not add more complicated pseudo-legal qsearch generation after the last failed experiment.
+- Those are not the weak point right now.
+
+Priority order from here
+1. Array-backed transposition table
+2. Reusable undo storage
+3. Narrow TT/qsearch policy tuning
+4. Legal-context representation refinement
+5. Qsearch move ordering simplification
+
+So, are we good with the current core data structures?
+- Yes for Stage 1 continuation.
+- No if the question is “is this the maximum speed we can get in pure Python?”
+
+The biggest remaining upside is not a new board model. It is reducing Python-level overhead around TT, undo records, and repeated qsearch control work.
+
+If you want, I can continue with one of these two next:
+1. inspect the current TT usage and propose a minimal fixed-size array TT design for pyengine2
+2. inspect make/unmake and propose a reusable undo-record design that fits the current search stack
+
+--------------------------------------------
+This was tried:
+
+1. Replace the transposition table dict with a fixed-size array-backed TT
+There was no improvement
+
+2. Replace undo tuples with reusable per-ply undo storage
+There was no improvement
+
+Conclusion:
+give up on:
+
+fixed-size array TT as the default next experiment
+reusable per-ply undo storage as the default next experiment
+
+
+
