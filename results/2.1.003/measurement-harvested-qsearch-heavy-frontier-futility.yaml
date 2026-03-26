@@ -1,0 +1,109 @@
+version: 1
+kind: pyengine2-benchmark-run
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-26T13:02:31.684822+00:00'
+mode: search
+repeat: 3
+topCount: 3
+cases:
+- name: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+  category: harvested
+  notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 34 (b17 b7b5).
+    tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=62024.1,
+    negamaxNodes=521388, quiescenceNodes=1852281, ttHits=264785, movegenCalls=1396834.'
+  summaries:
+  - name: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+    category: harvested
+    mode: search
+    medianMs: 134.0215
+    units: 3071
+    unitsLabel: evals
+    unitsPerMs: 22.914234
+    notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 34 (b17 b7b5).
+      tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=62024.1,
+      negamaxNodes=521388, quiescenceNodes=1852281, ttHits=264785, movegenCalls=1396834.'
+    depth: 2
+    topMoves:
+    - san: b7b5
+      score: -1.6799999999999997
+    - san: c7c5
+      score: -1.6799999999999997
+    - san: d6f10
+      score: -1.2800000000000011
+    metrics:
+      wallMs: 133.76470003277063
+      evalsPerMs: 22.958224398870886
+      rootMoves: 51
+      negamaxNodes: 2496
+      quiescenceNodes: 3087
+      movegenCalls: 3110
+      tacticalMovegenCalls: 622
+      legalContextCalls: 3110
+      ttHits: 39
+      ttCutoffs: 25
+      betaCutoffs: 219
+      negamaxTtHits: 12
+      quiescenceTtHits: 27
+      negamaxTtCutoffs: 9
+      quiescenceTtCutoffs: 16
+      negamaxBetaCutoffs: 0
+      quiescenceBetaCutoffs: 219
+      qsearchStandPatCutoffs: 2449
+      qsearchDeltaPruneChecks: 1
+      qsearchDeltaPruneSkips: 1
+      qsearchNodesWithMoves: 401
+      qsearchGeneratedMoves: 1111
+      pvsResearches: 45
+      negamaxFrontierFutilityChecks: 0
+      negamaxFrontierFutilitySkips: 0
+      ttEntries: 2890
+  - name: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+    category: harvested
+    mode: search
+    medianMs: 1578.1246
+    units: 45842
+    unitsLabel: evals
+    unitsPerMs: 29.048403
+    notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 34 (b17 b7b5).
+      tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=62024.1,
+      negamaxNodes=521388, quiescenceNodes=1852281, ttHits=264785, movegenCalls=1396834.'
+    depth: 3
+    topMoves:
+    - san: b7b5
+      score: -2.0
+    - san: c7c5
+      score: -2.0
+    - san: d6e8
+      score: -1.6799999999999997
+    metrics:
+      wallMs: 1575.763300061226
+      evalsPerMs: 29.091932778367678
+      rootMoves: 51
+      negamaxNodes: 12374
+      quiescenceNodes: 47719
+      movegenCalls: 39683
+      tacticalMovegenCalls: 29453
+      legalContextCalls: 39683
+      ttHits: 4808
+      ttCutoffs: 4022
+      betaCutoffs: 15414
+      negamaxTtHits: 2405
+      quiescenceTtHits: 2403
+      negamaxTtCutoffs: 2145
+      quiescenceTtCutoffs: 1877
+      negamaxBetaCutoffs: 2296
+      quiescenceBetaCutoffs: 13118
+      qsearchStandPatCutoffs: 16389
+      qsearchDeltaPruneChecks: 596
+      qsearchDeltaPruneSkips: 535
+      qsearchNodesWithMoves: 23997
+      qsearchGeneratedMoves: 67578
+      pvsResearches: 152
+      negamaxFrontierFutilityChecks: 0
+      negamaxFrontierFutilitySkips: 0
+      ttEntries: 42315
+depths:
+- 2
+- 3
+filter: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy

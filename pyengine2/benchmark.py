@@ -91,6 +91,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--repeat', type=int, default=3, help='Runs per benchmark/depth')
     parser.add_argument('--filter', dest='name_filter', default='', help='Only run benchmark names containing this text')
     parser.add_argument('--top', type=int, default=3, help='How many top moves to display')
+    parser.add_argument('--diagnostics', action='store_true', help='Enable extra diagnostic search counters in benchmark reports')
     return parser.parse_args()
 
 
@@ -98,7 +99,7 @@ def median_ms(values: list[float]) -> float:
     return statistics.median(values) * 1000.0
 
 
-def run_search_case(case: BenchmarkCase, depth: int, repeat: int) -> dict[str, Any]:
+def run_search_case(case: BenchmarkCase, depth: int, repeat: int, diagnostics: bool) -> dict[str, Any]:
     durations: list[float] = []
     evaluations: list[int] = []
     result: dict[str, Any] | None = None
@@ -106,7 +107,7 @@ def run_search_case(case: BenchmarkCase, depth: int, repeat: int) -> dict[str, A
     for _ in range(repeat):
         position = case.create_position()
         started_at = time.perf_counter()
-        result = search(position, depth)
+        result = search(position, depth, diagnostics=diagnostics)
         durations.append(time.perf_counter() - started_at)
         evaluations.append(int(result['evaluations']))
 
@@ -331,7 +332,7 @@ def run_suite(args: argparse.Namespace, cases: list[BenchmarkCase]) -> int:
             if mode == 'search':
                 summaries: list[dict[str, Any]] = []
                 for depth in entry['depths']:
-                    summary = run_search_case(case, depth, repeat)
+                    summary = run_search_case(case, depth, repeat, args.diagnostics)
                     print_search_summary(summary, args.top)
                     summaries.append(summary_report_data(summary, args.top))
                 case_entry['summaries'] = summaries
@@ -361,6 +362,7 @@ def run_suite(args: argparse.Namespace, cases: list[BenchmarkCase]) -> int:
                 'benchmarkFile': str(args.file),
                 'generatedAt': datetime.now(timezone.utc).isoformat(),
                 'topCount': args.top,
+                'diagnostics': bool(args.diagnostics),
                 'entries': suite_entries,
             },
         )
@@ -408,7 +410,7 @@ def main() -> int:
         if args.mode == 'search':
             summaries: list[dict[str, Any]] = []
             for depth in args.depths:
-                summary = run_search_case(case, depth, args.repeat)
+                summary = run_search_case(case, depth, args.repeat, args.diagnostics)
                 print_search_summary(summary, args.top)
                 summaries.append(summary_report_data(summary, args.top))
             case_entry['summaries'] = summaries
@@ -435,6 +437,7 @@ def main() -> int:
             'mode': args.mode,
             'repeat': args.repeat,
             'topCount': args.top,
+            'diagnostics': bool(args.diagnostics),
             'cases': report_cases,
         }
         if args.mode == 'search':

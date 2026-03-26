@@ -43,6 +43,37 @@ class NativeEngine2Tests(unittest.TestCase):
         self.assertEqual(result['depth'], 1)
         self.assertGreaterEqual(result['evaluations'], 51)
         self.assertIn(result['sans'][0]['san'], {'d3d5', 'h3h5', 'c2c4', 'i2i4', 'b1b3', 'k1k3'})
+        metrics = result['metrics']
+        self.assertIn('negamaxTtHits', metrics)
+        self.assertIn('quiescenceTtHits', metrics)
+        self.assertIn('qsearchDeltaPruneSkips', metrics)
+        self.assertIn('qsearchStandPatCutoffs', metrics)
+        self.assertIn('pvsResearches', metrics)
+        self.assertIn('negamaxFrontierFutilitySkips', metrics)
+        self.assertIn('nullMoveCutoffs', metrics)
+
+    def test_search_without_diagnostics_omits_extra_metrics(self) -> None:
+        result = search(Hexchess(INITIAL_POSITION), 1, diagnostics=False)
+
+        metrics = result['metrics']
+        self.assertIn('ttHits', metrics)
+        self.assertIn('ttCutoffs', metrics)
+        self.assertIn('betaCutoffs', metrics)
+        self.assertNotIn('negamaxTtHits', metrics)
+        self.assertNotIn('qsearchDeltaPruneSkips', metrics)
+        self.assertNotIn('negamaxFrontierFutilitySkips', metrics)
+        self.assertNotIn('nullMoveCutoffs', metrics)
+
+    def test_null_move_restores_position_and_hash(self) -> None:
+        position = Hexchess(INITIAL_POSITION)
+        before = position.to_string()
+        before_hash = position.position_key()
+
+        undo = position.make_null_move()
+        position.unmake_null_move(undo)
+
+        self.assertEqual(position.to_string(), before)
+        self.assertEqual(position.position_key(), before_hash)
 
     def test_evaluate_prefers_safe_queen(self) -> None:
         safe = build_position('w', {'f1': 'K', 'f11': 'k', 'g5': 'Q', 'g7': 'p'})

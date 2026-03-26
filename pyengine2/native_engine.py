@@ -575,6 +575,7 @@ class San:
 
 
 MoveUndo = tuple[int, int, int, int, int, int, int, int, int, int, int]
+NullMoveUndo = tuple[int, int, int, int, int]
 LegalContext = tuple[int, int, int, list[int], bool]
 RayScanEntry = tuple[int, int, int]
 
@@ -594,6 +595,7 @@ class EvalOptions:
 
 @dataclass(slots=True)
 class SearchState:
+    diagnostics_enabled: bool
     move_buffers: list[list[int]]
     pin_mask_buffers: list[list[int]]
     killer_primary: list[int]
@@ -607,8 +609,25 @@ class SearchState:
     tt_hits: int
     tt_cutoffs: int
     beta_cutoffs: int
+    negamax_tt_hits: int
+    quiescence_tt_hits: int
+    negamax_tt_cutoffs: int
+    quiescence_tt_cutoffs: int
+    negamax_beta_cutoffs: int
+    quiescence_beta_cutoffs: int
+    qsearch_stand_pat_cutoffs: int
+    qsearch_delta_prune_checks: int
+    qsearch_delta_prune_skips: int
+    qsearch_nodes_with_moves: int
+    qsearch_generated_moves: int
+    pvs_researches: int
+    negamax_frontier_futility_checks: int
+    negamax_frontier_futility_skips: int
+    null_move_attempts: int
+    null_move_cutoffs: int
 
-    def __init__(self) -> None:
+    def __init__(self, diagnostics_enabled: bool = True) -> None:
+        self.diagnostics_enabled = diagnostics_enabled
         self.move_buffers = []
         self.pin_mask_buffers = []
         self.killer_primary = []
@@ -622,6 +641,22 @@ class SearchState:
         self.tt_hits = 0
         self.tt_cutoffs = 0
         self.beta_cutoffs = 0
+        self.negamax_tt_hits = 0
+        self.quiescence_tt_hits = 0
+        self.negamax_tt_cutoffs = 0
+        self.quiescence_tt_cutoffs = 0
+        self.negamax_beta_cutoffs = 0
+        self.quiescence_beta_cutoffs = 0
+        self.qsearch_stand_pat_cutoffs = 0
+        self.qsearch_delta_prune_checks = 0
+        self.qsearch_delta_prune_skips = 0
+        self.qsearch_nodes_with_moves = 0
+        self.qsearch_generated_moves = 0
+        self.pvs_researches = 0
+        self.negamax_frontier_futility_checks = 0
+        self.negamax_frontier_futility_skips = 0
+        self.null_move_attempts = 0
+        self.null_move_cutoffs = 0
 
     def buffer_for(self, ply: int) -> list[int]:
         while len(self.move_buffers) <= ply:
@@ -649,7 +684,7 @@ class SearchState:
         self.killer_secondary[ply] = first if first != move_code else second
 
     def metrics_dict(self, root_moves: int, wall_ms: float, evaluations: int, tt_entries: int) -> dict[str, int | float]:
-        return {
+        metrics: dict[str, int | float] = {
             'wallMs': wall_ms,
             'evalsPerMs': evaluations / wall_ms if wall_ms > 0 else 0.0,
             'rootMoves': root_moves,
@@ -663,6 +698,28 @@ class SearchState:
             'betaCutoffs': self.beta_cutoffs,
             'ttEntries': tt_entries,
         }
+        if self.diagnostics_enabled:
+            metrics.update(
+                {
+                    'negamaxTtHits': self.negamax_tt_hits,
+                    'quiescenceTtHits': self.quiescence_tt_hits,
+                    'negamaxTtCutoffs': self.negamax_tt_cutoffs,
+                    'quiescenceTtCutoffs': self.quiescence_tt_cutoffs,
+                    'negamaxBetaCutoffs': self.negamax_beta_cutoffs,
+                    'quiescenceBetaCutoffs': self.quiescence_beta_cutoffs,
+                    'qsearchStandPatCutoffs': self.qsearch_stand_pat_cutoffs,
+                    'qsearchDeltaPruneChecks': self.qsearch_delta_prune_checks,
+                    'qsearchDeltaPruneSkips': self.qsearch_delta_prune_skips,
+                    'qsearchNodesWithMoves': self.qsearch_nodes_with_moves,
+                    'qsearchGeneratedMoves': self.qsearch_generated_moves,
+                    'pvsResearches': self.pvs_researches,
+                    'negamaxFrontierFutilityChecks': self.negamax_frontier_futility_checks,
+                    'negamaxFrontierFutilitySkips': self.negamax_frontier_futility_skips,
+                    'nullMoveAttempts': self.null_move_attempts,
+                    'nullMoveCutoffs': self.null_move_cutoffs,
+                }
+            )
+        return metrics
 
 
 @dataclass(slots=True)
@@ -1630,6 +1687,35 @@ class Hexchess:
         self.black_king = previous_black_king
         self.zobrist_hash = previous_hash
 
+    def make_null_move(self) -> NullMoveUndo:
+        previous_ep = self.ep
+        previous_turn = self.turn
+        previous_halfmove = self.halfmove
+        previous_fullmove = self.fullmove
+        previous_hash = self.zobrist_hash
+
+        if self.ep != -1:
+            self.zobrist_hash ^= ZOBRIST_EP[self.ep]
+            self.ep = -1
+
+        self.halfmove += 1
+        if self.turn == BLACK:
+            self.fullmove += 1
+            self.turn = WHITE
+        else:
+            self.turn = BLACK
+        self.zobrist_hash ^= ZOBRIST_TURN
+
+        return previous_ep, previous_turn, previous_halfmove, previous_fullmove, previous_hash
+
+    def unmake_null_move(self, undo: NullMoveUndo) -> None:
+        previous_ep, previous_turn, previous_halfmove, previous_fullmove, previous_hash = undo
+        self.ep = previous_ep
+        self.turn = previous_turn
+        self.halfmove = previous_halfmove
+        self.fullmove = previous_fullmove
+        self.zobrist_hash = previous_hash
+
     def to_string(self) -> str:
         en_passant = '-' if self.ep == -1 else POSITIONS[self.ep]
         return f'{stringify_board(self.board)} {_color_to_char(self.turn)} {en_passant} {self.halfmove} {self.fullmove}'
@@ -1769,6 +1855,12 @@ def _passes_qsearch_delta_prune(
     return stand_pat + optimistic_gain + delta_margin > alpha
 
 
+def _has_non_pawn_material(hexchess: Hexchess, color: int) -> bool:
+    if color == WHITE:
+        return any(hexchess.piece_masks[piece] for piece in (WR, WN, WB, WQ))
+    return any(hexchess.piece_masks[piece] for piece in (BR, BN, BB, BQ))
+
+
 def _promote_move_to_front(moves: list[int], prioritized_move: int | None) -> None:
     if prioritized_move is None or len(moves) < 2:
         return
@@ -1881,21 +1973,31 @@ def quiescence(
     tt_move = entry[3] if entry is not None else None
     if entry is not None:
         state.tt_hits += 1
+        if state.diagnostics_enabled:
+            state.quiescence_tt_hits += 1
         entry_depth, flag, value, _ = entry
         if entry_depth >= 0:
             if flag == 'exact':
                 state.tt_cutoffs += 1
+                if state.diagnostics_enabled:
+                    state.quiescence_tt_cutoffs += 1
                 return value
             if flag == 'lower' and value >= beta:
                 state.tt_cutoffs += 1
+                if state.diagnostics_enabled:
+                    state.quiescence_tt_cutoffs += 1
                 return value
             if flag == 'upper' and value <= alpha:
                 state.tt_cutoffs += 1
+                if state.diagnostics_enabled:
+                    state.quiescence_tt_cutoffs += 1
                 return value
 
     evaluations[0] += 1
     stand_pat = static_eval_for_turn(hexchess, options)
     if stand_pat >= beta:
+        if state.diagnostics_enabled:
+            state.qsearch_stand_pat_cutoffs += 1
         store_transposition_entry(table, key, 0, 'lower', stand_pat, tt_move)
         return stand_pat
     if stand_pat > alpha:
@@ -1903,19 +2005,29 @@ def quiescence(
     tactical_moves = hexchess._fill_current_moves(state.buffer_for(ply), tactical_only=True, pin_masks=state.pin_masks_for(ply), stats=state)
     if not tactical_moves:
         return stand_pat
+    if state.diagnostics_enabled:
+        state.qsearch_nodes_with_moves += 1
+        state.qsearch_generated_moves += len(tactical_moves)
     optimize_tactical_moves(hexchess, tactical_moves, tt_move)
     value = stand_pat
     best_move: int | None = None
     delta_prune_active = alpha > stand_pat + options.rook_value + options.check_value
     in_check = hexchess.is_check() if delta_prune_active else False
     for move_code in tactical_moves:
-        if delta_prune_active and not in_check and not _passes_qsearch_delta_prune(hexchess, move_code, stand_pat, alpha, tt_move, options):
-            continue
+        if delta_prune_active and not in_check:
+            if state.diagnostics_enabled:
+                state.qsearch_delta_prune_checks += 1
+            if not _passes_qsearch_delta_prune(hexchess, move_code, stand_pat, alpha, tt_move, options):
+                if state.diagnostics_enabled:
+                    state.qsearch_delta_prune_skips += 1
+                continue
         undo = hexchess.make_move_unsafe(move_code)
         child_value = -quiescence(hexchess, state, table, ply + 1, -beta, -alpha, evaluations, options)
         hexchess.unmake_move(undo)
         if child_value >= beta:
             state.beta_cutoffs += 1
+            if state.diagnostics_enabled:
+                state.quiescence_beta_cutoffs += 1
             store_transposition_entry(table, key, 0, 'lower', child_value, move_code)
             return child_value
         if child_value > value:
@@ -1943,42 +2055,105 @@ def negamax(
     evaluations: list[int],
     options: EvalOptions,
 ) -> float:
+    null_move_reduction = 2
     state.negamax_nodes += 1
     alpha_orig = alpha
     key = hexchess.position_key()
+    in_check = False
     entry = table.get(key)
     tt_move = entry[3] if entry is not None else None
     if entry is not None:
         state.tt_hits += 1
+        if state.diagnostics_enabled:
+            state.negamax_tt_hits += 1
         entry_depth, flag, value, _ = entry
         if entry_depth >= depth:
             if flag == 'exact':
                 state.tt_cutoffs += 1
+                if state.diagnostics_enabled:
+                    state.negamax_tt_cutoffs += 1
                 return value
             if flag == 'lower' and value >= beta:
                 state.tt_cutoffs += 1
+                if state.diagnostics_enabled:
+                    state.negamax_tt_cutoffs += 1
                 return value
             if flag == 'upper' and value <= alpha:
                 state.tt_cutoffs += 1
+                if state.diagnostics_enabled:
+                    state.negamax_tt_cutoffs += 1
                 return value
+    if depth >= null_move_reduction + 1 or depth == 0:
+        in_check = hexchess.is_check()
+    if depth == 0 and not in_check:
+        return quiescence(hexchess, state, table, ply, alpha, beta, evaluations, options)
+    if depth >= null_move_reduction + 1 and beta != float('inf') and not in_check and _has_non_pawn_material(hexchess, hexchess.turn):
+        static_eval = static_eval_for_turn(hexchess, options)
+        if static_eval >= beta:
+            if state.diagnostics_enabled:
+                state.null_move_attempts += 1
+            undo = hexchess.make_null_move()
+            null_value = -negamax(
+                state,
+                table,
+                hexchess,
+                depth - null_move_reduction - 1,
+                ply + 1,
+                -beta,
+                -beta + 1,
+                evaluations,
+                options,
+            )
+            hexchess.unmake_null_move(undo)
+            if null_value >= beta:
+                if state.diagnostics_enabled:
+                    state.null_move_cutoffs += 1
+                return null_value
     current_moves = hexchess._fill_current_moves(state.buffer_for(ply), tactical_only=False, pin_masks=state.pin_masks_for(ply), stats=state)
     if not current_moves:
         evaluations[0] += 1
-        if hexchess.is_check():
+        if in_check or hexchess.is_check():
             return options.checkmate_value if hexchess.turn == WHITE else -options.checkmate_value
         return options.stalemate_value if hexchess.turn == WHITE else -options.stalemate_value
-    if depth == 0:
+    if depth <= 0:
         return quiescence(hexchess, state, table, ply, alpha, beta, evaluations, options)
     optimize_for_branch_pruning(hexchess, current_moves, ply, state, tt_move)
+    frontier_futility_enabled = depth == 1
+    frontier_futility_checked = False
+    frontier_futility_ready = False
+    frontier_stand_pat = 0.0
+    frontier_margin = options.rook_value + options.check_value
     value = float('-inf')
     best_move: int | None = None
     for move_index, move_code in enumerate(current_moves):
+        if (
+            frontier_futility_enabled
+            and move_index > 0
+            and move_code != tt_move
+            and not _is_tactical_move(hexchess, move_code)
+        ):
+            if not frontier_futility_checked:
+                frontier_futility_checked = True
+                if not in_check:
+                    in_check = hexchess.is_check()
+                if not in_check:
+                    frontier_stand_pat = static_eval_for_turn(hexchess, options)
+                    frontier_futility_ready = True
+            if frontier_futility_ready:
+                if state.diagnostics_enabled:
+                    state.negamax_frontier_futility_checks += 1
+                if alpha >= frontier_stand_pat + frontier_margin:
+                    if state.diagnostics_enabled:
+                        state.negamax_frontier_futility_skips += 1
+                    continue
         undo = hexchess.make_move_unsafe(move_code)
         if move_index == 0:
             child_value = -negamax(state, table, hexchess, depth - 1, ply + 1, -beta, -alpha, evaluations, options)
         else:
             child_value = -negamax(state, table, hexchess, depth - 1, ply + 1, -alpha - 1, -alpha, evaluations, options)
             if child_value > alpha and child_value < beta:
+                if state.diagnostics_enabled:
+                    state.pvs_researches += 1
                 child_value = -negamax(state, table, hexchess, depth - 1, ply + 1, -beta, -alpha, evaluations, options)
         hexchess.unmake_move(undo)
         if child_value > value:
@@ -1987,6 +2162,8 @@ def negamax(
         alpha = max(alpha, value)
         if alpha >= beta:
             state.beta_cutoffs += 1
+            if state.diagnostics_enabled:
+                state.negamax_beta_cutoffs += 1
             if not _is_tactical_move(hexchess, move_code):
                 state.record_killer(ply, move_code)
                 state.history_scores[move_code] += depth * depth
@@ -2001,14 +2178,20 @@ def negamax(
     return value
 
 
-def search(hexchess: Hexchess, depth: int, options: EvalOptions | None = None) -> dict[str, object]:
+def search(
+    hexchess: Hexchess,
+    depth: int,
+    options: EvalOptions | None = None,
+    *,
+    diagnostics: bool = True,
+) -> dict[str, object]:
     if depth < 1:
         error(f'invalid depth: {depth}')
     started_at = time.perf_counter()
     evaluation_options = options or EvalOptions()
     table: dict[int, TranspositionEntry] = {}
     evaluations = [0]
-    state = SearchState()
+    state = SearchState(diagnostics_enabled=diagnostics)
     sans: list[dict[str, object]] = []
     root_moves = hexchess._fill_current_moves(state.buffer_for(0), tactical_only=False, pin_masks=state.pin_masks_for(0), stats=state)
     optimize_for_branch_pruning(hexchess, root_moves, 0, state)
@@ -2042,5 +2225,8 @@ def execute_command(command: str, options: dict[str, object] | None = None) -> d
             error('invalid position: expected string')
         if not isinstance(depth, int):
             error('invalid depth: expected integer')
-        return search(Hexchess.parse(position), depth)
+        diagnostics = command_options.get('diagnostics', True)
+        if not isinstance(diagnostics, bool):
+            error('invalid diagnostics: expected boolean')
+        return search(Hexchess.parse(position), depth, diagnostics=diagnostics)
     error(f'Unknown engine command: {command}')

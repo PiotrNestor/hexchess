@@ -1,0 +1,162 @@
+benchmark strategy
+
+Goal:
+- separate speed benchmarking from diagnostic measurement
+- keep performance decisions clean
+- use instrumented runs to choose the next experiment, not to declare a new speed baseline
+
+Core rule:
+- clean speed runs answer: faster or slower?
+- instrumented measurement runs answer: why is it faster or slower?
+
+1. clean speed baseline track
+
+Purpose:
+- decide whether a code change stays or is reverted
+- maintain the official Stage 1 comparison baseline
+
+Rules:
+- use the normal engine path with no extra diagnostic counters beyond the stable metrics already used in baseline reports
+- use benchmark.py without --diagnostics for clean speed runs
+- compare candidate changes only against the official speed baseline from results/2.1.003/stage1-baseline-leaf-fastpath.yaml
+- only clean speed runs may justify updating the baseline
+- do not run clean speed benchmarks in parallel with other benchmarks on the same machine; use sequential runs only
+
+Primary cases for keep-or-revert decisions:
+- initial-position
+- tt-transposition-midgame
+- capture-storm-qsearch
+- harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+
+Interpretation:
+- if a change is not broadly positive on this set, revert it
+- narrow wins are not enough if opening or TT-sensitive cases regress
+
+2. diagnostic measurement track
+
+Purpose:
+- identify the next likely optimization target before changing code
+- explain why a kept change helped or hurt
+
+Rules:
+- use the instrumented engine build with extra counters
+- use benchmark.py with --diagnostics for measurement runs
+- do not treat the wall-clock results from these runs as the official speed baseline
+- use these runs for branch ratios, cutoff composition, and relative behavior only
+
+Current measurement reports:
+- results/2.1.003/measurement-capture-storm-qsearch-leaf-fastpath.yaml
+- results/2.1.003/measurement-tt-transposition-midgame-leaf-fastpath.yaml
+- results/2.1.003/measurement-initial-position-leaf-fastpath.yaml
+- results/2.1.003/measurement-harvested-qsearch-heavy-leaf-fastpath.yaml
+
+Current fine-grained counters:
+- negamaxTtHits
+- quiescenceTtHits
+- negamaxTtCutoffs
+- quiescenceTtCutoffs
+- negamaxBetaCutoffs
+- quiescenceBetaCutoffs
+- qsearchStandPatCutoffs
+- qsearchDeltaPruneChecks
+- qsearchDeltaPruneSkips
+- qsearchNodesWithMoves
+- qsearchGeneratedMoves
+- pvsResearches
+
+3. ratios to inspect in measurement runs
+
+These ratios are more useful than raw totals alone:
+
+- qsearch share:
+	- quiescenceNodes / max(negamaxNodes, 1)
+
+- TT usefulness split:
+	- negamaxTtCutoffs / max(negamaxTtHits, 1)
+	- quiescenceTtCutoffs / max(quiescenceTtHits, 1)
+
+- qsearch stand-pat dominance:
+	- qsearchStandPatCutoffs / max(quiescenceNodes, 1)
+
+- qsearch beta-cutoff dominance:
+	- quiescenceBetaCutoffs / max(quiescenceNodes, 1)
+
+- delta-prune effectiveness:
+	- qsearchDeltaPruneSkips / max(qsearchDeltaPruneChecks, 1)
+
+- tactical list pressure:
+	- qsearchGeneratedMoves / max(qsearchNodesWithMoves, 1)
+
+- PVS overhead:
+	- pvsResearches / max(negamaxNodes, 1)
+
+4. present measurement conclusions
+
+The current instrumented runs say:
+
+- the new official baseline removed a large amount of wasted full move generation at depth-0 non-check leaves
+	- node counts stayed the same, but movegenCalls and legalContextCalls dropped sharply on all search cases
+
+- PVS is not the main bottleneck
+	- re-search frequency is low relative to negamax node count
+
+- TT reuse is still valuable
+	- reducing TT storage or reuse has been a losing direction
+
+- qsearch still dominates broad search cost
+	- especially in opening and harvested qsearch-heavy positions even after the depth-0 leaf fast path
+	- initial-position depth 5 is still about 691k qsearch nodes versus about 392k negamax nodes
+	- harvested qsearch-heavy depth 3 is still about 47.7k qsearch nodes versus about 12.4k negamax nodes
+
+- many qsearch nodes terminate cheaply
+	- stand-pat cutoffs and qsearch beta cutoffs are both large
+
+- delta pruning is effective when it activates
+	- but it activates on only a subset of qsearch work
+
+- tactical list sizes are often small
+	- so tactical sorting micro-structure is not the main benchmark problem
+
+Implication:
+- the next improvements should target qsearch-side cost, not another full-search structural rewrite
+- the biggest obvious full-search leaf overhead has already been removed
+- the remaining likely wins are in how expensive non-check qsearch nodes are to enter and process
+
+5. benchmark workflow for future experiments
+
+Use this loop for every future search experiment:
+
+1. use the current measurement reports to pick one narrow target
+2. implement one change only
+3. run regression tests
+4. run the clean speed benchmark set
+5. keep or revert based only on the clean speed run
+6. if the change is promising, run the diagnostic measurement track
+7. confirm the expected mechanism from ratios and branch counts
+
+This avoids using instrumented timing noise as a performance decision tool.
+
+6. benchmark interpretation policy
+
+Clean speed run:
+- authoritative for faster or slower decisions
+
+Instrumented measurement run:
+- authoritative for branch ratios and search-shape interpretation
+- not authoritative for declaring a new speed baseline
+
+7. next algorithmic search target
+
+Based on the current measurements, the first algorithmic search experiments should be:
+
+1. inspect and measure non-check qsearch node cost, especially legal-context and tactical move generation work after stand-pat survives
+2. if a narrow common path is visible there, prototype one qsearch-only fast path and judge it only on the clean comparison set
+
+Only after that should larger pruning families be reconsidered, such as:
+- deeper null-move tuning
+- late-move reductions
+
+Short version:
+- use clean benchmarks to decide
+- use measurement benchmarks to understand
+- do not mix those two jobs in the same baseline conversation

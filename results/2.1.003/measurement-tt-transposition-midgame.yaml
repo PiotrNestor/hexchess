@@ -1,0 +1,101 @@
+version: 1
+kind: pyengine2-benchmark-run
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-26T11:07:05.859662+00:00'
+mode: search
+repeat: 3
+topCount: 3
+cases:
+- name: tt-transposition-midgame
+  category: middlegame
+  notes: Symmetric tactical middlegame intended to increase transposition-table reuse.
+  summaries:
+  - name: tt-transposition-midgame
+    category: middlegame
+    mode: search
+    medianMs: 1208.8564
+    units: 29818
+    unitsLabel: evals
+    unitsPerMs: 24.666288
+    notes: Symmetric tactical middlegame intended to increase transposition-table
+      reuse.
+    depth: 4
+    topMoves:
+    - san: f5f7
+      score: -130.0
+    - san: g5l1
+      score: -119.92
+    - san: f5h3
+      score: -109.84
+    metrics:
+      wallMs: 1201.3954003341496
+      evalsPerMs: 24.819472416580407
+      rootMoves: 57
+      negamaxNodes: 36231
+      quiescenceNodes: 30919
+      movegenCalls: 35976
+      tacticalMovegenCalls: 8951
+      legalContextCalls: 35976
+      ttHits: 10949
+      ttCutoffs: 10308
+      betaCutoffs: 6931
+      negamaxTtHits: 9514
+      quiescenceTtHits: 1435
+      negamaxTtCutoffs: 9207
+      quiescenceTtCutoffs: 1101
+      negamaxBetaCutoffs: 3565
+      quiescenceBetaCutoffs: 3366
+      qsearchStandPatCutoffs: 20867
+      qsearchDeltaPruneChecks: 2869
+      qsearchDeltaPruneSkips: 2743
+      qsearchNodesWithMoves: 6384
+      qsearchGeneratedMoves: 17362
+      pvsResearches: 47
+      ttEntries: 32119
+  - name: tt-transposition-midgame
+    category: middlegame
+    mode: search
+    medianMs: 5336.4156
+    units: 97117
+    unitsLabel: evals
+    unitsPerMs: 18.19892
+    notes: Symmetric tactical middlegame intended to increase transposition-table
+      reuse.
+    depth: 5
+    topMoves:
+    - san: f5f7
+      score: -130.0
+    - san: g5l1
+      score: -119.92
+    - san: f5h3
+      score: -109.84
+    metrics:
+      wallMs: 5351.873999927193
+      evalsPerMs: 18.146353968968846
+      rootMoves: 57
+      negamaxNodes: 161851
+      quiescenceNodes: 100431
+      movegenCalls: 155717
+      tacticalMovegenCalls: 40541
+      legalContextCalls: 155717
+      ttHits: 51364
+      ttCutoffs: 50156
+      betaCutoffs: 38211
+      negamaxTtHits: 47257
+      quiescenceTtHits: 4107
+      negamaxTtCutoffs: 46676
+      quiescenceTtCutoffs: 3480
+      negamaxBetaCutoffs: 30864
+      quiescenceBetaCutoffs: 7347
+      qsearchStandPatCutoffs: 56410
+      qsearchDeltaPruneChecks: 9825
+      qsearchDeltaPruneSkips: 7650
+      qsearchNodesWithMoves: 19836
+      qsearchGeneratedMoves: 33221
+      pvsResearches: 124
+      ttEntries: 110184
+depths:
+- 4
+- 5
+filter: tt-transposition-midgame

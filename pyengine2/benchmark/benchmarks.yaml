@@ -118,3 +118,24 @@ benchmarks:
   notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 10 (b5 k7k5).
     tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
     wallMs=97689.2, negamaxNodes=921501, quiescenceNodes=2646313, ttHits=548905, movegenCalls=1773051.'
+- name: harvested-hexchess-game-20260326-173542-ply-032-tt-heavy
+  category: harvested
+  fen: 1/qbk/5/r4b1/p1pp1pbrp/11/2p8/3R4p2/5K1PPP1/2P8/1P1N1B1NR1Q b - 2 16
+  notes: 'Harvested from hexchess-game-20260326-173542.yaml before ply 32 (b16 i4k3).
+    tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+    wallMs=100537.7, negamaxNodes=1314268, quiescenceNodes=2290113, ttHits=610384,
+    movegenCalls=1959062.'
+- name: harvested-hexchess-game-20260326-173542-ply-012-qsearch-heavy
+  category: harvested
+  fen: b/qbk/2b1n/r2n3/pppppp1rp/11/3PP1P1p2/11/4BB1PP2/2P8/1PRNQBKNRP1 b d4 0 6
+  notes: 'Harvested from hexchess-game-20260326-173542.yaml before ply 12 (b6 f8e5).
+    tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+    wallMs=106783.5, negamaxNodes=845527, quiescenceNodes=2326002, ttHits=364240,
+    movegenCalls=1969314.'
+- name: harvested-hexchess-game-20260326-173542-ply-048-wide-root
+  category: harvested
+  fen: 1/1qk/5/r6/p1p2pbrp/3b7/2pb1N5/6R4/4p2PPp1/2P2K5/1P3B1NR1Q b - 3 24
+  notes: 'Harvested from hexchess-game-20260326-173542.yaml before ply 48 (b24 h7f5).
+    tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy,
+    wide-root. wallMs=80029.6, negamaxNodes=1155468, quiescenceNodes=1692986, ttHits=438005,
+    movegenCalls=1501474.'
