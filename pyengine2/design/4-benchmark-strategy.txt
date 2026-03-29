@@ -27,10 +27,14 @@ Primary cases for keep-or-revert decisions:
 - tt-transposition-midgame
 - capture-storm-qsearch
 - harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+- harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
 
 Interpretation:
 - if a change is not broadly positive on this set, revert it
 - narrow wins are not enough if opening or TT-sensitive cases regress
+
+Current clean comparison suite:
+- python pyengine2/benchmark.py --suite clean-search-comparison --output results/2.1.003/clean-search-comparison.yaml
 
 2. diagnostic measurement track
 
@@ -41,6 +45,8 @@ Purpose:
 Rules:
 - use the instrumented engine build with extra counters
 - use benchmark.py with --diagnostics for measurement runs
+- use the harvested-diagnostics suite for quick reruns of the March 29 harvested stress set
+- use the harvested-history-diagnostics suite for the March 24 and March 26 harvested positions
 - do not treat the wall-clock results from these runs as the official speed baseline
 - use these runs for branch ratios, cutoff composition, and relative behavior only
 
@@ -49,6 +55,10 @@ Current measurement reports:
 - results/2.1.003/measurement-tt-transposition-midgame-leaf-fastpath.yaml
 - results/2.1.003/measurement-initial-position-leaf-fastpath.yaml
 - results/2.1.003/measurement-harvested-qsearch-heavy-leaf-fastpath.yaml
+
+Current diagnostic suite:
+- python pyengine2/benchmark.py --suite harvested-diagnostics --diagnostics --output results/2.1.003/harvested-diagnostics-20260329.yaml
+- python pyengine2/benchmark.py --suite harvested-history-diagnostics --diagnostics --output results/2.1.003/harvested-history-diagnostics-20260329.yaml
 
 Current fine-grained counters:
 - negamaxTtHits

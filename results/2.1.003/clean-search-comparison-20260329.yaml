@@ -1,0 +1,307 @@
+version: 1
+kind: pyengine2-benchmark-suite
+suite: clean-search-comparison
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-29T19:20:00.469738+00:00'
+topCount: 3
+diagnostics: false
+entries:
+- mode: search
+  filter: tt-transposition-midgame
+  repeat: 3
+  cases:
+  - name: tt-transposition-midgame
+    category: middlegame
+    notes: Symmetric tactical middlegame intended to increase transposition-table
+      reuse.
+    summaries:
+    - name: tt-transposition-midgame
+      category: middlegame
+      mode: search
+      medianMs: 648.3517
+      units: 20556
+      unitsLabel: evals
+      unitsPerMs: 31.705014
+      notes: Symmetric tactical middlegame intended to increase transposition-table
+        reuse.
+      depth: 4
+      topMoves:
+      - san: f5f7
+        score: -130.0
+      - san: g5l1
+        score: -119.92
+      - san: f5h3
+        score: -109.84
+      metrics:
+        wallMs: 646.7438999970909
+        evalsPerMs: 31.783832827943893
+        rootMoves: 57
+        negamaxNodes: 20418
+        quiescenceNodes: 21658
+        movegenCalls: 14885
+        tacticalMovegenCalls: 8950
+        legalContextCalls: 14885
+        ttHits: 4359
+        ttCutoffs: 3757
+        betaCutoffs: 6931
+        ttEntries: 22877
+    - name: tt-transposition-midgame
+      category: middlegame
+      mode: search
+      medianMs: 3014.2384
+      units: 72364
+      unitsLabel: evals
+      unitsPerMs: 24.007391
+      notes: Symmetric tactical middlegame intended to increase transposition-table
+        reuse.
+      depth: 5
+      topMoves:
+      - san: f5f7
+        score: -130.0
+      - san: g5l1
+        score: -119.92
+      - san: f5h3
+        score: -109.84
+      metrics:
+        wallMs: 2988.2944999844767
+        evalsPerMs: 24.215819424884632
+        rootMoves: 57
+        negamaxNodes: 111740
+        quiescenceNodes: 75990
+        movegenCalls: 67232
+        tacticalMovegenCalls: 34044
+        legalContextCalls: 67232
+        ttHits: 35385
+        ttCutoffs: 34329
+        betaCutoffs: 29593
+        ttEntries: 81459
+  depths:
+  - 4
+  - 5
+- mode: search
+  filter: capture-storm-qsearch
+  repeat: 3
+  cases:
+  - name: capture-storm-qsearch
+    category: tactics
+    notes: Capture-dense position intended to stress tactical generation and qsearch.
+    summaries:
+    - name: capture-storm-qsearch
+      category: tactics
+      mode: search
+      medianMs: 224.3165
+      units: 7900
+      unitsLabel: evals
+      unitsPerMs: 35.218096
+      notes: Capture-dense position intended to stress tactical generation and qsearch.
+      depth: 4
+      topMoves:
+      - san: f5f7
+        score: -79.68
+      - san: f5h3
+        score: -69.6
+      - san: f5c8
+        score: -19.200000000000003
+      metrics:
+        wallMs: 223.60710002249107
+        evalsPerMs: 35.329826285504325
+        rootMoves: 36
+        negamaxNodes: 15028
+        quiescenceNodes: 8267
+        movegenCalls: 5493
+        tacticalMovegenCalls: 2146
+        legalContextCalls: 5493
+        ttHits: 6371
+        ttCutoffs: 5691
+        betaCutoffs: 2284
+        ttEntries: 8932
+    - name: capture-storm-qsearch
+      category: tactics
+      mode: search
+      medianMs: 553.3968
+      units: 13862
+      unitsLabel: evals
+      unitsPerMs: 25.048934
+      notes: Capture-dense position intended to stress tactical generation and qsearch.
+      depth: 5
+      topMoves:
+      - san: f5f7
+        score: -79.68
+      - san: f5h3
+        score: -69.6
+      - san: f5g4
+        score: -19.599999999999994
+      metrics:
+        wallMs: 547.7562000160106
+        evalsPerMs: 25.30687922764694
+        rootMoves: 36
+        negamaxNodes: 36986
+        quiescenceNodes: 13972
+        movegenCalls: 13876
+        tacticalMovegenCalls: 5362
+        legalContextCalls: 13876
+        ttHits: 19171
+        ttCutoffs: 17367
+        betaCutoffs: 5127
+        ttEntries: 14560
+  depths:
+  - 4
+  - 5
+- mode: search
+  filter: initial-position
+  repeat: 3
+  cases:
+  - name: initial-position
+    category: opening
+    notes: High-branching opening baseline.
+    summaries:
+    - name: initial-position
+      category: opening
+      mode: search
+      medianMs: 3404.4299
+      units: 134821
+      unitsLabel: evals
+      unitsPerMs: 39.601638
+      notes: High-branching opening baseline.
+      depth: 4
+      topMoves:
+      - san: d3d5
+        score: -0.0
+      - san: h3h5
+        score: -0.0
+      - san: c2c4
+        score: -0.0
+      metrics:
+        wallMs: 3409.156699985033
+        evalsPerMs: 39.54673013434434
+        rootMoves: 51
+        negamaxNodes: 155774
+        quiescenceNodes: 136519
+        movegenCalls: 40073
+        tacticalMovegenCalls: 28246
+        legalContextCalls: 40073
+        ttHits: 35137
+        ttCutoffs: 33924
+        betaCutoffs: 18648
+        ttEntries: 136337
+    - name: initial-position
+      category: opening
+      mode: search
+      medianMs: 28348.3074
+      units: 665456
+      unitsLabel: evals
+      unitsPerMs: 23.474276
+      notes: High-branching opening baseline.
+      depth: 5
+      topMoves:
+      - san: d3d5
+        score: -0.32000000000000006
+      - san: h3h5
+        score: -0.32000000000000006
+      - san: c2c4
+        score: -0.32000000000000006
+      metrics:
+        wallMs: 23385.510800027987
+        evalsPerMs: 28.455910400691508
+        rootMoves: 51
+        negamaxNodes: 391552
+        quiescenceNodes: 691299
+        movegenCalls: 467305
+        tacticalMovegenCalls: 390386
+        legalContextCalls: 467305
+        ttHits: 121118
+        ttCutoffs: 114008
+        betaCutoffs: 231272
+        ttEntries: 669829
+  depths:
+  - 4
+  - 5
+- mode: search
+  filter: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+  repeat: 3
+  cases:
+  - name: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+    category: harvested
+    notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 34 (b17 b7b5).
+      tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=62024.1,
+      negamaxNodes=521388, quiescenceNodes=1852281, ttHits=264785, movegenCalls=1396834.'
+    summaries:
+    - name: harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy
+      category: harvested
+      mode: search
+      medianMs: 1368.8656
+      units: 45842
+      unitsLabel: evals
+      unitsPerMs: 33.489044
+      notes: 'Harvested from hexchess-game-20260324-175232.yaml before ply 34 (b17
+        b7b5). tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=62024.1,
+        negamaxNodes=521388, quiescenceNodes=1852281, ttHits=264785, movegenCalls=1396834.'
+      depth: 3
+      topMoves:
+      - san: b7b5
+        score: -2.0
+      - san: c7c5
+        score: -2.0
+      - san: d6e8
+        score: -1.6799999999999997
+      metrics:
+        wallMs: 1365.2832999941893
+        evalsPerMs: 33.57691403695856
+        rootMoves: 51
+        negamaxNodes: 12374
+        quiescenceNodes: 47719
+        movegenCalls: 31951
+        tacticalMovegenCalls: 29453
+        legalContextCalls: 31951
+        ttHits: 4808
+        ttCutoffs: 4022
+        betaCutoffs: 15414
+        ttEntries: 42315
+  depths:
+  - 3
+- mode: search
+  filter: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+  repeat: 1
+  cases:
+  - name: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+    category: harvested
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 14 (b7 k7k5).
+      tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+      wallMs=486507.1, negamaxNodes=849351, quiescenceNodes=16278157, ttHits=1192920,
+      movegenCalls=9117488.'
+    summaries:
+    - name: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+      category: harvested
+      mode: search
+      medianMs: 5817.7373
+      units: 216221
+      unitsLabel: evals
+      unitsPerMs: 37.165824
+      notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 14 (b7
+        k7k5). tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy,
+        pruning-heavy. wallMs=486507.1, negamaxNodes=849351, quiescenceNodes=16278157,
+        ttHits=1192920, movegenCalls=9117488.'
+      depth: 3
+      topMoves:
+      - san: b7b5
+        score: -0.32000000000000006
+      - san: k7k5
+        score: -0.32000000000000006
+      - san: i4i3
+        score: -0.32000000000000006
+      metrics:
+        wallMs: 5806.272899993928
+        evalsPerMs: 37.23920727188454
+        rootMoves: 50
+        negamaxNodes: 14550
+        quiescenceNodes: 224231
+        movegenCalls: 131857
+        tacticalMovegenCalls: 128564
+        legalContextCalls: 131857
+        ttHits: 10010
+        ttCutoffs: 9494
+        betaCutoffs: 65049
+        ttEntries: 212607
+  depths:
+  - 3

@@ -1,0 +1,878 @@
+version: 1
+pyengine2Version: 2.1.003
+files:
+- results\2.1.003\hexchess-game-20260329-210806.yaml
+gameCount: 1
+totalLoggedPlies: 62
+enginePliesWithMetrics: 31
+metricSummary:
+  wall_ms:
+    mean: 65855.59786128861
+    median: 37854.75950001273
+    max: 486507.08119999035
+  evals_per_ms:
+    mean: 27.25919545558675
+    median: 27.513398121723398
+    max: 37.61874118927237
+  negamax_nodes:
+    mean: 503377.6451612903
+    median: 496813.0
+    max: 849351.0
+  quiescence_nodes:
+    mean: 2049160.7096774194
+    median: 1157234.0
+    max: 16278157.0
+  tt_hits:
+    mean: 250783.25806451612
+    median: 201885.0
+    max: 1192920.0
+  beta_cutoffs:
+    mean: 584856.6129032258
+    median: 318582.0
+    max: 4603402.0
+  movegen_calls:
+    mean: 1171622.064516129
+    median: 644139.0
+    max: 9117488.0
+  qsearch_ratio:
+    mean: 3.40891548193761
+    median: 2.342169478001634
+    max: 19.16540629256927
+topWallMs:
+- game: hexchess-game-20260329-210806.yaml
+  ply: 14
+  turn: b
+  fullmove: 7
+  san: k7k5
+  value: 486507.08119999035
+  wallMs: 486507.08119999035
+  dominantTag: tt-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 12
+  turn: b
+  fullmove: 6
+  san: i5i4
+  value: 229094.97569999075
+  wallMs: 229094.97569999075
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 22
+  turn: b
+  fullmove: 11
+  san: d9f8
+  value: 146405.48369998578
+  wallMs: 146405.48369998578
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+  - wide-root
+- game: hexchess-game-20260329-210806.yaml
+  ply: 18
+  turn: b
+  fullmove: 9
+  san: d6c5
+  value: 100281.9545000093
+  wallMs: 100281.9545000093
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 6
+  turn: b
+  fullmove: 3
+  san: i7i5
+  value: 78291.50449999725
+  wallMs: 78291.50449999725
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - tt-heavy
+  - low-throughput
+- game: hexchess-game-20260329-210806.yaml
+  ply: 8
+  turn: b
+  fullmove: 4
+  san: c7c5
+  value: 75414.74940002081
+  wallMs: 75414.74940002081
+  dominantTag: slow-search
+  tags:
+  - slow-search
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 20
+  turn: b
+  fullmove: 10
+  san: f11k3
+  value: 74173.11819997849
+  wallMs: 74173.11819997849
+  dominantTag: qsearch-heavy
+  tags:
+  - slow-search
+  - qsearch-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 42
+  turn: b
+  fullmove: 21
+  san: e9c7
+  value: 68709.92409999599
+  wallMs: 68709.92409999599
+  dominantTag: node-heavy
+  tags:
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+topNegamaxNodes:
+- game: hexchess-game-20260329-210806.yaml
+  ply: 14
+  turn: b
+  fullmove: 7
+  san: k7k5
+  value: 849351
+  wallMs: 486507.08119999035
+  dominantTag: tt-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 22
+  turn: b
+  fullmove: 11
+  san: d9f8
+  value: 819506
+  wallMs: 146405.48369998578
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+  - wide-root
+- game: hexchess-game-20260329-210806.yaml
+  ply: 18
+  turn: b
+  fullmove: 9
+  san: d6c5
+  value: 764493
+  wallMs: 100281.9545000093
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 42
+  turn: b
+  fullmove: 21
+  san: e9c7
+  value: 699350
+  wallMs: 68709.92409999599
+  dominantTag: node-heavy
+  tags:
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 24
+  turn: b
+  fullmove: 12
+  san: f8e5
+  value: 694621
+  wallMs: 44633.99619999109
+  dominantTag: node-heavy
+  tags:
+  - node-heavy
+  - tt-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 12
+  turn: b
+  fullmove: 6
+  san: i5i4
+  value: 664003
+  wallMs: 229094.97569999075
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 6
+  turn: b
+  fullmove: 3
+  san: i7i5
+  value: 657672
+  wallMs: 78291.50449999725
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - tt-heavy
+  - low-throughput
+- game: hexchess-game-20260329-210806.yaml
+  ply: 28
+  turn: b
+  fullmove: 14
+  san: h4i1
+  value: 651597
+  wallMs: 44083.698600006755
+  dominantTag: low-throughput
+  tags:
+  - low-throughput
+topQuiescenceNodes:
+- game: hexchess-game-20260329-210806.yaml
+  ply: 14
+  turn: b
+  fullmove: 7
+  san: k7k5
+  value: 16278157
+  wallMs: 486507.08119999035
+  dominantTag: tt-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 12
+  turn: b
+  fullmove: 6
+  san: i5i4
+  value: 7358271
+  wallMs: 229094.97569999075
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 22
+  turn: b
+  fullmove: 11
+  san: d9f8
+  value: 5824151
+  wallMs: 146405.48369998578
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+  - wide-root
+- game: hexchess-game-20260329-210806.yaml
+  ply: 18
+  turn: b
+  fullmove: 9
+  san: d6c5
+  value: 3495614
+  wallMs: 100281.9545000093
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 20
+  turn: b
+  fullmove: 10
+  san: f11k3
+  value: 2680684
+  wallMs: 74173.11819997849
+  dominantTag: qsearch-heavy
+  tags:
+  - slow-search
+  - qsearch-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 42
+  turn: b
+  fullmove: 21
+  san: e9c7
+  value: 2098881
+  wallMs: 68709.92409999599
+  dominantTag: node-heavy
+  tags:
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 10
+  turn: b
+  fullmove: 5
+  san: d7d6
+  value: 1881492
+  wallMs: 68475.12570000254
+  dominantTag: qsearch-heavy
+  tags:
+  - qsearch-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 8
+  turn: b
+  fullmove: 4
+  san: c7c5
+  value: 1851437
+  wallMs: 75414.74940002081
+  dominantTag: slow-search
+  tags:
+  - slow-search
+  - movegen-heavy
+  - pruning-heavy
+topTtHits:
+- game: hexchess-game-20260329-210806.yaml
+  ply: 14
+  turn: b
+  fullmove: 7
+  san: k7k5
+  value: 1192920
+  wallMs: 486507.08119999035
+  dominantTag: tt-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 12
+  turn: b
+  fullmove: 6
+  san: i5i4
+  value: 602219
+  wallMs: 229094.97569999075
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 18
+  turn: b
+  fullmove: 9
+  san: d6c5
+  value: 512721
+  wallMs: 100281.9545000093
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 22
+  turn: b
+  fullmove: 11
+  san: d9f8
+  value: 497227
+  wallMs: 146405.48369998578
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+  - wide-root
+- game: hexchess-game-20260329-210806.yaml
+  ply: 42
+  turn: b
+  fullmove: 21
+  san: e9c7
+  value: 404581
+  wallMs: 68709.92409999599
+  dominantTag: node-heavy
+  tags:
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 24
+  turn: b
+  fullmove: 12
+  san: f8e5
+  value: 294915
+  wallMs: 44633.99619999109
+  dominantTag: node-heavy
+  tags:
+  - node-heavy
+  - tt-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 6
+  turn: b
+  fullmove: 3
+  san: i7i5
+  value: 292647
+  wallMs: 78291.50449999725
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - tt-heavy
+  - low-throughput
+- game: hexchess-game-20260329-210806.yaml
+  ply: 20
+  turn: b
+  fullmove: 10
+  san: f11k3
+  value: 283244
+  wallMs: 74173.11819997849
+  dominantTag: qsearch-heavy
+  tags:
+  - slow-search
+  - qsearch-heavy
+  - movegen-heavy
+  - pruning-heavy
+topQsearchRatio:
+- game: hexchess-game-20260329-210806.yaml
+  ply: 14
+  turn: b
+  fullmove: 7
+  san: k7k5
+  value: 19.16540629256927
+  wallMs: 486507.08119999035
+  dominantTag: tt-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 12
+  turn: b
+  fullmove: 6
+  san: i5i4
+  value: 11.081683365888408
+  wallMs: 229094.97569999075
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 22
+  turn: b
+  fullmove: 11
+  san: d9f8
+  value: 7.106904647433942
+  wallMs: 146405.48369998578
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+  - wide-root
+- game: hexchess-game-20260329-210806.yaml
+  ply: 18
+  turn: b
+  fullmove: 9
+  san: d6c5
+  value: 4.5724604411027965
+  wallMs: 100281.9545000093
+  dominantTag: node-heavy
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 20
+  turn: b
+  fullmove: 10
+  san: f11k3
+  value: 4.384866909081392
+  wallMs: 74173.11819997849
+  dominantTag: qsearch-heavy
+  tags:
+  - slow-search
+  - qsearch-heavy
+  - movegen-heavy
+  - pruning-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 10
+  turn: b
+  fullmove: 5
+  san: d7d6
+  value: 3.7637442763438216
+  wallMs: 68475.12570000254
+  dominantTag: qsearch-heavy
+  tags:
+  - qsearch-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 32
+  turn: b
+  fullmove: 16
+  san: b5b4
+  value: 3.427041441883276
+  wallMs: 54108.1903000013
+  dominantTag: qsearch-heavy
+  tags:
+  - qsearch-heavy
+- game: hexchess-game-20260329-210806.yaml
+  ply: 34
+  turn: b
+  fullmove: 17
+  san: b4c4
+  value: 3.3144160898824704
+  wallMs: 42174.51010001241
+  dominantTag: interesting
+  tags: []
+benchmarkCandidates:
+- game: hexchess-game-20260329-210806.yaml
+  ply: 14
+  san: k7k5
+  tags:
+  - slow-search
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+  dominantTag: tt-heavy
+  interestingness: 7.7
+  fen: b/qbk/n1b1n/r5r/p2ppp2p/3p7/2pPP1PP3/2P5p2/5B5/3Q1B2P2/1PRN1BKNRP1 b h4 0 7
+  metrics:
+    wallMs: 486507.08119999035
+    evalsPerMs: 31.55929398217422
+    rootMoves: 50
+    negamaxNodes: 849351
+    quiescenceNodes: 16278157
+    movegenCalls: 9117488
+    tacticalMovegenCalls: 8947572
+    legalContextCalls: 9117488
+    ttHits: 1192920
+    ttCutoffs: 1101633
+    betaCutoffs: 4603402
+    ttEntries: 14963939
+    duration: 487418.3000000119
+    evaluations: 15353820
+    qsearchRatio: 19.16540629256927
+  benchmark:
+    name: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+    category: harvested
+    fen: b/qbk/n1b1n/r5r/p2ppp2p/3p7/2pPP1PP3/2P5p2/5B5/3Q1B2P2/1PRN1BKNRP1 b h4 0
+      7
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 14 (b7 k7k5).
+      tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+      wallMs=486507.1, negamaxNodes=849351, quiescenceNodes=16278157, ttHits=1192920,
+      movegenCalls=9117488.'
+- game: hexchess-game-20260329-210806.yaml
+  ply: 20
+  san: f11k3
+  tags:
+  - slow-search
+  - qsearch-heavy
+  - movegen-heavy
+  - pruning-heavy
+  dominantTag: qsearch-heavy
+  interestingness: 2.031414924843304
+  fen: b/qbk/n1b1n/r6/p2ppp1r1/11/2p1P1PP1p1/2P5p2/4BB3P1/3Q4P2/1PRN1BKNR2 b k2 0
+    10
+  metrics:
+    wallMs: 74173.11819997849
+    evalsPerMs: 34.25789641402371
+    rootMoves: 53
+    negamaxNodes: 611349
+    quiescenceNodes: 2680684
+    movegenCalls: 1546842
+    tacticalMovegenCalls: 1360045
+    legalContextCalls: 1546842
+    ttHits: 283244
+    ttCutoffs: 254559
+    betaCutoffs: 763509
+    ttEntries: 2602044
+    duration: 74334.59999999404
+    evaluations: 2541015
+    qsearchRatio: 4.384866909081392
+  benchmark:
+    name: harvested-hexchess-game-20260329-210806-ply-020-qsearch-heavy
+    category: harvested
+    fen: b/qbk/n1b1n/r6/p2ppp1r1/11/2p1P1PP1p1/2P5p2/4BB3P1/3Q4P2/1PRN1BKNR2 b k2
+      0 10
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 20 (b10 f11k3).
+      tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=74173.1,
+      negamaxNodes=611349, quiescenceNodes=2680684, ttHits=283244, movegenCalls=1546842.'
+- game: hexchess-game-20260329-210806.yaml
+  ply: 58
+  san: i4i3
+  tags:
+  - wide-root
+  dominantTag: wide-root
+  interestingness: 1.2362035652219001
+  fen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r5p2/Q8p1/3R4P2/3N2BKN2 b - 5 29
+  metrics:
+    wallMs: 34068.70049997815
+    evalsPerMs: 24.82677611963927
+    rootMoves: 61
+    negamaxNodes: 519873
+    quiescenceNodes: 888734
+    movegenCalls: 604623
+    tacticalMovegenCalls: 446798
+    legalContextCalls: 604623
+    ttHits: 160009
+    ttCutoffs: 136991
+    betaCutoffs: 293494
+    ttEntries: 919743
+    duration: 34153.09999999404
+    evaluations: 845816
+    qsearchRatio: 1.709521363871561
+  benchmark:
+    name: harvested-hexchess-game-20260329-210806-ply-058-wide-root
+    category: harvested
+    fen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r5p2/Q8p1/3R4P2/3N2BKN2 b - 5 29
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 58 (b29 i4i3).
+      tags: wide-root. wallMs=34068.7, negamaxNodes=519873, quiescenceNodes=888734,
+      ttHits=160009, movegenCalls=604623.'
+- game: hexchess-game-20260329-210806.yaml
+  ply: 42
+  san: e9c7
+  tags:
+  - node-heavy
+  - qsearch-heavy
+  - tt-heavy
+  - movegen-heavy
+  - pruning-heavy
+  dominantTag: node-heavy
+  interestingness: 2.0556949857644633
+  fen: 1/q1k/1rb1n/7/3ppp1r1/3b7/2Q3PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 b - 7 21
+  metrics:
+    wallMs: 68709.92409999599
+    evalsPerMs: 27.720507989909294
+    rootMoves: 55
+    negamaxNodes: 699350
+    quiescenceNodes: 2098881
+    movegenCalls: 1147819
+    tacticalMovegenCalls: 979591
+    legalContextCalls: 1147819
+    ttHits: 404581
+    ttCutoffs: 347935
+    betaCutoffs: 570874
+    ttEntries: 1964435
+    duration: 68849.59999999404
+    evaluations: 1904674
+    qsearchRatio: 3.001188246228641
+  benchmark:
+    name: harvested-hexchess-game-20260329-210806-ply-042-node-heavy
+    category: harvested
+    fen: 1/q1k/1rb1n/7/3ppp1r1/3b7/2Q3PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 b - 7 21
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 42 (b21 e9c7).
+      tags: node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy. wallMs=68709.9,
+      negamaxNodes=699350, quiescenceNodes=2098881, ttHits=404581, movegenCalls=1147819.'
+- game: hexchess-game-20260329-210806.yaml
+  ply: 28
+  san: h4i1
+  tags:
+  - low-throughput
+  dominantTag: low-throughput
+  interestingness: 1.4799563103412858
+  fen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p3PP1p1/2P3Qnp2/4BB3N1/8P2/1PRN1BK1R2 b - 3 14
+  metrics:
+    wallMs: 44083.698600006755
+    evalsPerMs: 19.349601487382216
+    rootMoves: 58
+    negamaxNodes: 651597
+    quiescenceNodes: 891456
+    movegenCalls: 608259
+    tacticalMovegenCalls: 424305
+    legalContextCalls: 608259
+    ttHits: 198530
+    ttCutoffs: 176878
+    betaCutoffs: 300086
+    ttEntries: 988998
+    duration: 44166.09999999404
+    evaluations: 853002
+    qsearchRatio: 1.3681094296014253
+  benchmark:
+    name: harvested-hexchess-game-20260329-210806-ply-028-low-throughput
+    category: harvested
+    fen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p3PP1p1/2P3Qnp2/4BB3N1/8P2/1PRN1BK1R2 b - 3 14
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 28 (b14 h4i1).
+      tags: low-throughput. wallMs=44083.7, negamaxNodes=651597, quiescenceNodes=891456,
+      ttHits=198530, movegenCalls=608259.'
+- game: hexchess-game-20260329-210806.yaml
+  ply: 8
+  san: c7c5
+  tags:
+  - slow-search
+  - movegen-heavy
+  - pruning-heavy
+  dominantTag: slow-search
+  interestingness: 1.842608745478134
+  fen: b/qbk/n1b1n/r5r/pppppp2p/11/4P1P1p2/2P8/3P1B1P3/5B2P2/1PRNQBKNRP1 b c3 0 4
+  metrics:
+    wallMs: 75414.74940002081
+    evalsPerMs: 23.322002844174598
+    rootMoves: 49
+    negamaxNodes: 635323
+    quiescenceNodes: 1851437
+    movegenCalls: 1097512
+    tacticalMovegenCalls: 958204
+    legalContextCalls: 1097512
+    ttHits: 246345
+    ttCutoffs: 223432
+    betaCutoffs: 544864
+    ttEntries: 1794642
+    duration: 75556.0
+    evaluations: 1758823
+    qsearchRatio: 2.914166494838059
+  benchmark:
+    name: harvested-hexchess-game-20260329-210806-ply-008-slow-search
+    category: harvested
+    fen: b/qbk/n1b1n/r5r/pppppp2p/11/4P1P1p2/2P8/3P1B1P3/5B2P2/1PRNQBKNRP1 b c3 0
+      4
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 8 (b4 c7c5).
+      tags: slow-search, movegen-heavy, pruning-heavy. wallMs=75414.7, negamaxNodes=635323,
+      quiescenceNodes=1851437, ttHits=246345, movegenCalls=1097512.'
+- game: hexchess-game-20260329-210806.yaml
+  ply: 34
+  san: b4c4
+  tags: []
+  dominantTag: interesting
+  interestingness: 1.4039647449459296
+  fen: 1/qbk/2b1n/r6/3ppp1r1/11/2B3PP1p1/1pP3Q1p2/5B5/3R4P2/1P1N1BK1N2 b - 0 17
+  metrics:
+    wallMs: 42174.51010001241
+    evalsPerMs: 34.22965664750129
+    rootMoves: 49
+    negamaxNodes: 469413
+    quiescenceNodes: 1555830
+    movegenCalls: 890113
+    tacticalMovegenCalls: 742221
+    legalContextCalls: 890113
+    ttHits: 211732
+    ttCutoffs: 188989
+    betaCutoffs: 440169
+    ttEntries: 1511329
+    duration: 42272.19999998808
+    evaluations: 1443619
+    qsearchRatio: 3.3144160898824704
+  benchmark:
+    name: harvested-hexchess-game-20260329-210806-ply-034-interesting
+    category: harvested
+    fen: 1/qbk/2b1n/r6/3ppp1r1/11/2B3PP1p1/1pP3Q1p2/5B5/3R4P2/1P1N1BK1N2 b - 0 17
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 34 (b17 b4c4).
+      tags: interesting. wallMs=42174.5, negamaxNodes=469413, quiescenceNodes=1555830,
+      ttHits=211732, movegenCalls=890113.'
+mergeSummary:
+  path: pyengine2\benchmark\benchmarks.yaml
+  added:
+  - name: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+    category: harvested
+    fen: b/qbk/n1b1n/r5r/p2ppp2p/3p7/2pPP1PP3/2P5p2/5B5/3Q1B2P2/1PRN1BKNRP1 b h4 0
+      7
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 14 (b7 k7k5).
+      tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+      wallMs=486507.1, negamaxNodes=849351, quiescenceNodes=16278157, ttHits=1192920,
+      movegenCalls=9117488.'
+  - name: harvested-hexchess-game-20260329-210806-ply-020-qsearch-heavy
+    category: harvested
+    fen: b/qbk/n1b1n/r6/p2ppp1r1/11/2p1P1PP1p1/2P5p2/4BB3P1/3Q4P2/1PRN1BKNR2 b k2
+      0 10
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 20 (b10 f11k3).
+      tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=74173.1,
+      negamaxNodes=611349, quiescenceNodes=2680684, ttHits=283244, movegenCalls=1546842.'
+  - name: harvested-hexchess-game-20260329-210806-ply-058-wide-root
+    category: harvested
+    fen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r5p2/Q8p1/3R4P2/3N2BKN2 b - 5 29
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 58 (b29 i4i3).
+      tags: wide-root. wallMs=34068.7, negamaxNodes=519873, quiescenceNodes=888734,
+      ttHits=160009, movegenCalls=604623.'
+  - name: harvested-hexchess-game-20260329-210806-ply-042-node-heavy
+    category: harvested
+    fen: 1/q1k/1rb1n/7/3ppp1r1/3b7/2Q3PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 b - 7 21
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 42 (b21 e9c7).
+      tags: node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy. wallMs=68709.9,
+      negamaxNodes=699350, quiescenceNodes=2098881, ttHits=404581, movegenCalls=1147819.'
+  - name: harvested-hexchess-game-20260329-210806-ply-028-low-throughput
+    category: harvested
+    fen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p3PP1p1/2P3Qnp2/4BB3N1/8P2/1PRN1BK1R2 b - 3 14
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 28 (b14 h4i1).
+      tags: low-throughput. wallMs=44083.7, negamaxNodes=651597, quiescenceNodes=891456,
+      ttHits=198530, movegenCalls=608259.'
+  - name: harvested-hexchess-game-20260329-210806-ply-008-slow-search
+    category: harvested
+    fen: b/qbk/n1b1n/r5r/pppppp2p/11/4P1P1p2/2P8/3P1B1P3/5B2P2/1PRNQBKNRP1 b c3 0
+      4
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 8 (b4 c7c5).
+      tags: slow-search, movegen-heavy, pruning-heavy. wallMs=75414.7, negamaxNodes=635323,
+      quiescenceNodes=1851437, ttHits=246345, movegenCalls=1097512.'
+  - name: harvested-hexchess-game-20260329-210806-ply-034-interesting
+    category: harvested
+    fen: 1/qbk/2b1n/r6/3ppp1r1/11/2B3PP1p1/1pP3Q1p2/5B5/3R4P2/1P1N1BK1N2 b - 0 17
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 34 (b17 b4c4).
+      tags: interesting. wallMs=42174.5, negamaxNodes=469413, quiescenceNodes=1555830,
+      ttHits=211732, movegenCalls=890113.'
+  skipped: []

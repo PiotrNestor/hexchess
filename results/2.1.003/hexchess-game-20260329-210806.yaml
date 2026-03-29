@@ -1,0 +1,1252 @@
+version: 1
+startFen: b/qbk/n1b1n/r5r/ppppppppp/11/5P5/4P1P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 1
+historyIndex: 62
+moves:
+  - san: e4e5
+    beforeFen: b/qbk/n1b1n/r5r/ppppppppp/11/5P5/4P1P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 1
+    source: manual
+    evaluations: null
+    duration: null
+    metrics: null
+  - san: h7h5
+    beforeFen: b/qbk/n1b1n/r5r/ppppppppp/11/4PP5/6P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 b - 0 1
+    source: python-api
+    evaluations: 812429
+    duration: 37919.5
+    metrics:
+      wallMs: 37854.75950001273
+      evalsPerMs: 21.461739837489304
+      rootMoves: 50
+      negamaxNodes: 511658
+      quiescenceNodes: 860918
+      movegenCalls: 546527
+      tacticalMovegenCalls: 445280
+      legalContextCalls: 546527
+      ttHits: 201885
+      ttCutoffs: 186242
+      betaCutoffs: 267192
+      ttEntries: 830673
+      negamaxTtHits: 146314
+      quiescenceTtHits: 55571
+      negamaxTtCutoffs: 137753
+      quiescenceTtCutoffs: 48489
+      negamaxBetaCutoffs: 86255
+      quiescenceBetaCutoffs: 180937
+      qsearchStandPatCutoffs: 367149
+      qsearchDeltaPruneChecks: 52268
+      qsearchDeltaPruneSkips: 45320
+      qsearchNodesWithMoves: 378048
+      qsearchGeneratedMoves: 976535
+      pvsResearches: 2420
+      negamaxFrontierFutilityChecks: 322309
+      negamaxFrontierFutilitySkips: 30807
+      nullMoveAttempts: 2367
+      nullMoveCutoffs: 1823
+  - san: g4g5
+    beforeFen: b/qbk/n1b1n/r5r/pppppp1pp/11/4PP1p3/6P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w
+      h6 0 2
+    source: rust-worker
+    evaluations: 8490961
+    duration: 141525.09999999404
+    metrics: null
+  - san: h5g5
+    beforeFen: b/qbk/n1b1n/r5r/pppppp1pp/11/4PPPp3/11/3P1B1P3/2P2B2P2/1PRNQBKNRP1 b - 0 2
+    source: python-api
+    evaluations: 1193536
+    duration: 52456
+    metrics:
+      wallMs: 52376.90509998356
+      evalsPerMs: 22.787447973904335
+      rootMoves: 53
+      negamaxNodes: 582330
+      quiescenceNodes: 1302178
+      movegenCalls: 690560
+      tacticalMovegenCalls: 514609
+      legalContextCalls: 690560
+      ttHits: 246333
+      ttCutoffs: 234147
+      betaCutoffs: 341982
+      ttEntries: 1311912
+      negamaxTtHits: 130306
+      quiescenceTtHits: 116027
+      negamaxTtCutoffs: 125505
+      quiescenceTtCutoffs: 108642
+      negamaxBetaCutoffs: 163776
+      quiescenceBetaCutoffs: 178206
+      qsearchStandPatCutoffs: 678927
+      qsearchDeltaPruneChecks: 148590
+      qsearchDeltaPruneSkips: 142984
+      qsearchNodesWithMoves: 470874
+      qsearchGeneratedMoves: 1573666
+      pvsResearches: 1347
+      negamaxFrontierFutilityChecks: 180938
+      negamaxFrontierFutilitySkips: 14112
+      nullMoveAttempts: 3461
+      nullMoveCutoffs: 557
+  - san: f5g5
+    beforeFen: b/qbk/n1b1n/r5r/pppppp1pp/11/4PPp4/11/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 3
+    source: rust-worker
+    evaluations: 8373371
+    duration: 163475.40000000596
+    metrics: null
+  - san: i7i5
+    beforeFen: b/qbk/n1b1n/r5r/pppppp1pp/11/4P1P4/11/3P1B1P3/2P2B2P2/1PRNQBKNRP1 b - 0 3
+    source: python-api
+    evaluations: 1536362
+    duration: 78424.40000000596
+    metrics:
+      wallMs: 78291.50449999725
+      evalsPerMs: 19.62361063070456
+      rootMoves: 52
+      negamaxNodes: 657672
+      quiescenceNodes: 1667430
+      movegenCalls: 985475
+      tacticalMovegenCalls: 841319
+      legalContextCalls: 985475
+      ttHits: 292647
+      ttCutoffs: 270855
+      betaCutoffs: 487292
+      ttEntries: 1574207
+      negamaxTtHits: 149073
+      quiescenceTtHits: 143574
+      negamaxTtCutoffs: 139787
+      quiescenceTtCutoffs: 131068
+      negamaxBetaCutoffs: 124568
+      quiescenceBetaCutoffs: 362724
+      qsearchStandPatCutoffs: 695043
+      qsearchDeltaPruneChecks: 137735
+      qsearchDeltaPruneSkips: 127107
+      qsearchNodesWithMoves: 757768
+      qsearchGeneratedMoves: 2303961
+      pvsResearches: 4013
+      negamaxFrontierFutilityChecks: 386799
+      negamaxFrontierFutilitySkips: 53288
+      nullMoveAttempts: 2875
+      nullMoveCutoffs: 1990
+  - san: c2c4
+    beforeFen: b/qbk/n1b1n/r5r/pppppp2p/11/4P1P1p2/11/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w i6 0 4
+    source: rust-worker
+    evaluations: 8975837
+    duration: 159192.30000001192
+    metrics: null
+  - san: c7c5
+    beforeFen: b/qbk/n1b1n/r5r/pppppp2p/11/4P1P1p2/2P8/3P1B1P3/5B2P2/1PRNQBKNRP1 b c3 0 4
+    source: python-api
+    evaluations: 1758823
+    duration: 75556
+    metrics:
+      wallMs: 75414.74940002081
+      evalsPerMs: 23.322002844174598
+      rootMoves: 49
+      negamaxNodes: 635323
+      quiescenceNodes: 1851437
+      movegenCalls: 1097512
+      tacticalMovegenCalls: 958204
+      legalContextCalls: 1097512
+      ttHits: 246345
+      ttCutoffs: 223432
+      betaCutoffs: 544864
+      ttEntries: 1794642
+      negamaxTtHits: 140839
+      quiescenceTtHits: 105506
+      negamaxTtCutoffs: 130818
+      quiescenceTtCutoffs: 92614
+      negamaxBetaCutoffs: 117965
+      quiescenceBetaCutoffs: 426899
+      qsearchStandPatCutoffs: 800619
+      qsearchDeltaPruneChecks: 167636
+      qsearchDeltaPruneSkips: 156032
+      qsearchNodesWithMoves: 880026
+      qsearchGeneratedMoves: 2887853
+      pvsResearches: 4690
+      negamaxFrontierFutilityChecks: 389473
+      negamaxFrontierFutilitySkips: 78206
+      nullMoveAttempts: 2500
+      nullMoveCutoffs: 1822
+  - san: d3d5
+    beforeFen: b/qbk/n1b1n/r5r/p1pppp2p/11/2p1P1P1p2/2P8/3P1B1P3/5B2P2/1PRNQBKNRP1 w
+      c6 0 5
+    source: rust-worker
+    evaluations: 8664826
+    duration: 151253
+    metrics: null
+  - san: d7d6
+    beforeFen: b/qbk/n1b1n/r5r/p1pppp2p/11/2pPP1P1p2/2P8/5B1P3/5B2P2/1PRNQBKNRP1 b d4 0 5
+    source: python-api
+    evaluations: 1793548
+    duration: 68586.59999999404
+    metrics:
+      wallMs: 68475.12570000254
+      evalsPerMs: 26.192693794499068
+      rootMoves: 49
+      negamaxNodes: 499899
+      quiescenceNodes: 1881492
+      movegenCalls: 969340
+      tacticalMovegenCalls: 824726
+      legalContextCalls: 969340
+      ttHits: 220326
+      ttCutoffs: 199985
+      betaCutoffs: 487943
+      ttEntries: 1875742
+      negamaxTtHits: 119245
+      quiescenceTtHits: 101081
+      negamaxTtCutoffs: 112041
+      quiescenceTtCutoffs: 87944
+      negamaxBetaCutoffs: 132439
+      quiescenceBetaCutoffs: 355504
+      qsearchStandPatCutoffs: 968822
+      qsearchDeltaPruneChecks: 204658
+      qsearchDeltaPruneSkips: 198470
+      qsearchNodesWithMoves: 783684
+      qsearchGeneratedMoves: 3055515
+      pvsResearches: 2281
+      negamaxFrontierFutilityChecks: 163267
+      negamaxFrontierFutilitySkips: 8941
+      nullMoveAttempts: 2817
+      nullMoveCutoffs: 918
+  - san: e1d2
+    beforeFen: b/qbk/n1b1n/r5r/p2ppp2p/3p7/2pPP1P1p2/2P8/5B1P3/5B2P2/1PRNQBKNRP1 w - 0 6
+    source: rust-worker
+    evaluations: 4460449
+    duration: 95089.10000002384
+    metrics: null
+  - san: i5i4
+    beforeFen: b/qbk/n1b1n/r5r/p2ppp2p/3p7/2pPP1P1p2/2P8/5B1P3/3Q1B2P2/1PRN1BKNRP1 b - 1 6
+    source: python-api
+    evaluations: 6957404
+    duration: 229737.90000000596
+    metrics:
+      wallMs: 229094.97569999075
+      evalsPerMs: 30.369081551186024
+      rootMoves: 47
+      negamaxNodes: 664003
+      quiescenceNodes: 7358271
+      movegenCalls: 4219265
+      tacticalMovegenCalls: 4084466
+      legalContextCalls: 4219265
+      ttHits: 602219
+      ttCutoffs: 557949
+      betaCutoffs: 2137393
+      ttEntries: 6829384
+      negamaxTtHits: 169052
+      quiescenceTtHits: 433167
+      negamaxTtCutoffs: 157082
+      quiescenceTtCutoffs: 400867
+      negamaxBetaCutoffs: 121850
+      quiescenceBetaCutoffs: 2015543
+      qsearchStandPatCutoffs: 2872938
+      qsearchDeltaPruneChecks: 1479713
+      qsearchDeltaPruneSkips: 1450337
+      qsearchNodesWithMoves: 3860340
+      qsearchGeneratedMoves: 15435149
+      pvsResearches: 5580
+      negamaxFrontierFutilityChecks: 347797
+      negamaxFrontierFutilitySkips: 14446
+      nullMoveAttempts: 2233
+      nullMoveCutoffs: 1671
+  - san: h3h5
+    beforeFen: b/qbk/n1b1n/r5r/p2ppp2p/3p7/2pPP1P4/2P5p2/5B1P3/3Q1B2P2/1PRN1BKNRP1 w - 0 7
+    source: rust-worker
+    evaluations: 4755592
+    duration: 196663.80000001192
+    metrics: null
+  - san: k7k5
+    beforeFen: b/qbk/n1b1n/r5r/p2ppp2p/3p7/2pPP1PP3/2P5p2/5B5/3Q1B2P2/1PRN1BKNRP1 b h4 0 7
+    source: python-api
+    evaluations: 15353820
+    duration: 487418.3000000119
+    metrics:
+      wallMs: 486507.08119999035
+      evalsPerMs: 31.55929398217422
+      rootMoves: 50
+      negamaxNodes: 849351
+      quiescenceNodes: 16278157
+      movegenCalls: 9117488
+      tacticalMovegenCalls: 8947572
+      legalContextCalls: 9117488
+      ttHits: 1192920
+      ttCutoffs: 1101633
+      betaCutoffs: 4603402
+      ttEntries: 14963939
+      negamaxTtHits: 196565
+      quiescenceTtHits: 996355
+      negamaxTtCutoffs: 177296
+      quiescenceTtCutoffs: 924337
+      negamaxBetaCutoffs: 156213
+      quiescenceBetaCutoffs: 4447189
+      qsearchStandPatCutoffs: 6406248
+      qsearchDeltaPruneChecks: 3932340
+      qsearchDeltaPruneSkips: 3849515
+      qsearchNodesWithMoves: 8468755
+      qsearchGeneratedMoves: 34889523
+      pvsResearches: 8375
+      negamaxFrontierFutilityChecks: 429222
+      negamaxFrontierFutilitySkips: 19695
+      nullMoveAttempts: 1984
+      nullMoveCutoffs: 1108
+  - san: f2e3
+    beforeFen: b/qbk/n1b1n/r5r/p2ppp3/3p7/2pPP1PP1p1/2P5p2/5B5/3Q1B2P2/1PRN1BKNRP1 w
+      k6 0 8
+    source: rust-worker
+    evaluations: 5758742
+    duration: 260136.79999998212
+    metrics: null
+  - san: i8i7
+    beforeFen: b/qbk/n1b1n/r5r/p2ppp3/3p7/2pPP1PP1p1/2P5p2/4BB5/3Q4P2/1PRN1BKNRP1 b - 1 8
+    source: python-api
+    evaluations: 1080741
+    duration: 33559.5
+    metrics:
+      wallMs: 33494.35049999738
+      evalsPerMs: 32.26636683102974
+      rootMoves: 51
+      negamaxNodes: 346202
+      quiescenceNodes: 1132139
+      movegenCalls: 644139
+      tacticalMovegenCalls: 554156
+      legalContextCalls: 644139
+      ttHits: 135685
+      ttCutoffs: 122032
+      betaCutoffs: 317426
+      ttEntries: 1123022
+      negamaxTtHits: 75713
+      quiescenceTtHits: 59972
+      negamaxTtCutoffs: 70634
+      quiescenceTtCutoffs: 51398
+      negamaxBetaCutoffs: 82679
+      quiescenceBetaCutoffs: 234747
+      qsearchStandPatCutoffs: 526585
+      qsearchDeltaPruneChecks: 472980
+      qsearchDeltaPruneSkips: 433149
+      qsearchNodesWithMoves: 518960
+      qsearchGeneratedMoves: 2165216
+      pvsResearches: 1304
+      negamaxFrontierFutilityChecks: 149666
+      negamaxFrontierFutilitySkips: 15483
+      nullMoveAttempts: 3065
+      nullMoveCutoffs: 1921
+  - san: d5c5
+    beforeFen: b/qbk/n1b1n/r6/p2ppp1r1/3p7/2pPP1PP1p1/2P5p2/4BB5/3Q4P2/1PRN1BKNRP1 w - 2 9
+    source: rust-worker
+    evaluations: 4902196
+    duration: 222723.79999998212
+    metrics: null
+  - san: d6c5
+    beforeFen: b/qbk/n1b1n/r6/p2ppp1r1/3p7/2P1P1PP1p1/2P5p2/4BB5/3Q4P2/1PRN1BKNRP1 b - 0 9
+    source: python-api
+    evaluations: 3225371
+    duration: 100482.79999998212
+    metrics:
+      wallMs: 100281.9545000093
+      evalsPerMs: 32.16302490394422
+      rootMoves: 55
+      negamaxNodes: 764493
+      quiescenceNodes: 3495614
+      movegenCalls: 1922250
+      tacticalMovegenCalls: 1718689
+      legalContextCalls: 1922250
+      ttHits: 512721
+      ttCutoffs: 421193
+      betaCutoffs: 966017
+      ttEntries: 3255046
+      negamaxTtHits: 179590
+      quiescenceTtHits: 333131
+      negamaxTtCutoffs: 150950
+      quiescenceTtCutoffs: 270243
+      negamaxBetaCutoffs: 187668
+      quiescenceBetaCutoffs: 778349
+      qsearchStandPatCutoffs: 1506682
+      qsearchDeltaPruneChecks: 829855
+      qsearchDeltaPruneSkips: 805673
+      qsearchNodesWithMoves: 1622769
+      qsearchGeneratedMoves: 6735182
+      pvsResearches: 3233
+      negamaxFrontierFutilityChecks: 284643
+      negamaxFrontierFutilitySkips: 35682
+      nullMoveAttempts: 1576
+      nullMoveCutoffs: 841
+  - san: k1k3
+    beforeFen: b/qbk/n1b1n/r6/p2ppp1r1/11/2p1P1PP1p1/2P5p2/4BB5/3Q4P2/1PRN1BKNRP1 w - 0 10
+    source: rust-worker
+    evaluations: 18244123
+    duration: 818011.7999999821
+    metrics: null
+  - san: f11k3
+    beforeFen: b/qbk/n1b1n/r6/p2ppp1r1/11/2p1P1PP1p1/2P5p2/4BB3P1/3Q4P2/1PRN1BKNR2 b
+      k2 0 10
+    source: python-api
+    evaluations: 2541015
+    duration: 74334.59999999404
+    metrics:
+      wallMs: 74173.11819997849
+      evalsPerMs: 34.25789641402371
+      rootMoves: 53
+      negamaxNodes: 611349
+      quiescenceNodes: 2680684
+      movegenCalls: 1546842
+      tacticalMovegenCalls: 1360045
+      legalContextCalls: 1546842
+      ttHits: 283244
+      ttCutoffs: 254559
+      betaCutoffs: 763509
+      ttEntries: 2602044
+      negamaxTtHits: 126912
+      quiescenceTtHits: 156332
+      negamaxTtCutoffs: 114890
+      quiescenceTtCutoffs: 139669
+      negamaxBetaCutoffs: 144336
+      quiescenceBetaCutoffs: 619173
+      qsearchStandPatCutoffs: 1180970
+      qsearchDeltaPruneChecks: 542570
+      qsearchDeltaPruneSkips: 526426
+      qsearchNodesWithMoves: 1288378
+      qsearchGeneratedMoves: 4967529
+      pvsResearches: 2257
+      negamaxFrontierFutilityChecks: 318435
+      negamaxFrontierFutilitySkips: 105325
+      nullMoveAttempts: 3337
+      nullMoveCutoffs: 1784
+  - san: h1g4
+    beforeFen: 1/qbk/n1b1n/r6/p2ppp1r1/11/2p1P1PP1p1/2P5p2/4BB3b1/3Q4P2/1PRN1BKNR2 w
+      - 0 11
+    source: rust-worker
+    evaluations: 19579485
+    duration: 924410.3999999762
+    metrics: null
+  - san: d9f8
+    beforeFen: 1/qbk/n1b1n/r6/p2ppp1r1/11/2p1P1PP1p1/2P3N1p2/4BB3b1/3Q4P2/1PRN1BK1R2
+      b - 1 11
+    source: python-api
+    evaluations: 5507590
+    duration: 146706.59999999404
+    metrics:
+      wallMs: 146405.48369998578
+      evalsPerMs: 37.61874118927237
+      rootMoves: 59
+      negamaxNodes: 819506
+      quiescenceNodes: 5824151
+      movegenCalls: 3212771
+      tacticalMovegenCalls: 2997386
+      legalContextCalls: 3212771
+      ttHits: 497227
+      ttCutoffs: 454891
+      betaCutoffs: 1603666
+      ttEntries: 5514858
+      negamaxTtHits: 152871
+      quiescenceTtHits: 344356
+      negamaxTtCutoffs: 138330
+      quiescenceTtCutoffs: 316561
+      negamaxBetaCutoffs: 182441
+      quiescenceBetaCutoffs: 1421225
+      qsearchStandPatCutoffs: 2510204
+      qsearchDeltaPruneChecks: 1196574
+      qsearchDeltaPruneSkips: 1157045
+      qsearchNodesWithMoves: 2843932
+      qsearchGeneratedMoves: 11457875
+      pvsResearches: 5318
+      negamaxFrontierFutilityChecks: 415163
+      negamaxFrontierFutilitySkips: 70828
+      nullMoveAttempts: 3887
+      nullMoveCutoffs: 2350
+  - san: g4k3
+    beforeFen: 1/qbk/2b1n/r2n3/p2ppp1r1/11/2p1P1PP1p1/2P3N1p2/4BB3b1/3Q4P2/1PRN1BK1R2
+      w - 2 12
+    source: rust-worker
+    evaluations: 21968450
+    duration: 1053760.099999994
+    metrics: null
+  - san: f8e5
+    beforeFen: 1/qbk/2b1n/r2n3/p2ppp1r1/11/2p1P1PP1p1/2P5p2/4BB3N1/3Q4P2/1PRN1BK1R2
+      b - 0 12
+    source: python-api
+    evaluations: 1236812
+    duration: 44725.40000000596
+    metrics:
+      wallMs: 44633.99619999109
+      evalsPerMs: 27.710088840314214
+      rootMoves: 54
+      negamaxNodes: 694621
+      quiescenceNodes: 1330458
+      movegenCalls: 701069
+      tacticalMovegenCalls: 519228
+      legalContextCalls: 701069
+      ttHits: 294915
+      ttCutoffs: 276500
+      betaCutoffs: 355083
+      ttEntries: 1370806
+      negamaxTtHits: 191577
+      quiescenceTtHits: 103338
+      negamaxTtCutoffs: 182854
+      quiescenceTtCutoffs: 93646
+      negamaxBetaCutoffs: 159477
+      quiescenceBetaCutoffs: 195606
+      qsearchStandPatCutoffs: 717584
+      qsearchDeltaPruneChecks: 315926
+      qsearchDeltaPruneSkips: 306317
+      qsearchNodesWithMoves: 495215
+      qsearchGeneratedMoves: 2022632
+      pvsResearches: 1621
+      negamaxFrontierFutilityChecks: 383257
+      negamaxFrontierFutilitySkips: 137084
+      nullMoveAttempts: 1487
+      nullMoveCutoffs: 823
+  - san: d2e4
+    beforeFen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p1n1PP1p1/2P5p2/4BB3N1/3Q4P2/1PRN1BK1R2 w - 0 13
+    source: rust-worker
+    evaluations: 17466742
+    duration: 727842.1999999881
+    metrics: null
+  - san: e5h4
+    beforeFen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p1n1PP1p1/2P1Q3p2/4BB3N1/8P2/1PRN1BK1R2 b - 1 13
+    source: python-api
+    evaluations: 674609
+    duration: 30617.600000023842
+    metrics:
+      wallMs: 30561.093399999663
+      evalsPerMs: 22.074112047313314
+      rootMoves: 59
+      negamaxNodes: 410248
+      quiescenceNodes: 709116
+      movegenCalls: 425582
+      tacticalMovegenCalls: 311595
+      legalContextCalls: 425582
+      ttHits: 118097
+      ttCutoffs: 105540
+      betaCutoffs: 210124
+      ttEntries: 758622
+      negamaxTtHits: 76693
+      quiescenceTtHits: 41404
+      negamaxTtCutoffs: 71033
+      quiescenceTtCutoffs: 34507
+      negamaxBetaCutoffs: 101448
+      quiescenceBetaCutoffs: 108676
+      qsearchStandPatCutoffs: 363014
+      qsearchDeltaPruneChecks: 482857
+      qsearchDeltaPruneSkips: 472067
+      qsearchNodesWithMoves: 296517
+      qsearchGeneratedMoves: 1387269
+      pvsResearches: 1005
+      negamaxFrontierFutilityChecks: 230105
+      negamaxFrontierFutilitySkips: 70950
+      nullMoveAttempts: 3465
+      nullMoveCutoffs: 2340
+  - san: e4g4
+    beforeFen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p3PP1p1/2P1Q2np2/4BB3N1/8P2/1PRN1BK1R2 w - 2 14
+    source: rust-worker
+    evaluations: 17239421
+    duration: 745917.5
+    metrics: null
+  - san: h4i1
+    beforeFen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p3PP1p1/2P3Qnp2/4BB3N1/8P2/1PRN1BK1R2 b - 3 14
+    source: python-api
+    evaluations: 853002
+    duration: 44166.09999999404
+    metrics:
+      wallMs: 44083.698600006755
+      evalsPerMs: 19.349601487382216
+      rootMoves: 58
+      negamaxNodes: 651597
+      quiescenceNodes: 891456
+      movegenCalls: 608259
+      tacticalMovegenCalls: 424305
+      legalContextCalls: 608259
+      ttHits: 198530
+      ttCutoffs: 176878
+      betaCutoffs: 300086
+      ttEntries: 988998
+      negamaxTtHits: 148943
+      quiescenceTtHits: 49587
+      negamaxTtCutoffs: 138424
+      quiescenceTtCutoffs: 38454
+      negamaxBetaCutoffs: 160260
+      quiescenceBetaCutoffs: 139826
+      qsearchStandPatCutoffs: 428697
+      qsearchDeltaPruneChecks: 707322
+      qsearchDeltaPruneSkips: 697515
+      qsearchNodesWithMoves: 402860
+      qsearchGeneratedMoves: 1738553
+      pvsResearches: 1537
+      negamaxFrontierFutilityChecks: 445336
+      negamaxFrontierFutilitySkips: 225909
+      nullMoveAttempts: 1477
+      nullMoveCutoffs: 943
+  - san: k3i1
+    beforeFen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p3PP1p1/2P3Q1p2/4BB3N1/8P2/1PRN1BK1n2 w - 0 15
+    source: rust-worker
+    evaluations: 36649786
+    duration: 1756173.599999994
+    metrics: null
+  - san: b7b5
+    beforeFen: 1/qbk/2b1n/r6/p2ppp1r1/11/2p3PP1p1/2P3Q1p2/4BB5/8P2/1PRN1BK1N2 b - 0 15
+    source: python-api
+    evaluations: 1239731
+    duration: 44255.59999999404
+    metrics:
+      wallMs: 44162.5892999873
+      evalsPerMs: 28.071972673041532
+      rootMoves: 48
+      negamaxNodes: 434171
+      quiescenceNodes: 1354016
+      movegenCalls: 754239
+      tacticalMovegenCalls: 636779
+      legalContextCalls: 754239
+      ttHits: 215416
+      ttCutoffs: 192733
+      betaCutoffs: 375133
+      ttEntries: 1290894
+      negamaxTtHits: 87628
+      quiescenceTtHits: 127788
+      negamaxTtCutoffs: 78448
+      quiescenceTtCutoffs: 114285
+      negamaxBetaCutoffs: 104550
+      quiescenceBetaCutoffs: 270583
+      qsearchStandPatCutoffs: 602952
+      qsearchDeltaPruneChecks: 281796
+      qsearchDeltaPruneSkips: 272951
+      qsearchNodesWithMoves: 593509
+      qsearchGeneratedMoves: 2258768
+      pvsResearches: 2144
+      negamaxFrontierFutilityChecks: 186763
+      negamaxFrontierFutilitySkips: 19561
+      nullMoveAttempts: 2689
+      nullMoveCutoffs: 1405
+  - san: c1d2
+    beforeFen: 1/qbk/2b1n/r6/3ppp1r1/11/1pp3PP1p1/2P3Q1p2/4BB5/8P2/1PRN1BK1N2 w - 0 16
+    source: rust-worker
+    evaluations: 18854984
+    duration: 867161.900000006
+    metrics: null
+  - san: b5b4
+    beforeFen: 1/qbk/2b1n/r6/3ppp1r1/11/1pp3PP1p1/2P3Q1p2/4BB5/3R4P2/1P1N1BK1N2 b - 1 16
+    source: python-api
+    evaluations: 1560318
+    duration: 54216.90000000596
+    metrics:
+      wallMs: 54108.1903000013
+      evalsPerMs: 28.837002149745942
+      rootMoves: 50
+      negamaxNodes: 489360
+      quiescenceNodes: 1677057
+      movegenCalls: 850091
+      tacticalMovegenCalls: 727853
+      legalContextCalls: 850091
+      ttHits: 226252
+      ttCutoffs: 197845
+      betaCutoffs: 423253
+      ttEntries: 1617115
+      negamaxTtHits: 92410
+      quiescenceTtHits: 133842
+      negamaxTtCutoffs: 81106
+      quiescenceTtCutoffs: 116739
+      negamaxBetaCutoffs: 108696
+      quiescenceBetaCutoffs: 314557
+      qsearchStandPatCutoffs: 832465
+      qsearchDeltaPruneChecks: 291383
+      qsearchDeltaPruneSkips: 278046
+      qsearchNodesWithMoves: 688427
+      qsearchGeneratedMoves: 2540151
+      pvsResearches: 2347
+      negamaxFrontierFutilityChecks: 278116
+      negamaxFrontierFutilitySkips: 68241
+      nullMoveAttempts: 3090
+      nullMoveCutoffs: 2132
+  - san: e3c5
+    beforeFen: 1/qbk/2b1n/r6/3ppp1r1/11/2p3PP1p1/1pP3Q1p2/4BB5/3R4P2/1P1N1BK1N2 w - 0 17
+    source: rust-worker
+    evaluations: 12692997
+    duration: 640951.3000000119
+    metrics: null
+  - san: b4c4
+    beforeFen: 1/qbk/2b1n/r6/3ppp1r1/11/2B3PP1p1/1pP3Q1p2/5B5/3R4P2/1P1N1BK1N2 b - 0 17
+    source: python-api
+    evaluations: 1443619
+    duration: 42272.19999998808
+    metrics:
+      wallMs: 42174.51010001241
+      evalsPerMs: 34.22965664750129
+      rootMoves: 49
+      negamaxNodes: 469413
+      quiescenceNodes: 1555830
+      movegenCalls: 890113
+      tacticalMovegenCalls: 742221
+      legalContextCalls: 890113
+      ttHits: 211732
+      ttCutoffs: 188989
+      betaCutoffs: 440169
+      ttEntries: 1511329
+      negamaxTtHits: 85816
+      quiescenceTtHits: 125916
+      negamaxTtCutoffs: 76778
+      quiescenceTtCutoffs: 112211
+      negamaxBetaCutoffs: 129374
+      quiescenceBetaCutoffs: 310795
+      qsearchStandPatCutoffs: 701398
+      qsearchDeltaPruneChecks: 366587
+      qsearchDeltaPruneSkips: 340218
+      qsearchNodesWithMoves: 691175
+      qsearchGeneratedMoves: 2512385
+      pvsResearches: 1328
+      negamaxFrontierFutilityChecks: 191325
+      negamaxFrontierFutilitySkips: 43899
+      nullMoveAttempts: 3606
+      nullMoveCutoffs: 2064
+  - san: c5a4
+    beforeFen: 1/qbk/2b1n/r6/3ppp1r1/11/2B3PP1p1/2p3Q1p2/5B5/3R4P2/1P1N1BK1N2 w - 0 18
+    source: rust-worker
+    evaluations: 20269515
+    duration: 1148809.2000000179
+    metrics: null
+  - san: c8e8
+    beforeFen: 1/qbk/2b1n/r6/3ppp1r1/11/6PP1p1/B1p3Q1p2/5B5/3R4P2/1P1N1BK1N2 b - 1 18
+    source: python-api
+    evaluations: 977278
+    duration: 31676.90000000596
+    metrics:
+      wallMs: 31615.655200002948
+      evalsPerMs: 30.911205028574226
+      rootMoves: 50
+      negamaxNodes: 396868
+      quiescenceNodes: 1083084
+      movegenCalls: 601734
+      tacticalMovegenCalls: 477293
+      legalContextCalls: 601734
+      ttHits: 190982
+      ttCutoffs: 171674
+      betaCutoffs: 296895
+      ttEntries: 1040970
+      negamaxTtHits: 73242
+      quiescenceTtHits: 117740
+      negamaxTtCutoffs: 65868
+      quiescenceTtCutoffs: 105806
+      negamaxBetaCutoffs: 107622
+      quiescenceBetaCutoffs: 189273
+      qsearchStandPatCutoffs: 499985
+      qsearchDeltaPruneChecks: 266211
+      qsearchDeltaPruneSkips: 251033
+      qsearchNodesWithMoves: 441812
+      qsearchGeneratedMoves: 1556764
+      pvsResearches: 1269
+      negamaxFrontierFutilityChecks: 167230
+      negamaxFrontierFutilitySkips: 31537
+      nullMoveAttempts: 3641
+      nullMoveCutoffs: 2412
+  - san: g4a5
+    beforeFen: 1/qbk/2b1n/2r4/3ppp1r1/11/6PP1p1/B1p3Q1p2/5B5/3R4P2/1P1N1BK1N2 w - 2 19
+    source: rust-worker
+    evaluations: 19938706
+    duration: 1129732.099999994
+    metrics: null
+  - san: e8e9
+    beforeFen: 1/qbk/2b1n/2r4/3ppp1r1/11/Q5PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 b - 3 19
+    source: python-api
+    evaluations: 614708
+    duration: 23140.30000001192
+    metrics:
+      wallMs: 23095.364500011783
+      evalsPerMs: 26.616077005395884
+      rootMoves: 46
+      negamaxNodes: 288697
+      quiescenceNodes: 657764
+      movegenCalls: 428891
+      tacticalMovegenCalls: 332327
+      legalContextCalls: 428891
+      ttHits: 86076
+      ttCutoffs: 76715
+      betaCutoffs: 210355
+      ttEntries: 675521
+      negamaxTtHits: 37607
+      quiescenceTtHits: 48469
+      negamaxTtCutoffs: 33659
+      quiescenceTtCutoffs: 43056
+      negamaxBetaCutoffs: 86006
+      quiescenceBetaCutoffs: 124349
+      qsearchStandPatCutoffs: 282381
+      qsearchDeltaPruneChecks: 292700
+      qsearchDeltaPruneSkips: 282088
+      qsearchNodesWithMoves: 309286
+      qsearchGeneratedMoves: 1051408
+      pvsResearches: 968
+      negamaxFrontierFutilityChecks: 131503
+      negamaxFrontierFutilitySkips: 46340
+      nullMoveAttempts: 3407
+      nullMoveCutoffs: 2417
+  - san: a5b5
+    beforeFen: 1/qbk/1rb1n/7/3ppp1r1/11/Q5PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 w - 4 20
+    source: rust-worker
+    evaluations: 8655830
+    duration: 455712
+    metrics: null
+  - san: f10d6
+    beforeFen: 1/qbk/1rb1n/7/3ppp1r1/11/1Q4PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 b - 5 20
+    source: python-api
+    evaluations: 1073277
+    duration: 36655.59999999404
+    metrics:
+      wallMs: 36577.90059997933
+      evalsPerMs: 29.342225288911372
+      rootMoves: 47
+      negamaxNodes: 406215
+      quiescenceNodes: 1157234
+      movegenCalls: 684377
+      tacticalMovegenCalls: 553794
+      legalContextCalls: 684377
+      ttHits: 154266
+      ttCutoffs: 133483
+      betaCutoffs: 336055
+      ttEntries: 1142588
+      negamaxTtHits: 57713
+      quiescenceTtHits: 96553
+      negamaxTtCutoffs: 49526
+      quiescenceTtCutoffs: 83957
+      negamaxBetaCutoffs: 116859
+      quiescenceBetaCutoffs: 219196
+      qsearchStandPatCutoffs: 519483
+      qsearchDeltaPruneChecks: 440167
+      qsearchDeltaPruneSkips: 420910
+      qsearchNodesWithMoves: 514391
+      qsearchGeneratedMoves: 1815251
+      pvsResearches: 2393
+      negamaxFrontierFutilityChecks: 181713
+      negamaxFrontierFutilitySkips: 57906
+      nullMoveAttempts: 3690
+      nullMoveCutoffs: 2483
+  - san: b5c5
+    beforeFen: 1/q1k/1rb1n/7/3ppp1r1/3b7/1Q4PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 w - 6 21
+    source: rust-worker
+    evaluations: 13305942
+    duration: 583797.6000000238
+    metrics: null
+  - san: e9c7
+    beforeFen: 1/q1k/1rb1n/7/3ppp1r1/3b7/2Q3PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 b - 7 21
+    source: python-api
+    evaluations: 1904674
+    duration: 68849.59999999404
+    metrics:
+      wallMs: 68709.92409999599
+      evalsPerMs: 27.720507989909294
+      rootMoves: 55
+      negamaxNodes: 699350
+      quiescenceNodes: 2098881
+      movegenCalls: 1147819
+      tacticalMovegenCalls: 979591
+      legalContextCalls: 1147819
+      ttHits: 404581
+      ttCutoffs: 347935
+      betaCutoffs: 570874
+      ttEntries: 1964435
+      negamaxTtHits: 177629
+      quiescenceTtHits: 226952
+      negamaxTtCutoffs: 153728
+      quiescenceTtCutoffs: 194207
+      negamaxBetaCutoffs: 148805
+      quiescenceBetaCutoffs: 422069
+      qsearchStandPatCutoffs: 925083
+      qsearchDeltaPruneChecks: 644934
+      qsearchDeltaPruneSkips: 615536
+      qsearchNodesWithMoves: 919370
+      qsearchGeneratedMoves: 3178433
+      pvsResearches: 2918
+      negamaxFrontierFutilityChecks: 382300
+      negamaxFrontierFutilitySkips: 67331
+      nullMoveAttempts: 3973
+      nullMoveCutoffs: 2538
+  - san: c5a3
+    beforeFen: 1/q1k/2b1n/7/1r1ppp1r1/3b7/2Q3PP1p1/B1p5p2/5B5/3R4P2/1P1N1BK1N2 w - 8 22
+    source: rust-worker
+    evaluations: 12915373
+    duration: 629123.599999994
+    metrics: null
+  - san: e10f10
+    beforeFen: 1/q1k/2b1n/7/1r1ppp1r1/3b7/6PP1p1/B1p5p2/Q4B5/3R4P2/1P1N1BK1N2 b - 9 22
+    source: python-api
+    evaluations: 810308
+    duration: 26428.90000000596
+    metrics:
+      wallMs: 26374.922699993476
+      evalsPerMs: 30.72266824123054
+      rootMoves: 60
+      negamaxNodes: 365959
+      quiescenceNodes: 857138
+      movegenCalls: 489756
+      tacticalMovegenCalls: 396769
+      legalContextCalls: 489756
+      ttHits: 141582
+      ttCutoffs: 118285
+      betaCutoffs: 243091
+      ttEntries: 848524
+      negamaxTtHits: 82242
+      quiescenceTtHits: 59340
+      negamaxTtCutoffs: 71455
+      quiescenceTtCutoffs: 46830
+      negamaxBetaCutoffs: 79594
+      quiescenceBetaCutoffs: 163497
+      qsearchStandPatCutoffs: 413539
+      qsearchDeltaPruneChecks: 270590
+      qsearchDeltaPruneSkips: 256041
+      qsearchNodesWithMoves: 364112
+      qsearchGeneratedMoves: 1307220
+      pvsResearches: 1346
+      negamaxFrontierFutilityChecks: 233684
+      negamaxFrontierFutilitySkips: 76732
+      nullMoveAttempts: 4057
+      nullMoveCutoffs: 3247
+  - san: b1b3
+    beforeFen: 1/1qk/2b1n/7/1r1ppp1r1/3b7/6PP1p1/B1p5p2/Q4B5/3R4P2/1P1N1BK1N2 w - 10 23
+    source: rust-worker
+    evaluations: 25172999
+    duration: 1266578.900000006
+    metrics: null
+  - san: k5k4
+    beforeFen: 1/1qk/2b1n/7/1r1ppp1r1/3b7/6PP1p1/B1p5p2/QP3B5/3R4P2/3N1BK1N2 b - 0 23
+    source: python-api
+    evaluations: 1148653
+    duration: 34739.60000002384
+    metrics:
+      wallMs: 34651.03239999735
+      evalsPerMs: 33.14917104750068
+      rootMoves: 56
+      negamaxNodes: 528929
+      quiescenceNodes: 1212722
+      movegenCalls: 638022
+      tacticalMovegenCalls: 529245
+      legalContextCalls: 638022
+      ttHits: 242248
+      ttCutoffs: 205693
+      betaCutoffs: 318582
+      ttEntries: 1195302
+      negamaxTtHits: 159336
+      quiescenceTtHits: 82912
+      negamaxTtCutoffs: 141624
+      quiescenceTtCutoffs: 64069
+      negamaxBetaCutoffs: 92591
+      quiescenceBetaCutoffs: 225991
+      qsearchStandPatCutoffs: 619408
+      qsearchDeltaPruneChecks: 352960
+      qsearchDeltaPruneSkips: 331291
+      qsearchNodesWithMoves: 498193
+      qsearchGeneratedMoves: 1829176
+      pvsResearches: 2399
+      negamaxFrontierFutilityChecks: 378439
+      negamaxFrontierFutilitySkips: 102546
+      nullMoveAttempts: 3349
+      nullMoveCutoffs: 2509
+  - san: b3c4
+    beforeFen: 1/1qk/2b1n/7/1r1ppp1r1/3b7/6PP3/B1p5pp1/QP3B5/3R4P2/3N1BK1N2 w - 0 24
+    source: rust-worker
+    evaluations: 19613399
+    duration: 959871.5
+    metrics: null
+  - san: d6c4
+    beforeFen: 1/1qk/2b1n/7/1r1ppp1r1/3b7/6PP3/B1P5pp1/Q4B5/3R4P2/3N1BK1N2 b - 0 24
+    source: python-api
+    evaluations: 818579
+    duration: 32510
+    metrics:
+      wallMs: 32440.710599999875
+      evalsPerMs: 25.233078587372347
+      rootMoves: 56
+      negamaxNodes: 490908
+      quiescenceNodes: 860899
+      movegenCalls: 516571
+      tacticalMovegenCalls: 407236
+      legalContextCalls: 516571
+      ttHits: 184084
+      ttCutoffs: 160361
+      betaCutoffs: 257220
+      ttEntries: 881156
+      negamaxTtHits: 129775
+      quiescenceTtHits: 54309
+      negamaxTtCutoffs: 118041
+      quiescenceTtCutoffs: 42320
+      negamaxBetaCutoffs: 93103
+      quiescenceBetaCutoffs: 164117
+      qsearchStandPatCutoffs: 411343
+      qsearchDeltaPruneChecks: 243983
+      qsearchDeltaPruneSkips: 230559
+      qsearchNodesWithMoves: 382794
+      qsearchGeneratedMoves: 1220426
+      pvsResearches: 1563
+      negamaxFrontierFutilityChecks: 365141
+      negamaxFrontierFutilitySkips: 127935
+      nullMoveAttempts: 3214
+      nullMoveCutoffs: 2535
+  - san: f1c4
+    beforeFen: 1/1qk/2b1n/7/1r1ppp1r1/11/6PP3/B1b5pp1/Q4B5/3R4P2/3N1BK1N2 w - 0 25
+    source: rust-worker
+    evaluations: 69303967
+    duration: 3427247.099999994
+    metrics: null
+  - san: c7c4
+    beforeFen: 1/1qk/2b1n/7/1r1ppp1r1/11/6PP3/B1B5pp1/Q4B5/3R4P2/3N2K1N2 b - 0 25
+    source: python-api
+    evaluations: 177353
+    duration: 9108.40000000596
+    metrics:
+      wallMs: 9085.126600024523
+      evalsPerMs: 19.52124695758464
+      rootMoves: 52
+      negamaxNodes: 164671
+      quiescenceNodes: 185716
+      movegenCalls: 161883
+      tacticalMovegenCalls: 105662
+      legalContextCalls: 161883
+      ttHits: 38712
+      ttCutoffs: 30928
+      betaCutoffs: 77325
+      ttEntries: 213074
+      negamaxTtHits: 26031
+      quiescenceTtHits: 12681
+      negamaxTtCutoffs: 22565
+      quiescenceTtCutoffs: 8363
+      negamaxBetaCutoffs: 48056
+      quiescenceBetaCutoffs: 29269
+      qsearchStandPatCutoffs: 71691
+      qsearchDeltaPruneChecks: 123513
+      qsearchDeltaPruneSkips: 116275
+      qsearchNodesWithMoves: 95436
+      qsearchGeneratedMoves: 266519
+      pvsResearches: 499
+      negamaxFrontierFutilityChecks: 88127
+      negamaxFrontierFutilitySkips: 44523
+      nullMoveAttempts: 3858
+      nullMoveCutoffs: 3277
+  - san: f3h2
+    beforeFen: 1/1qk/2b1n/7/3ppp1r1/11/6PP3/B1r5pp1/Q4B5/3R4P2/3N2K1N2 w - 0 26
+    source: rust-worker
+    evaluations: 31626873
+    duration: 1632190.199999988
+    metrics: null
+  - san: k4k3
+    beforeFen: 1/1qk/2b1n/7/3ppp1r1/11/6PP3/B1r5pp1/Q10/3R3BP2/3N2K1N2 b - 1 26
+    source: python-api
+    evaluations: 487567
+    duration: 17971.40000000596
+    metrics:
+      wallMs: 17918.949699989753
+      evalsPerMs: 27.209574677263525
+      rootMoves: 62
+      negamaxNodes: 330876
+      quiescenceNodes: 507603
+      movegenCalls: 342093
+      tacticalMovegenCalls: 243735
+      legalContextCalls: 342093
+      ttHits: 86119
+      ttCutoffs: 71529
+      betaCutoffs: 161983
+      ttEntries: 527505
+      negamaxTtHits: 59142
+      quiescenceTtHits: 26977
+      negamaxTtCutoffs: 51489
+      quiescenceTtCutoffs: 20040
+      negamaxBetaCutoffs: 73941
+      quiescenceBetaCutoffs: 88042
+      qsearchStandPatCutoffs: 243828
+      qsearchDeltaPruneChecks: 158550
+      qsearchDeltaPruneSkips: 148456
+      qsearchNodesWithMoves: 212069
+      qsearchGeneratedMoves: 625773
+      pvsResearches: 1412
+      negamaxFrontierFutilityChecks: 203453
+      negamaxFrontierFutilitySkips: 67089
+      nullMoveAttempts: 3969
+      nullMoveCutoffs: 3137
+  - san: h2k4
+    beforeFen: 1/1qk/2b1n/7/3ppp1r1/11/6PP3/B1r5p2/Q8p1/3R3BP2/3N2K1N2 w - 0 27
+    source: rust-worker
+    evaluations: 36344449
+    duration: 1717403.800000012
+    metrics: null
+  - san: g10e10
+    beforeFen: 1/1qk/2b1n/7/3ppp1r1/11/6PP3/B1r5pB1/Q8p1/3R4P2/3N2K1N2 b - 1 27
+    source: python-api
+    evaluations: 93434
+    duration: 3605.5999999940395
+    metrics:
+      wallMs: 3587.152200023411
+      evalsPerMs: 26.046845740024697
+      rootMoves: 8
+      negamaxNodes: 61513
+      quiescenceNodes: 96171
+      movegenCalls: 65670
+      tacticalMovegenCalls: 48194
+      legalContextCalls: 65670
+      ttHits: 13828
+      ttCutoffs: 12054
+      betaCutoffs: 31292
+      ttEntries: 100625
+      negamaxTtHits: 10386
+      quiescenceTtHits: 3442
+      negamaxTtCutoffs: 9317
+      quiescenceTtCutoffs: 2737
+      negamaxBetaCutoffs: 12846
+      quiescenceBetaCutoffs: 18446
+      qsearchStandPatCutoffs: 45240
+      qsearchDeltaPruneChecks: 24826
+      qsearchDeltaPruneSkips: 23018
+      qsearchNodesWithMoves: 42382
+      qsearchGeneratedMoves: 115243
+      pvsResearches: 285
+      negamaxFrontierFutilityChecks: 41949
+      negamaxFrontierFutilitySkips: 13028
+      nullMoveAttempts: 421
+      nullMoveCutoffs: 352
+  - san: g1h1
+    beforeFen: 1/kq1/2b1n/7/3ppp1r1/11/6PP3/B1r5pB1/Q8p1/3R4P2/3N2K1N2 w - 2 28
+    source: rust-worker
+    evaluations: 25037916
+    duration: 1355147.400000006
+    metrics: null
+  - san: i7k7
+    beforeFen: 1/kq1/2b1n/7/3ppp1r1/11/6PP3/B1r5pB1/Q8p1/3R4P2/3N3KN2 b - 3 28
+    source: python-api
+    evaluations: 607289
+    duration: 27041.5
+    metrics:
+      wallMs: 26981.309800001327
+      evalsPerMs: 22.50776572751743
+      rootMoves: 60
+      negamaxNodes: 361775
+      quiescenceNodes: 633317
+      movegenCalls: 440569
+      tacticalMovegenCalls: 318480
+      legalContextCalls: 440569
+      ttHits: 95261
+      ttCutoffs: 75923
+      betaCutoffs: 212409
+      ttEntries: 662162
+      negamaxTtHits: 59550
+      quiescenceTtHits: 35711
+      negamaxTtCutoffs: 49843
+      quiescenceTtCutoffs: 26080
+      negamaxBetaCutoffs: 93103
+      quiescenceBetaCutoffs: 119306
+      qsearchStandPatCutoffs: 288757
+      qsearchDeltaPruneChecks: 169949
+      qsearchDeltaPruneSkips: 160709
+      qsearchNodesWithMoves: 285934
+      qsearchGeneratedMoves: 813202
+      pvsResearches: 1631
+      negamaxFrontierFutilityChecks: 215649
+      negamaxFrontierFutilitySkips: 83882
+      nullMoveAttempts: 3354
+      nullMoveCutoffs: 2487
+  - san: k4g1
+    beforeFen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r5pB1/Q8p1/3R4P2/3N3KN2 w - 4 29
+    source: rust-worker
+    evaluations: 33928487
+    duration: 1473705.599999994
+    metrics: null
+  - san: i4i3
+    beforeFen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r5p2/Q8p1/3R4P2/3N2BKN2 b - 5 29
+    source: python-api
+    evaluations: 845816
+    duration: 34153.09999999404
+    metrics:
+      wallMs: 34068.70049997815
+      evalsPerMs: 24.82677611963927
+      rootMoves: 61
+      negamaxNodes: 519873
+      quiescenceNodes: 888734
+      movegenCalls: 604623
+      tacticalMovegenCalls: 446798
+      legalContextCalls: 604623
+      ttHits: 160009
+      ttCutoffs: 136991
+      betaCutoffs: 293494
+      ttEntries: 919743
+      negamaxTtHits: 105632
+      quiescenceTtHits: 54377
+      negamaxTtCutoffs: 94039
+      quiescenceTtCutoffs: 42952
+      negamaxBetaCutoffs: 120923
+      quiescenceBetaCutoffs: 172571
+      qsearchStandPatCutoffs: 398984
+      qsearchDeltaPruneChecks: 247307
+      qsearchDeltaPruneSkips: 234387
+      qsearchNodesWithMoves: 405842
+      qsearchGeneratedMoves: 1155974
+      pvsResearches: 2415
+      negamaxFrontierFutilityChecks: 302708
+      negamaxFrontierFutilitySkips: 93127
+      nullMoveAttempts: 3393
+      nullMoveCutoffs: 2135
+  - san: i1g4
+    beforeFen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r8/Q7pp1/3R4P2/3N2BKN2 w - 0 30
+    source: rust-worker
+    evaluations: 37259890
+    duration: 1657395.7999999821
+    metrics: null
+  - san: k3k2
+    beforeFen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r3N4/Q7pp1/3R4P2/3N2BK3 b - 1 30
+    source: python-api
+    evaluations: 816400
+    duration: 29734.90000000596
+    metrics:
+      wallMs: 29672.815999976592
+      evalsPerMs: 27.513398121723398
+      rootMoves: 62
+      negamaxNodes: 496813
+      quiescenceNodes: 867866
+      movegenCalls: 559990
+      tacticalMovegenCalls: 409090
+      legalContextCalls: 559990
+      ttHits: 173740
+      ttCutoffs: 147741
+      betaCutoffs: 276697
+      ttEntries: 893480
+      negamaxTtHits: 109289
+      quiescenceTtHits: 64451
+      negamaxTtCutoffs: 96231
+      quiescenceTtCutoffs: 51510
+      negamaxBetaCutoffs: 120641
+      quiescenceBetaCutoffs: 156056
+      qsearchStandPatCutoffs: 407266
+      qsearchDeltaPruneChecks: 316523
+      qsearchDeltaPruneSkips: 301026
+      qsearchNodesWithMoves: 373472
+      qsearchGeneratedMoves: 1265737
+      pvsResearches: 1849
+      negamaxFrontierFutilityChecks: 322668
+      negamaxFrontierFutilitySkips: 130715
+      nullMoveAttempts: 3499
+      nullMoveCutoffs: 2242
+  - san: i2k2
+    beforeFen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r3N4/Q7p2/3R4Pp1/3N2BK3 w - 0 31
+    source: rust-worker
+    evaluations: 47082614
+    duration: 2561976.800000012
+    metrics: null
+  - san: i3k2
+    beforeFen: 1/kq1/2b1n/7/3ppp2r/11/6PP3/B1r3N4/Q7p2/3R5P1/3N2BK3 b - 0 31
+    source: python-api
+    evaluations: 537865
+    duration: 24692.30000001192
+    metrics:
+      wallMs: 24649.88290000474
+      evalsPerMs: 21.820184792841207
+      rootMoves: 65
+      negamaxNodes: 401064
+      quiescenceNodes: 566449
+      movegenCalls: 456764
+      tacticalMovegenCalls: 298937
+      legalContextCalls: 456764
+      ttHits: 106299
+      ttCutoffs: 87898
+      betaCutoffs: 219749
+      ttEntries: 618689
+      negamaxTtHits: 68161
+      quiescenceTtHits: 38138
+      negamaxTtCutoffs: 59286
+      quiescenceTtCutoffs: 28612
+      negamaxBetaCutoffs: 123724
+      quiescenceBetaCutoffs: 96025
+      qsearchStandPatCutoffs: 238900
+      qsearchDeltaPruneChecks: 293054
+      qsearchDeltaPruneSkips: 270783
+      qsearchNodesWithMoves: 262019
+      qsearchGeneratedMoves: 864579
+      pvsResearches: 1079
+      negamaxFrontierFutilityChecks: 202000
+      negamaxFrontierFutilitySkips: 94359
+      nullMoveAttempts: 3739
+      nullMoveCutoffs: 2461

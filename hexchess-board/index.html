@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hexagonal chess (Python powered)</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="panel">
+      <h1>Hexagonal chess (Python powered)</h1>
+      <p class="muted">Client based on <a href="https://hexagonchess.github.io/hexchess-board" target="_blank" rel="noopener noreferrer">hexchess-board</a>.</p>
+      <p class="muted">Engine: pyengine2 - Pure Python implementation evolved from the Rust engine by <a href="https://github.com/scottbedard/hexchess" target="_blank" rel="noopener noreferrer">hexchess</a></p>
+    </header>
+
+    <section class="panel controls-grid">
+      <input id="engine-url" type="hidden" value="">
+
+      <label>
+        <span>White</span>
+        <select id="white-side">
+          <option value="human">Human</option>
+          <option value="pyengine2">pyengine2</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Black</span>
+        <select id="black-side">
+          <option value="human">Human</option>
+          <option value="pyengine2">pyengine2</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Depth (for engine)</span>
+        <input id="engine-depth" type="number" min="1" max="8" step="1" value="3">
+      </label>
+
+      <div class="buttons-row">
+        <button id="ping" type="button">Ping Engine</button>
+        <button id="play-engine" type="button">Play Engine Move</button>
+        <button id="toggle-match" type="button">Start Match</button>
+        <button id="flip" type="button">Flip Board</button>
+        <button id="flip-top-pieces" type="button">Flip Top Pieces: Off</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+
+      <div class="status" id="status">Ready.</div>
+    </section>
+
+    <section class="panel board-wrap">
+      <hexchess-board id="board" board="start" orientation="white" muted></hexchess-board>
+    </section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <strong>Game Log</strong>
+        <span id="history-summary" class="muted"></span>
+      </div>
+
+      <div class="buttons-row">
+        <button id="nav-start" type="button">|&lt;</button>
+        <button id="nav-back" type="button">&lt;</button>
+        <button id="nav-forward" type="button">&gt;</button>
+        <button id="nav-end" type="button">&gt;|</button>
+        <button id="save" type="button">Save Game</button>
+        <button id="load" type="button">Load Game</button>
+        <input id="load-input" type="file" accept=".yaml,.yml,text/yaml,application/yaml" hidden>
+      </div>
+
+      <div class="history" id="history"></div>
+    </section>
+  </main>
+
+  <script src="./app-config.js"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
