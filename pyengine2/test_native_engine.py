@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from pyengine2.native_engine import CHAR_TO_PIECE, EvalOptions, Hexchess, INITIAL_POSITION, San, _passes_qsearch_delta_prune, create_board, evaluate, index, search, stringify_board
+from pyengine2.native_engine import CHAR_TO_PIECE, EvalOptions, Hexchess, INITIAL_POSITION, San, _passes_qsearch_delta_prune, create_board, evaluate, execute_command, index, search, stringify_board
 
 
 def build_position(turn: str, pieces: dict[str, str], ep: str = '-') -> Hexchess:
@@ -63,6 +63,29 @@ class NativeEngine2Tests(unittest.TestCase):
         self.assertNotIn('qsearchDeltaPruneSkips', metrics)
         self.assertNotIn('negamaxFrontierFutilitySkips', metrics)
         self.assertNotIn('nullMoveCutoffs', metrics)
+
+    def test_execute_command_rejects_invalid_position_history(self) -> None:
+        with self.assertRaisesRegex(ValueError, 'invalid positionHistory'):
+            execute_command('hexchess/evaluate', {'position': INITIAL_POSITION, 'depth': 1, 'positionHistory': ['ok', 123]})
+
+    def test_search_avoids_third_repetition_from_game_history(self) -> None:
+        position = Hexchess.parse('1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 11 50')
+        prior_positions = [
+            '1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 4 46',
+            '1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 5 47',
+            '1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 6 47',
+            '1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 7 48',
+            '1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 8 48',
+            '1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 9 49',
+            '1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 10 49',
+        ]
+
+        without_history = search(position.clone(), 4, diagnostics=False)
+        with_history = search(position.clone(), 4, diagnostics=False, position_history=prior_positions)
+
+        self.assertEqual(without_history['sans'][0]['san'], 'c7a6')
+        self.assertEqual(with_history['sans'][0]['san'], 'c7b6')
+        self.assertEqual(with_history['sans'][1], {'san': 'c7a6', 'score': 0.0})
 
     def test_null_move_restores_position_and_hash(self) -> None:
         position = Hexchess(INITIAL_POSITION)

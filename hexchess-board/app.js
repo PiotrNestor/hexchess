@@ -513,6 +513,13 @@ function appendMove(san, meta = {}) {
   renderHistory()
 }
 
+function currentPositionHistory() {
+  return moveHistory
+    .slice(0, historyIndex)
+    .map((entry) => entry.beforeFen)
+    .filter((fen) => typeof fen === 'string' && fen.length > 0)
+}
+
 function setBusy(nextBusy) {
   isBusy = nextBusy
   playEngineBtn.disabled = nextBusy
@@ -572,6 +579,7 @@ async function playEngineMove() {
     const data = await executeEngine(engineType, 'hexchess/evaluate', {
       depth: getEngineDepth(),
       position: currentGame.toString(),
+      positionHistory: currentPositionHistory(),
       diagnostics: true,
     })
     const duration = performance.now() - startedAt

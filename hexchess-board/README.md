@@ -49,6 +49,8 @@ Start pyengine2 separately:
 python -m uvicorn pyengine2.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
+When the selected engine is `pyengine2`, the board client also sends earlier game positions together with the current FEN on each evaluation request. That lets `pyengine2` recognize threefold-repetition lines from the current game history instead of treating every request as a completely fresh position.
+
 ## pyrustengine
 
 Start pyrustengine separately:

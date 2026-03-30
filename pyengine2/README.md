@@ -60,6 +60,8 @@ Useful endpoints:
 
 The API wrapper delegates engine work to `execute_command(...)` in [pyengine2/native_engine.py](pyengine2/native_engine.py).
 
+For `hexchess/evaluate`, callers may optionally provide `options.positionHistory` as a list of earlier FEN strings from the same game. `pyengine2` uses that prior-position history to score threefold-repetition lines as draws instead of treating them as ordinary fresh positions.
+
 ### Run the benchmark suite
 
 Search benchmarks:
