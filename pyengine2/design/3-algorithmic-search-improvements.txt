@@ -1,0 +1,245 @@
+measurement pass on specific branches and counters
+
+What was added:
+- split TT hits and TT cutoffs into negamax and quiescence counts
+- split beta cutoffs into negamax and quiescence counts
+- added qsearch stand-pat cutoff count
+- added qsearch delta-prune checks and skips
+- added qsearch nodes-with-moves and total generated tactical moves
+- added PVS re-search count
+
+Focused measurement summary from the current tree:
+- PVS re-searches are rare relative to negamax node volume
+  - initial-position depth 5: 2,286 re-searches across 572,449 negamax nodes
+  - tt-transposition-midgame depth 5: 124 re-searches across 161,851 negamax nodes
+- TT reuse is already materially important in both full search and qsearch
+  - initial-position depth 5: 119,781 negamax TT hits and 77,033 qsearch TT hits
+  - tt-transposition-midgame depth 5: 47,257 negamax TT hits and 4,107 qsearch TT hits
+- qsearch still dominates the broad baseline work profile
+  - initial-position depth 5: 1,082,998 qsearch nodes vs 572,449 negamax nodes
+  - harvested qsearch-heavy depth 3: 47,719 qsearch nodes vs 12,374 negamax nodes
+- A large share of qsearch ends at cheap stand-pat or qsearch beta-cutoff decisions
+  - initial-position depth 5: 373,425 stand-pat cutoffs and 262,245 qsearch beta cutoffs
+  - harvested qsearch-heavy depth 3: 16,389 stand-pat cutoffs and 13,118 qsearch beta cutoffs
+- Delta pruning is highly effective when it activates, but it activates on a relatively small subset of qsearch work
+  - initial-position depth 5: 62,952 checks, 58,130 skips
+  - tt-transposition-midgame depth 5: 9,825 checks, 7,650 skips
+  - harvested qsearch-heavy depth 3: 596 checks, 535 skips
+- Tactical lists are usually small enough that sorting itself is not the dominant problem
+  - capture-storm-qsearch depth 5: 1,051 tactical moves across 1,036 qsearch nodes with moves
+  - initial-position depth 5: 1,257,887 tactical moves across 528,843 qsearch nodes with moves, about 2.4 per node
+
+What this means:
+- move-order micro-structure is not the best next target
+- PVS behavior is not the main bottleneck
+- reducing TT storage is the wrong direction because reuse is still paying for itself
+- the best algorithmic opportunity is to reduce how often search falls into expensive qsearch work, or to make more qsearch nodes terminate on static bounds sooner
+
+Best algorithmic next step:
+- target qsearch entry and pruning policy, not structure
+- the first candidate should be a measured algorithmic pruning change such as:
+  - frontier futility pruning at shallow negamax depths before entering qsearch, or
+  - a broader but still conservative qsearch delta-pruning activation rule
+
+Recommended order from here:
+1. prototype a conservative frontier futility pruning rule for depth-1 non-check nodes
+2. if that is not broad-positive, test a measured expansion of qsearch delta-prune activation
+3. only after those, consider larger algorithmic pruning families such as null-move pruning or late-move reductions
+
+Result of the first algorithmic slice:
+- Implemented a conservative frontier futility rule in negamax for depth-1 non-check nodes only
+- The rule only considers later quiet moves after earlier ordering work has already happened
+- It never prunes the TT move and never prunes tactical moves
+- The final version uses lazy setup so the check test and stand-pat eval are only computed when a later quiet move actually becomes eligible for pruning
+
+Refined benchmark outcome versus the measurement baseline:
+- capture-storm-qsearch: depth 4 improved from 360.2 ms to 341.8 ms, depth 5 regressed slightly from 1125.8 ms to 1129.2 ms
+- tt-transposition-midgame: depth 4 improved from 1208.9 ms to 866.4 ms, depth 5 improved from 5336.4 ms to 4924.0 ms
+- initial-position: depth 4 improved from 7157.6 ms to 7093.9 ms, depth 5 improved from 45708.9 ms to 45558.1 ms
+- harvested-qsearch-heavy: depth 2 improved from 135.8 ms to 125.4 ms, depth 3 improved from 1536.8 ms to 1433.6 ms
+
+Interpretation:
+- This is broad-positive enough to keep provisionally in the tree
+- The one regression is small and isolated to capture-storm depth 5
+- The biggest gains appear in the TT-heavy middlegame case, where the rule removes a large number of late quiet branches before they feed more search and qsearch work
+- The harvested qsearch-heavy case saw zero actual frontier-futility skips, but the lazy setup kept overhead low enough that the case still improved
+
+Recommended next step from this point:
+1. keep the lazy frontier futility rule in place
+2. rerun a clean non-instrumented speed pass before promoting it into any formal baseline
+3. continue with the next measured algorithmic slice, most likely a conservative expansion of qsearch delta-prune activation
+
+Result of the next measured qsearch slice:
+- Tried a conservative expansion of qsearch delta-prune activation only
+- The per-move prune rule was left unchanged
+- Only the activation gate was widened from stand-pat plus rook value plus check value to stand-pat plus bishop value plus check value
+
+Outcome versus the current frontier-futility measurement tree:
+- capture-storm-qsearch: slower at both depths
+  - depth 4: 341.8 ms to 353.2 ms
+  - depth 5: 1129.2 ms to 1149.4 ms
+- tt-transposition-midgame: mixed and not strong enough to save the change
+  - depth 4: 866.4 ms to 868.8 ms
+  - depth 5: 4924.0 ms to 4860.8 ms
+- initial-position: slower at both depths
+  - depth 4: 7093.9 ms to 7155.0 ms
+  - depth 5: 45558.1 ms to 45649.7 ms
+- harvested-qsearch-heavy: slower at both depths
+  - depth 2: 125.4 ms to 135.7 ms
+  - depth 3: 1433.6 ms to 1591.6 ms
+
+Interpretation:
+- The wider gate did increase delta-prune checks substantially
+- But the added control-path work was not paid back by enough extra useful skips on the broad benchmark set
+- This exact activation-threshold expansion should be treated as rejected and reverted
+
+Updated direction from here:
+1. keep lazy frontier futility as the last broad-positive change
+2. stop widening qsearch delta-prune activation by threshold alone
+3. if continuing algorithmic pruning work, move to a different family such as a conservative null-move pruning experiment rather than another small qsearch gate expansion
+
+Benchmark-control improvement completed:
+- search() now supports an explicit diagnostics toggle
+- benchmark.py defaults to clean search runs with only the stable metric set
+- benchmark.py --diagnostics enables the extra branch and cutoff counters for measurement runs
+- this keeps clean speed decisions and instrumented diagnosis on the same codepath without forcing both to pay for the extra hot-path counter updates
+
+Result of the first conservative null-move slice:
+- Added a reversible null-move path that changes only turn, en-passant state, clocks, and zobrist hash
+- Added hard gates before trying null move:
+  - depth at least 3 below the root negamax frame
+  - not in check
+  - side to move has non-pawn material
+  - static eval already at or above beta
+- Used a null-window verification search with reduction 2
+
+Diagnostic measurement outcome versus the frontier-futility tree:
+- capture-storm-qsearch:
+  - depth 4: unchanged in practice and null move inactive
+  - depth 5: improved from 1129.2 ms to 729.5 ms with 755 attempts and 677 cutoffs
+- tt-transposition-midgame:
+  - depth 4: unchanged in practice and null move inactive
+  - depth 5: improved from 4924.0 ms to 3998.3 ms with 1184 attempts and 501 cutoffs
+- initial-position:
+  - depth 4: unchanged in practice and null move inactive
+  - depth 5: improved from 45558.1 ms to 29571.1 ms with 1692 attempts and 1383 cutoffs
+- harvested-qsearch-heavy:
+  - depth 2 and depth 3: null move inactive because the depth gate is not reached
+
+Clean Stage 1 suite outcome versus the official baseline:
+- tt-transposition-midgame:
+  - depth 4: 1147.8 ms to 854.1 ms
+  - depth 5: 5108.5 ms to 3950.3 ms
+- capture-storm-qsearch:
+  - depth 4: effectively unchanged at 346.7 ms to 347.1 ms
+  - depth 5: 1077.5 ms to 710.6 ms
+- initial-position:
+  - depth 4: slightly slower at 6778.4 ms to 6930.6 ms
+  - depth 5: 42528.3 ms to 29446.7 ms
+
+Keep decision:
+- Keep this null-move slice provisionally in the tree
+- The clean benchmark set is strongly positive overall
+- One shallow opening case remains slightly slower, but the depth-5 search cases improved enough to justify keeping the feature
+- The harvested case was rerun in clean mode after an apparent slowdown and the repeat result returned to the prior no-null range, so that earlier harvested regression should be treated as timing noise rather than a stable blocker
+
+Sequential clean validation follow-up:
+- A parallel clean rerun was discarded because it was contaminated by benchmark contention on the same machine
+- A sequential repeat-5 opening check and a second sequential full Stage 1 suite both confirmed the null-move depth-5 gains
+- The validated clean baseline snapshot for future comparisons is now results/2.1.003/stage1-baseline-null-move.yaml
+
+Sequential clean Stage 1 validation versus the previous official baseline:
+- tt-transposition-midgame:
+  - depth 4: 1147.8 ms to 862.7 ms
+  - depth 5: 5108.5 ms to 3891.1 ms
+- capture-storm-qsearch:
+  - depth 4: 346.7 ms to 335.9 ms
+  - depth 5: 1077.5 ms to 701.8 ms
+- initial-position:
+  - depth 4: 6778.4 ms to 6955.0 ms
+  - depth 5: 42528.3 ms to 28935.7 ms
+
+Interpretation after sequential validation:
+- The shallow opening slowdown remains small but real enough to keep watching
+- It is not caused by null move itself at depth 4, because the current null-move depth gate does not activate on the depth-4 search profile
+- Future tuning should therefore avoid treating the depth-4 opening number as a null-move gating problem
+
+Follow-up on the remaining initial-position depth-4 regression:
+- Disabling frontier futility made the opening case worse, so frontier futility is helping rather than causing the remaining slowdown
+- Keeping frontier futility enabled while temporarily disabling null move produced essentially the same initial-position depth-4 timing as the full tree, which confirms the remaining depth-4 gap is not a null-move activation effect
+
+Rejected clean-recursion split experiment:
+- Tried splitting search recursion into a clean path with no diagnostic-counter branches and a separate diagnostic path with the extra counters
+- Result:
+  - initial-position depth 4 improved slightly from about 7075.6 ms to about 6970.2 ms on repeat-5 clean runs
+  - but initial-position depth 5 regressed badly from about 29183.8 ms to about 35876.8 ms with identical node counts and identical search-shape metrics
+- Conclusion:
+  - this split-recursion approach is rejected and reverted
+  - the slowdown was interpreter overhead from the refactor itself, not a search improvement
+  - the remaining shallow opening regression is therefore still unresolved, but it is now better bounded: it is not due to frontier futility and not due to null-move activation at depth 4
+
+Repository hygiene follow-up:
+- Cleaned out the temporary isolation artifacts from the opening-regression investigation
+- Cleaned out the non-canonical null-move validation snapshots and ad hoc clean harvested comparator reruns
+- The promoted clean reference point remains results/2.1.003/stage1-baseline-null-move.yaml
+- The measurement history and source saved-game logs were left intact
+
+Next optimization pass: depth-0 non-check leaf fast path
+- Found a hot-path ordering problem in negamax:
+  - depth-0 nodes were still building a full legal move list before returning to qsearch
+  - that full move generation is only needed at depth 0 when the side to move is in check, so non-check leaves were paying avoidable overhead
+- Kept the existing mate and stalemate handling for checked leaf nodes
+- Changed the leaf path so depth-0 non-check nodes jump straight into quiescence without first calling full legal move generation
+
+Clean benchmark outcome versus the promoted baseline:
+- tt-transposition-midgame:
+  - depth 4: 862.7 ms to 554.5 ms
+  - depth 5: 3891.1 ms to 2788.2 ms
+- capture-storm-qsearch:
+  - depth 4: 335.9 ms to 213.2 ms
+  - depth 5: 701.8 ms to 511.3 ms
+- initial-position:
+  - depth 4: 6955.0 ms to 3202.6 ms
+  - depth 5: 28935.7 ms to 21863.1 ms
+- harvested-qsearch-heavy standing check:
+  - depth 2: about 126.6 ms to 54.6 ms
+  - depth 3: about 1483.8 ms to 1227.8 ms
+
+Interpretation:
+- This is a clear keep
+- The gain is broad rather than case-specific, which matches the code path: depth-0 non-check leaves occur everywhere in the tree
+- The especially large opening improvement supports the earlier suspicion that too much work was still happening before qsearch on shallow frontier nodes
+- The null-move and frontier-futility decisions remain unchanged; this slice removes unrelated leaf overhead beneath those already-kept features
+
+Diagnostic follow-up after promoting the leaf fast path:
+- Wrote a new clean baseline snapshot to results/2.1.003/stage1-baseline-leaf-fastpath.yaml
+- Refreshed the four diagnostic reports on the current tree:
+  - results/2.1.003/measurement-capture-storm-qsearch-leaf-fastpath.yaml
+  - results/2.1.003/measurement-tt-transposition-midgame-leaf-fastpath.yaml
+  - results/2.1.003/measurement-initial-position-leaf-fastpath.yaml
+  - results/2.1.003/measurement-harvested-qsearch-heavy-leaf-fastpath.yaml
+
+What the refreshed diagnostics say:
+- The leaf-path win came from removing wasted full move-generation and legal-context work, not from changing the search shape
+  - node counts, TT counts, beta cutoffs, null-move counts, and qsearch counters stayed effectively the same
+  - movegenCalls and legalContextCalls dropped sharply because non-check depth-0 leaves no longer build full legal move lists before entering qsearch
+- qsearch is still the dominant cost center on the broad search cases even after that fix
+  - initial-position depth 5: 691,299 qsearch nodes vs 391,552 negamax nodes
+  - harvested qsearch-heavy depth 3: 47,719 qsearch nodes vs 12,374 negamax nodes
+- Tactical lists are still small on average
+  - initial-position depth 5: 775,113 tactical moves across 324,483 qsearch nodes with moves, about 2.4 per node
+  - harvested qsearch-heavy depth 3: 67,578 tactical moves across 23,997 qsearch nodes with moves, about 2.8 per node
+- Null move remains a strong depth-5 contributor where it is active
+  - initial-position depth 5: 1,692 attempts and 1,383 cutoffs
+  - tt-transposition-midgame depth 5: 1,184 attempts and 501 cutoffs
+  - capture-storm-qsearch depth 5: 755 attempts and 677 cutoffs
+
+Updated direction from here:
+1. preserve the new leaf fast path as part of the official comparison tree
+2. stop looking for more full-search leaf overhead in negamax; the obvious waste there is already removed
+3. focus the next measurement-guided experiment on non-check qsearch node cost, especially the legal-context and tactical-generation work that still sits behind stand-pat survival
+
+------------------------------------------------
+
+
+

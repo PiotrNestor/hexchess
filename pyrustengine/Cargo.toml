@@ -1,0 +1,13 @@
+[package]
+name = "hexchess_pyrustengine"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "hexchess_pyrustengine"
+crate-type = ["cdylib"]
+
+[dependencies]
+engine = { package = "hexchess_engine", path = "../engine" }
+hexchess = { path = "../rust" }
+serde_json = "1.0"

@@ -1,0 +1,110 @@
+version: 1
+kind: pyengine2-benchmark-run
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-26T13:47:58.606425+00:00'
+mode: search
+repeat: 3
+topCount: 3
+diagnostics: true
+cases:
+- name: tt-transposition-midgame
+  category: middlegame
+  notes: Symmetric tactical middlegame intended to increase transposition-table reuse.
+  summaries:
+  - name: tt-transposition-midgame
+    category: middlegame
+    mode: search
+    medianMs: 897.7618
+    units: 20556
+    unitsLabel: evals
+    unitsPerMs: 22.896942
+    notes: Symmetric tactical middlegame intended to increase transposition-table
+      reuse.
+    depth: 4
+    topMoves:
+    - san: f5f7
+      score: -130.0
+    - san: g5l1
+      score: -119.92
+    - san: f5h3
+      score: -109.84
+    metrics:
+      wallMs: 901.2339003384113
+      evalsPerMs: 22.808729223657995
+      rootMoves: 57
+      negamaxNodes: 20418
+      quiescenceNodes: 21658
+      movegenCalls: 26714
+      tacticalMovegenCalls: 8950
+      legalContextCalls: 26714
+      ttHits: 4359
+      ttCutoffs: 3757
+      betaCutoffs: 6931
+      ttEntries: 22877
+      negamaxTtHits: 2943
+      quiescenceTtHits: 1416
+      negamaxTtCutoffs: 2655
+      quiescenceTtCutoffs: 1102
+      negamaxBetaCutoffs: 3565
+      quiescenceBetaCutoffs: 3366
+      qsearchStandPatCutoffs: 11606
+      qsearchDeltaPruneChecks: 2869
+      qsearchDeltaPruneSkips: 2743
+      qsearchNodesWithMoves: 6384
+      qsearchGeneratedMoves: 17362
+      pvsResearches: 47
+      negamaxFrontierFutilityChecks: 24111
+      negamaxFrontierFutilitySkips: 15813
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - name: tt-transposition-midgame
+    category: middlegame
+    mode: search
+    medianMs: 3998.3462
+    units: 72366
+    unitsLabel: evals
+    unitsPerMs: 18.098983
+    notes: Symmetric tactical middlegame intended to increase transposition-table
+      reuse.
+    depth: 5
+    topMoves:
+    - san: f5f7
+      score: -130.0
+    - san: g5l1
+      score: -119.92
+    - san: f5h3
+      score: -109.84
+    metrics:
+      wallMs: 3993.520400021225
+      evalsPerMs: 18.120853971251876
+      rootMoves: 57
+      negamaxNodes: 111743
+      quiescenceNodes: 75990
+      movegenCalls: 114677
+      tacticalMovegenCalls: 34044
+      legalContextCalls: 114677
+      ttHits: 35386
+      ttCutoffs: 34330
+      betaCutoffs: 29593
+      ttEntries: 81459
+      negamaxTtHits: 31148
+      quiescenceTtHits: 4238
+      negamaxTtCutoffs: 30610
+      quiescenceTtCutoffs: 3720
+      negamaxBetaCutoffs: 22029
+      quiescenceBetaCutoffs: 7564
+      qsearchStandPatCutoffs: 38226
+      qsearchDeltaPruneChecks: 9709
+      qsearchDeltaPruneSkips: 7113
+      qsearchNodesWithMoves: 18539
+      qsearchGeneratedMoves: 34540
+      pvsResearches: 131
+      negamaxFrontierFutilityChecks: 71328
+      negamaxFrontierFutilitySkips: 28204
+      nullMoveAttempts: 1184
+      nullMoveCutoffs: 501
+depths:
+- 4
+- 5
+filter: tt-transposition-midgame

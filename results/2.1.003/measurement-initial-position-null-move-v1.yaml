@@ -1,0 +1,108 @@
+version: 1
+kind: pyengine2-benchmark-run
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-26T13:50:00.353871+00:00'
+mode: search
+repeat: 3
+topCount: 3
+diagnostics: true
+cases:
+- name: initial-position
+  category: opening
+  notes: High-branching opening baseline.
+  summaries:
+  - name: initial-position
+    category: opening
+    mode: search
+    medianMs: 7053.1786
+    units: 134821
+    unitsLabel: evals
+    unitsPerMs: 19.114928
+    notes: High-branching opening baseline.
+    depth: 4
+    topMoves:
+    - san: d3d5
+      score: -0.0
+    - san: h3h5
+      score: -0.0
+    - san: c2c4
+      score: -0.0
+    metrics:
+      wallMs: 7027.559800073504
+      evalsPerMs: 19.184610851492128
+      rootMoves: 51
+      negamaxNodes: 155774
+      quiescenceNodes: 136519
+      movegenCalls: 151795
+      tacticalMovegenCalls: 28246
+      legalContextCalls: 151795
+      ttHits: 35137
+      ttCutoffs: 33924
+      betaCutoffs: 18648
+      ttEntries: 136337
+      negamaxTtHits: 32861
+      quiescenceTtHits: 2276
+      negamaxTtCutoffs: 32226
+      quiescenceTtCutoffs: 1698
+      negamaxBetaCutoffs: 8274
+      quiescenceBetaCutoffs: 10374
+      qsearchStandPatCutoffs: 106575
+      qsearchDeltaPruneChecks: 1206
+      qsearchDeltaPruneSkips: 1177
+      qsearchNodesWithMoves: 19316
+      qsearchGeneratedMoves: 37747
+      pvsResearches: 738
+      negamaxFrontierFutilityChecks: 139389
+      negamaxFrontierFutilitySkips: 6899
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - name: initial-position
+    category: opening
+    mode: search
+    medianMs: 29571.1113
+    units: 665456
+    unitsLabel: evals
+    unitsPerMs: 22.503584
+    notes: High-branching opening baseline.
+    depth: 5
+    topMoves:
+    - san: d3d5
+      score: -0.32000000000000006
+    - san: h3h5
+      score: -0.32000000000000006
+    - san: c2c4
+      score: -0.32000000000000006
+    metrics:
+      wallMs: 29572.809800039977
+      evalsPerMs: 22.50229195330301
+      rootMoves: 51
+      negamaxNodes: 391552
+      quiescenceNodes: 691299
+      movegenCalls: 692391
+      tacticalMovegenCalls: 390386
+      legalContextCalls: 692391
+      ttHits: 121118
+      ttCutoffs: 114008
+      betaCutoffs: 231272
+      ttEntries: 669829
+      negamaxTtHits: 91484
+      quiescenceTtHits: 29634
+      negamaxTtCutoffs: 88165
+      quiescenceTtCutoffs: 25843
+      negamaxBetaCutoffs: 68818
+      quiescenceBetaCutoffs: 162454
+      qsearchStandPatCutoffs: 275070
+      qsearchDeltaPruneChecks: 37568
+      qsearchDeltaPruneSkips: 34205
+      qsearchNodesWithMoves: 324483
+      qsearchGeneratedMoves: 775113
+      pvsResearches: 1692
+      negamaxFrontierFutilityChecks: 242858
+      negamaxFrontierFutilitySkips: 19465
+      nullMoveAttempts: 1692
+      nullMoveCutoffs: 1383
+depths:
+- 4
+- 5
+filter: initial-position

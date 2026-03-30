@@ -1,0 +1,401 @@
+Question:
+Before continuing with further tuning, are we good with the core data-structure(s) and associated computation actions.
+Is there anything elese or differnt that could be done to speed up even more?
+
+I’m checking a few exact anchors in the engine so the answer is tied to the current implementation rather than a generic optimization list.
+
+Searched for regex `class SearchState|class Hexchess|def _compute_legal_context|def optimize_tactical_moves|def quiescence\(|def make_move_unsafe|def position_key` (`**/pyengine2/native_engine.py`), 7 results
+
+Searched for regex `quiescenceNodes|tacticalMovegenCalls|legalContextCalls|ttHits|ttCutoffs` (`**/results/2.1.003/stage1-baseline.yaml`), 30 results
+
+Short answer: the core data structures are good enough for Stage 1, but they are not the final ceiling.
+
+What is already solid
+- The board and piece state are already in the right shape for a Python engine:
+  - numeric board state and synchronized masks in native_engine.py
+  - reusable search scratch state in native_engine.py
+  - Zobrist position keying in native_engine.py
+  - integer move ordering in native_engine.py
+- Those are not “toy” structures. They are the right base for continued tuning.
+- The benchmark data also says the engine is mostly losing time in repeated search work, not because the board representation is fundamentally wrong:
+  - opening depth 5 still shows very high quiescence, tactical movegen, and legal-context counts in stage1-baseline.yaml
+  - TT is already active and useful in the same baseline in stage1-baseline.yaml
+
+What is not yet ideal
+- The expensive parts now are mostly Python object and control overhead around the core structures:
+  - full legal-context rebuilds in native_engine.py
+  - move undo tuple creation in native_engine.py
+  - dictionary-based TT entries around native_engine.py
+  - per-node sorting and move scoring in native_engine.py
+- That is why the last two experiments failed:
+  - they changed the movegen path, but replaced one form of overhead with another
+  - they did not reduce total Python work enough on the broad baseline
+
+My assessment
+- For Stage 1: yes, the core structures are good enough to keep.
+- For larger speedups beyond the current incremental slices: yes, there are still different things worth doing.
+
+Best “different” things that could speed it up more
+1. Replace the transposition table dict with a fixed-size array-backed TT
+- This is the biggest structural candidate still available in pure Python.
+- Right now TT is a Python dict mapping key to tuple entries.
+- A fixed-size TT with direct index masking and overwrite policy would cut:
+  - dict hash overhead
+  - tuple churn
+  - allocation pressure
+- This is the first thing I would look at if you want a more structural Stage 1.5 improvement.
+
+2. Replace undo tuples with reusable per-ply undo storage
+- native_engine.py creates undo tuples constantly.
+- A reusable per-ply undo stack or packed list-based undo record would likely help more than another movegen micro-optimization.
+- This is lower risk than a whole new legality path and attacks a very hot make/unmake loop.
+
+3. Split qsearch TT policy from full-search TT policy
+- Not a whole new structure, but a different use of the current one.
+- Qsearch may benefit from:
+  - shallower or separate replacement policy
+  - cheaper entry payload
+  - avoiding some storage on low-value nodes
+- That could reduce common-path TT overhead without weakening full-search reuse.
+
+4. Introduce a compact no-pin/no-check legal-context representation
+- Not the failed sparse-reset experiment.
+- A more promising version is to change the representation itself:
+  - fast sentinel for no pins
+  - sparse pinned-piece map only when needed
+- The current full mask representation in native_engine.py is convenient but still heavy.
+
+5. Reduce sorting frequency in qsearch
+- native_engine.py sorts every tactical move list.
+- If lists are often very small, a manual best-first selection or one-pass TT/promotion/capture bucketing may beat full sort.
+- This is smaller than the TT and undo ideas, but still plausible.
+
+What I would not change yet
+- I would not replace the board representation.
+- I would not replace piece masks.
+- I would not move away from packed move codes.
+- I would not add more complicated pseudo-legal qsearch generation after the last failed experiment.
+- Those are not the weak point right now.
+
+Priority order from here
+1. Array-backed transposition table
+2. Reusable undo storage
+3. Narrow TT/qsearch policy tuning
+4. Legal-context representation refinement
+5. Qsearch move ordering simplification
+
+So, are we good with the current core data structures?
+- Yes for Stage 1 continuation.
+- No if the question is “is this the maximum speed we can get in pure Python?”
+
+The biggest remaining upside is not a new board model. It is reducing Python-level overhead around TT, undo records, and repeated qsearch control work.
+
+If you want, I can continue with one of these two next:
+1. inspect the current TT usage and propose a minimal fixed-size array TT design for pyengine2
+2. inspect make/unmake and propose a reusable undo-record design that fits the current search stack
+
+--------------------------------------------
+This was tried:
+
+1. Replace the transposition table dict with a fixed-size array-backed TT
+There was no improvement
+
+2. Replace undo tuples with reusable per-ply undo storage
+There was no improvement
+
+Conclusion:
+give up on:
+
+fixed-size array TT as the default next experiment
+reusable per-ply undo storage as the default next experiment
+
+----------------------------------------------
+recommendation to continue from here:
+
+Freeze the current board, mask, and move-code model.
+Treat large core data-structure rewrites as low priority unless a new measurement strongly points there.
+Continue only with targeted changes in these areas:
+qsearch move ordering without full sort
+compact no-pin or no-check legal-context fast representation
+split TT policy for qsearch versus full search
+selective instrumentation to find the next dominant common-path branch cost
+
+Next experiments: next step in one of two directions:
+
+inspect qsearch ordering and propose a no-full-sort tactical ordering path
+inspect legal-context construction and propose a compact fast path for the common no-pin case
+
+
+----------------------------------------------
+qsearch ordering inspection
+
+Current path in native_engine.py:
+- _fill_current_moves(..., tactical_only=True) builds the full tactical list first
+- optimize_tactical_moves(...) computes a Python score for every move and then calls list.sort(...)
+- quiescence(...) applies delta pruning only after that full sort
+
+What this means:
+- qsearch pays full scoring and Timsort cost even when:
+  - the TT move cuts off immediately
+  - the first winning capture cuts off immediately
+  - several tail moves would later be skipped by delta pruning anyway
+- This is a bad fit for qsearch, where the practical goal is usually to find one good tactical move early, not to perfectly rank the full list
+
+Recommended no-full-sort path:
+Replace full tactical sorting with an in-place front-priority pass.
+
+Proposed shape:
+1. Keep tactical generation unchanged.
+2. Replace optimize_tactical_moves(...) with a helper that only promotes a small front segment.
+3. Priority order for that front segment:
+   - TT move first, if present
+   - promotion moves next, ordered by existing promotion bonus
+   - clearly good captures next, using the current MVV-LVA-style score
+   - leave the remaining tail unsorted
+4. Run quiescence over:
+   - the promoted front segment first
+   - then the unsorted tail in generated order
+
+Why this is the right tradeoff:
+- avoids scoring every move just to feed Timsort
+- avoids extra temporary bucket lists
+- keeps the current move generator and legality path unchanged
+- still preserves the main value of move ordering in qsearch: getting TT move / promotions / best captures to the front quickly
+
+Concrete implementation sketch:
+- Add a small helper like promote_tactical_front(hexchess, moves, tt_move) -> int
+- It does a single scan over moves and swaps a few selected moves into the first slots
+- Suggested front classes:
+  - slot 0: TT move
+  - next slots: promotions
+  - next slots: captures with non-negative tactical score
+- The function returns front_count
+- quiescence(...) searches moves[0:front_count] first, then moves[front_count:]
+
+Important constraint:
+- Do not add reusable per-node bucket arrays for this first version
+- The last undo-storage experiment showed that extra Python-side buffer traffic can erase the expected gain
+- The first attempt here should therefore prefer a minimal in-place promotion strategy over more bookkeeping-heavy classification
+
+Expected upside:
+- best case: faster qsearch on nodes where cutoff happens in the first one or two tactical moves
+- neutral case: no regression on positions where tactical lists are already tiny
+- main risk: if too many qsearch nodes need deep tail search, partial ordering may lose enough cutoff quality to cancel the saved sort cost
+
+Recommended experiment order:
+1. promote TT move + promotions only, leave all captures otherwise unsorted
+2. if that is neutral or positive, extend front promotion to include one or two best non-losing captures
+3. stop if broad benchmarks regress, especially initial-position and tt-transposition-midgame
+
+
+Result:
+- Tried the first no-full-sort qsearch ordering slice by promoting:
+  - TT move first
+  - promotions next
+  - one best non-losing capture after promotions
+- Broad benchmarks regressed, so this exact partial-ordering path should be treated as rejected:
+  - capture-storm-qsearch: slower
+  - tt-transposition-midgame: slower
+  - initial-position: slower
+  - harvested qsearch-heavy: slower
+- Conclusion: the saved sort work did not make up for the weaker cutoff quality from the partially unsorted tail.
+
+----------------------------------------------------
+Best next step from here:
+
+Inspect legal-context construction for a compact common-case no-pin fast path
+Inspect narrower qsearch TT policy differences without changing the main tactical ordering path
+
+
+----------------------------------------------------
+legal-context no-pin inspection
+
+Current path in native_engine.py:
+- _compute_legal_context(...) resets all 91 pin masks to ALL_PIN_MASKS on every call
+- this happens even on common no-pin paths
+- _fill_current_moves(...) already has a fast branch for check_count == 0 and not has_pins
+
+Proposed fast path that was tried:
+- defer pin-mask materialization until the first actual pin is found
+- return the shared ALL_PIN_MASKS sentinel when no pins are present instead of rewriting the reusable pin-mask buffer
+
+Why it looked plausible:
+- legal-context is called at every move-generation node
+- the common no-pin path should avoid 91 Python writes per call if possible
+- it keeps board model, move generation, and legality semantics unchanged
+
+Result:
+- Broad benchmarks still regressed overall, so this exact deferred-materialization path should also be treated as rejected:
+  - capture-storm-qsearch: slightly slower
+  - tt-transposition-midgame: slower
+  - initial-position: slower overall
+  - harvested qsearch-heavy: still slower than baseline
+- Conclusion: skipping the default pin-mask rewrite did not save enough to offset the extra control-path cost and the change did not improve the broad Stage 1 profile.
+
+Updated conclusion:
+- preserve the current legal-context representation for now
+- do not revisit this exact no-pin deferred pin-mask materialization variant as a first-line optimization
+- the next best target is now narrower qsearch TT policy tuning rather than another common-path representation rewrite
+
+----------------------------------------------
+Next step then
+reduce qsearch TT storage aggressiveness
+reduce qsearch TT entry payload or replacement frequency
+
+
+----------------------------------------------
+qsearch TT policy inspection
+
+First narrow slice tried:
+- keep full-search TT behavior unchanged
+- in quiescence only, reduce storage aggressiveness by:
+  - keeping lower-bound entries
+  - skipping upper-bound entries
+  - skipping stand-pat-only exact entries without a best move
+
+Why it looked plausible:
+- qsearch creates a large number of shallow TT entries
+- some of those entries may carry little move-order value but still cost dict writes and replacement churn
+- this was a much narrower experiment than replacing the TT itself
+
+Result:
+- Broad benchmarks regressed again, so this qsearch TT-storage slice should also be treated as rejected:
+  - capture-storm-qsearch: slower and more evals
+  - tt-transposition-midgame: slower and more evals
+  - initial-position: slower and more evals
+  - harvested qsearch-heavy: slower and more evals
+- Conclusion: reducing qsearch TT writes in this way weakened reuse more than it reduced overhead.
+
+Updated conclusion:
+- preserve the current qsearch TT storage policy for now
+- do not revisit this specific “skip upper / stand-pat-only exact qsearch stores” variant as a first-line optimization
+- Stage 1 structural pure-Python tuning is now showing a consistent pattern of broad regressions across all recent rewrite-style experiments
+
+----------------------------------------------------------------------
+
+General conclusion: accept that further speed gains likely need a non-Python escape hatch for the hottest paths
+
+The present structure is: Present pyengine2 data-structure design, as it stands now:
+
+**Core Shape**
+- The engine is centered on a numeric, search-oriented core in native_engine.py.
+- Board state is a fixed-size 91-square array of integer piece codes, not SAN strings or object-heavy piece instances.
+- That board is kept in sync with bitmask-style occupancy state:
+  - per-piece masks
+  - per-color masks
+- King locations are cached directly on the position object, so king lookup is constant-time rather than scanned from the board state. See native_engine.py and native_engine.py.
+
+**Move Representation**
+- Internal moves are packed integers, not objects. Encoding and decoding helpers live in native_engine.py.
+- SAN is used as a thin interface layer only. The San dataclass exists mainly as an adapter between human-readable move strings and packed move codes. See native_engine.py.
+- Public move APIs remain string-friendly, but the search path stays integer-based.
+
+**Precomputed Board Data**
+- Geometry and attack support are heavily precomputed:
+  - board graph
+  - ray masks
+  - ray attack tables
+  - king masks
+  - knight masks
+  - pawn attack tables
+- Those tables are constructed once and then reused throughout move generation and legality checks. The main table builders are in native_engine.py.
+- This is one of the strongest current design choices. The engine is not spending its time rediscovering board structure on every node.
+
+**Position Object**
+- The position container is the Hexchess class in native_engine.py.
+- It owns:
+  - board array
+  - piece masks
+  - color masks
+  - en passant square
+  - side to move
+  - halfmove and fullmove counters
+  - cached king squares
+  - Zobrist hash
+- The Zobrist key is maintained incrementally during make and unmake, and exposed through position_key in native_engine.py.
+
+**Search Scratch State**
+- Search scratch data lives in SearchState in native_engine.py.
+- It currently uses:
+  - reusable per-ply move buffers
+  - reusable per-ply pin-mask buffers
+  - fixed-size history score array indexed by packed move code
+  - per-ply killer move slots
+  - counters for nodes, movegen calls, TT hits, TT cutoffs, and beta cutoffs
+- This is the current low-allocation search scratch design. The earlier attempts to replace more pieces of the hot path with extra reusable structures did not help on benchmarks.
+
+**Move Generation**
+- The main fast move-generation entry point is native_engine.py.
+- Generation is specialized by piece type rather than routed through a generic polymorphic layer.
+- There are two main paths:
+  - full legal move generation
+  - tactical-only move generation for qsearch
+- The common fast branch already exists for the simple case of no check and no pins, which lets generation skip some of the more restrictive filtering logic after legal-context computation.
+
+**Legal Context Representation**
+- Legal context is computed in native_engine.py.
+- The representation currently returns:
+  - king square
+  - check count
+  - evasion mask
+  - full pin-mask array
+  - has-pins flag
+- This is still a full-mask representation, not a sparse pinned-piece map.
+- That design is heavier than ideal, but the attempted no-pin deferred-materialization variant also regressed, so the present implementation stays in place.
+
+**Make and Unmake**
+- Move application remains tuple-based through make_move_unsafe and unmake_move in native_engine.py and native_engine.py.
+- The undo record is a compact tuple of prior state needed to reverse the move.
+- Search-only reusable undo storage was tried and rejected. The current tuple-based path is therefore still the chosen implementation.
+
+**Move Ordering**
+- Full-search ordering is handled by optimize_for_branch_pruning in native_engine.py.
+- Qsearch tactical ordering is handled by optimize_tactical_moves in native_engine.py.
+- Current ordering uses:
+  - TT move promotion
+  - history scores
+  - killer moves
+  - MVV-LVA-style tactical scoring
+  - promotion bonuses
+  - Python list sort for the tactical list
+- The attempted no-full-sort tactical front-promotion path regressed, so full tactical sorting remains the present design.
+
+**Transposition Table**
+- The TT is still a normal Python dictionary keyed by Zobrist hash.
+- Entries are stored as tuples containing depth, flag, value, and best move. The store helper is in native_engine.py.
+- TT reuse is active in both qsearch and full negamax. See native_engine.py and native_engine.py.
+- Both the fixed-size array-backed TT and the narrower qsearch-only reduced-store policy were tested and rejected.
+
+**Search Structure**
+- Qsearch lives in native_engine.py.
+- Full search lives in native_engine.py.
+- Root search lives in native_engine.py.
+- The algorithmic structure is:
+  - negamax
+  - alpha-beta pruning
+  - PVS-style narrow re-search for later siblings
+  - qsearch
+  - TT reuse
+  - conservative qsearch delta pruning
+
+**Current Design Verdict**
+- The present data-structure design is stable and internally coherent.
+- The board model, occupancy masks, packed moves, cached king squares, precomputed geometry, and reusable search scratch are the right foundation for this Python engine.
+- The repeated failed experiments now strongly suggest that broad pure-Python structural rewrites are no longer the productive direction for Stage 1.
+- In practical terms, the current design frontier is documented in 2-data-structures.txt and summarized operationally in memories/repo/pyengine2-stage1.md.
+
+Conlusion of experiments to 'improve' the data structures: Shortest summary:
+- Keep the current board, masks, packed moves, TT dict, tuple undo, and full tactical sort.
+- The engine’s current bottlenecks are now more about Python execution cost in repeated search work than about obviously wrong underlying data structures.
+
+-----------------------------------------------------------------------
+the sensible directions are now:
+
+do a tighter measurement pass on specific branches or counters before changing code again
+switch from speed-only structural tuning to algorithmic search improvements
+continuation in: 3-algorithmic-search-improvements
+
+----------------------------------------------------------------------
+
+
+

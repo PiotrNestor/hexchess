@@ -26,6 +26,41 @@ STAGE1_BASELINE_SUITE = (
     {'mode': 'search', 'filter': 'initial-position', 'depths': [4, 5], 'repeat': 3},
 )
 
+HARVESTED_DIAGNOSTIC_SUITE = (
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260329-210806-ply-014-tt-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260329-210806-ply-020-qsearch-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260329-210806-ply-058-wide-root', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260329-210806-ply-042-node-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260329-210806-ply-028-low-throughput', 'depths': [3], 'repeat': 1},
+)
+
+HARVESTED_HISTORY_DIAGNOSTIC_SUITE = (
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260324-175232-ply-018-tt-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260324-175232-ply-024-wide-root', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260324-175232-ply-004-node-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260324-175232-ply-074-low-throughput', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260324-175232-ply-010-node-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260326-173542-ply-032-tt-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260326-173542-ply-012-qsearch-heavy', 'depths': [3], 'repeat': 1},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260326-173542-ply-048-wide-root', 'depths': [3], 'repeat': 1},
+)
+
+CLEAN_SEARCH_COMPARISON_SUITE = (
+    {'mode': 'search', 'filter': 'tt-transposition-midgame', 'depths': [4, 5], 'repeat': 3},
+    {'mode': 'search', 'filter': 'capture-storm-qsearch', 'depths': [4, 5], 'repeat': 3},
+    {'mode': 'search', 'filter': 'initial-position', 'depths': [4, 5], 'repeat': 3},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260324-175232-ply-034-qsearch-heavy', 'depths': [3], 'repeat': 3},
+    {'mode': 'search', 'filter': 'harvested-hexchess-game-20260329-210806-ply-014-tt-heavy', 'depths': [3], 'repeat': 1},
+)
+
+BENCHMARK_SUITES: dict[str, tuple[dict[str, Any], ...]] = {
+    'stage1-baseline': STAGE1_BASELINE_SUITE,
+    'harvested-diagnostics': HARVESTED_DIAGNOSTIC_SUITE,
+    'harvested-history-diagnostics': HARVESTED_HISTORY_DIAGNOSTIC_SUITE,
+    'clean-search-comparison': CLEAN_SEARCH_COMPARISON_SUITE,
+}
+
 
 @dataclass(frozen=True, slots=True)
 class BenchmarkCase:
@@ -80,7 +115,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Run pyengine2 search benchmarks.')
     parser.add_argument('--file', type=Path, default=DEFAULT_BENCHMARK_FILE, help='Benchmark YAML file')
     parser.add_argument('--output', type=Path, help='Optional YAML report output path')
-    parser.add_argument('--suite', choices=('stage1-baseline',), help='Run a predefined benchmark suite')
+    parser.add_argument('--suite', choices=tuple(BENCHMARK_SUITES), help='Run a predefined benchmark suite')
     parser.add_argument(
         '--mode',
         choices=('search', 'moves', 'tactical-moves', 'eval'),
@@ -91,6 +126,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--repeat', type=int, default=3, help='Runs per benchmark/depth')
     parser.add_argument('--filter', dest='name_filter', default='', help='Only run benchmark names containing this text')
     parser.add_argument('--top', type=int, default=3, help='How many top moves to display')
+    parser.add_argument('--diagnostics', action='store_true', help='Enable extra diagnostic search counters in benchmark reports')
     return parser.parse_args()
 
 
@@ -98,7 +134,7 @@ def median_ms(values: list[float]) -> float:
     return statistics.median(values) * 1000.0
 
 
-def run_search_case(case: BenchmarkCase, depth: int, repeat: int) -> dict[str, Any]:
+def run_search_case(case: BenchmarkCase, depth: int, repeat: int, diagnostics: bool) -> dict[str, Any]:
     durations: list[float] = []
     evaluations: list[int] = []
     result: dict[str, Any] | None = None
@@ -106,7 +142,7 @@ def run_search_case(case: BenchmarkCase, depth: int, repeat: int) -> dict[str, A
     for _ in range(repeat):
         position = case.create_position()
         started_at = time.perf_counter()
-        result = search(position, depth)
+        result = search(position, depth, diagnostics=diagnostics)
         durations.append(time.perf_counter() - started_at)
         evaluations.append(int(result['evaluations']))
 
@@ -282,8 +318,10 @@ def print_eval_summary(summary: dict[str, Any]) -> None:
 
 
 def run_suite(args: argparse.Namespace, cases: list[BenchmarkCase]) -> int:
-    if args.suite != 'stage1-baseline':
+    if args.suite not in BENCHMARK_SUITES:
         raise ValueError(f'Unsupported suite: {args.suite}')
+
+    suite_definition = BENCHMARK_SUITES[args.suite]
 
     print(f'Benchmark file: {args.file}')
     print(f'Suite: {args.suite} | pyengine2 version: {PYENGINE2_VERSION}')
@@ -291,7 +329,7 @@ def run_suite(args: argparse.Namespace, cases: list[BenchmarkCase]) -> int:
 
     suite_entries: list[dict[str, Any]] = []
 
-    for entry in STAGE1_BASELINE_SUITE:
+    for entry in suite_definition:
         mode = entry['mode']
         name_filter = str(entry['filter'])
         selected_cases = [case for case in cases if name_filter in case.name.lower()]
@@ -331,7 +369,7 @@ def run_suite(args: argparse.Namespace, cases: list[BenchmarkCase]) -> int:
             if mode == 'search':
                 summaries: list[dict[str, Any]] = []
                 for depth in entry['depths']:
-                    summary = run_search_case(case, depth, repeat)
+                    summary = run_search_case(case, depth, repeat, args.diagnostics)
                     print_search_summary(summary, args.top)
                     summaries.append(summary_report_data(summary, args.top))
                 case_entry['summaries'] = summaries
@@ -361,6 +399,7 @@ def run_suite(args: argparse.Namespace, cases: list[BenchmarkCase]) -> int:
                 'benchmarkFile': str(args.file),
                 'generatedAt': datetime.now(timezone.utc).isoformat(),
                 'topCount': args.top,
+                'diagnostics': bool(args.diagnostics),
                 'entries': suite_entries,
             },
         )
@@ -408,7 +447,7 @@ def main() -> int:
         if args.mode == 'search':
             summaries: list[dict[str, Any]] = []
             for depth in args.depths:
-                summary = run_search_case(case, depth, args.repeat)
+                summary = run_search_case(case, depth, args.repeat, args.diagnostics)
                 print_search_summary(summary, args.top)
                 summaries.append(summary_report_data(summary, args.top))
             case_entry['summaries'] = summaries
@@ -435,6 +474,7 @@ def main() -> int:
             'mode': args.mode,
             'repeat': args.repeat,
             'topCount': args.top,
+            'diagnostics': bool(args.diagnostics),
             'cases': report_cases,
         }
         if args.mode == 'search':

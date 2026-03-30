@@ -25,7 +25,7 @@ function log(...args: unknown[]) {
 export type EngineKind = 'rust-worker' | 'python-api' | 'cyengine-api'
 
 const ENGINE_MAX_DEPTH: Record<EngineKind, number | null> = {
-  'rust-worker': 4,
+  'rust-worker': null,
   'python-api': null,
   'cyengine-api': null,
 }
@@ -49,8 +49,7 @@ function timeoutMsFor(kind: EngineKind, options: EvaluateOptions) {
     return 120000
   }
 
-  const depth = Math.max(1, options.depth)
-  return Math.max(120000, depth * 120000)
+  return null
 }
 
 export function useEngine() {

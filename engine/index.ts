@@ -4,7 +4,7 @@ export interface EvaluateOptions {
 }
 
 export interface WorkerCommandOptions {
-  timeoutMs?: number
+  timeoutMs?: number | null
 }
 
 export interface SearchMetrics {
@@ -44,7 +44,7 @@ export function execute<T extends Record<string, any> = {}>(
   worker: Worker,
   command: string,
   options: Record<string, any> = {},
-  timeoutMs = 120000,
+  timeoutMs: number | null = 120000,
 ) {
   const id = crypto.randomUUID()
 
@@ -53,9 +53,11 @@ export function execute<T extends Record<string, any> = {}>(
       messageListener: (evt: MessageEvent) => void,
       errorListener: (evt: ErrorEvent) => void,
       messageErrorListener: (evt: MessageEvent) => void,
-      timeoutId: ReturnType<typeof setTimeout>,
+      timeoutId: ReturnType<typeof setTimeout> | null,
     ) => {
-      clearTimeout(timeoutId)
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId)
+      }
       worker.removeEventListener('message', messageListener)
       worker.removeEventListener('error', errorListener)
       worker.removeEventListener('messageerror', messageErrorListener)
@@ -95,10 +97,12 @@ export function execute<T extends Record<string, any> = {}>(
       reject(new Error(`Engine worker message error while running ${command}`))
     }
 
-    const timeoutId = setTimeout(() => {
-      cleanup(messageListener, errorListener, messageErrorListener, timeoutId)
-      reject(new Error(`Engine command timed out after ${timeoutMs}ms: ${command}`))
-    }, timeoutMs)
+    const timeoutId = timeoutMs === null
+      ? null
+      : setTimeout(() => {
+        cleanup(messageListener, errorListener, messageErrorListener, timeoutId)
+        reject(new Error(`Engine command timed out after ${timeoutMs}ms: ${command}`))
+      }, timeoutMs)
 
     worker.addEventListener('message', messageListener)
     worker.addEventListener('error', errorListener)

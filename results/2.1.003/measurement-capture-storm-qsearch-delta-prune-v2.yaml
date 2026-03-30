@@ -1,0 +1,103 @@
+version: 1
+kind: pyengine2-benchmark-run
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-26T13:35:56.836138+00:00'
+mode: search
+repeat: 3
+topCount: 3
+cases:
+- name: capture-storm-qsearch
+  category: tactics
+  notes: Capture-dense position intended to stress tactical generation and qsearch.
+  summaries:
+  - name: capture-storm-qsearch
+    category: tactics
+    mode: search
+    medianMs: 353.1545
+    units: 8261
+    unitsLabel: evals
+    unitsPerMs: 23.392028
+    notes: Capture-dense position intended to stress tactical generation and qsearch.
+    depth: 4
+    topMoves:
+    - san: f5f7
+      score: -79.68
+    - san: f5h3
+      score: -69.6
+    - san: f5c8
+      score: -19.200000000000003
+    metrics:
+      wallMs: 351.0706997476518
+      evalsPerMs: 23.530872858196293
+      rootMoves: 36
+      negamaxNodes: 15371
+      quiescenceNodes: 8592
+      movegenCalls: 12437
+      tacticalMovegenCalls: 2373
+      legalContextCalls: 12437
+      ttHits: 6331
+      ttCutoffs: 5652
+      betaCutoffs: 2414
+      negamaxTtHits: 5692
+      quiescenceTtHits: 639
+      negamaxTtCutoffs: 5308
+      quiescenceTtCutoffs: 344
+      negamaxBetaCutoffs: 1857
+      quiescenceBetaCutoffs: 557
+      qsearchStandPatCutoffs: 5875
+      qsearchDeltaPruneChecks: 194
+      qsearchDeltaPruneSkips: 133
+      qsearchNodesWithMoves: 1068
+      qsearchGeneratedMoves: 1463
+      pvsResearches: 200
+      negamaxFrontierFutilityChecks: 9808
+      negamaxFrontierFutilitySkips: 1642
+      ttEntries: 9217
+  - name: capture-storm-qsearch
+    category: tactics
+    mode: search
+    medianMs: 1149.3522
+    units: 19437
+    unitsLabel: evals
+    unitsPerMs: 16.911265
+    notes: Capture-dense position intended to stress tactical generation and qsearch.
+    depth: 5
+    topMoves:
+    - san: f5f7
+      score: -79.68
+    - san: f5h3
+      score: -69.6
+    - san: f5g4
+      score: -19.599999999999994
+    metrics:
+      wallMs: 1144.3749000318348
+      evalsPerMs: 16.98481852359685
+      rootMoves: 36
+      negamaxNodes: 53280
+      quiescenceNodes: 19485
+      movegenCalls: 39678
+      tacticalMovegenCalls: 9559
+      legalContextCalls: 39678
+      ttHits: 25801
+      ttCutoffs: 23283
+      betaCutoffs: 10478
+      negamaxTtHits: 24674
+      quiescenceTtHits: 1127
+      negamaxTtCutoffs: 23162
+      quiescenceTtCutoffs: 121
+      negamaxBetaCutoffs: 9696
+      quiescenceBetaCutoffs: 782
+      qsearchStandPatCutoffs: 9805
+      qsearchDeltaPruneChecks: 217
+      qsearchDeltaPruneSkips: 46
+      qsearchNodesWithMoves: 1036
+      qsearchGeneratedMoves: 1051
+      pvsResearches: 283
+      negamaxFrontierFutilityChecks: 27750
+      negamaxFrontierFutilitySkips: 2782
+      ttEntries: 21469
+depths:
+- 4
+- 5
+filter: capture-storm-qsearch

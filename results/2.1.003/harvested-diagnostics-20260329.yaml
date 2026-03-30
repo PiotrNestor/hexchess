@@ -1,0 +1,307 @@
+version: 1
+kind: pyengine2-benchmark-suite
+suite: harvested-diagnostics
+pyengine2Version: 2.1.003
+benchmarkFile: G:\work\Training\hexchess\pyengine2\benchmark\benchmarks.yaml
+generatedAt: '2026-03-29T19:14:45.954104+00:00'
+topCount: 3
+diagnostics: true
+entries:
+- mode: search
+  filter: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+  repeat: 1
+  cases:
+  - name: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+    category: harvested
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 14 (b7 k7k5).
+      tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+      wallMs=486507.1, negamaxNodes=849351, quiescenceNodes=16278157, ttHits=1192920,
+      movegenCalls=9117488.'
+    summaries:
+    - name: harvested-hexchess-game-20260329-210806-ply-014-tt-heavy
+      category: harvested
+      mode: search
+      medianMs: 5989.9364
+      units: 216221
+      unitsLabel: evals
+      unitsPerMs: 36.097378
+      notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 14 (b7
+        k7k5). tags: slow-search, node-heavy, qsearch-heavy, tt-heavy, movegen-heavy,
+        pruning-heavy. wallMs=486507.1, negamaxNodes=849351, quiescenceNodes=16278157,
+        ttHits=1192920, movegenCalls=9117488.'
+      depth: 3
+      topMoves:
+      - san: b7b5
+        score: -0.32000000000000006
+      - san: k7k5
+        score: -0.32000000000000006
+      - san: i4i3
+        score: -0.32000000000000006
+      metrics:
+        wallMs: 5980.9916999947745
+        evalsPerMs: 36.15136265783297
+        rootMoves: 50
+        negamaxNodes: 14550
+        quiescenceNodes: 224231
+        movegenCalls: 131857
+        tacticalMovegenCalls: 128564
+        legalContextCalls: 131857
+        ttHits: 10010
+        ttCutoffs: 9494
+        betaCutoffs: 65049
+        ttEntries: 212607
+        negamaxTtHits: 1652
+        quiescenceTtHits: 8358
+        negamaxTtCutoffs: 1484
+        quiescenceTtCutoffs: 8010
+        negamaxBetaCutoffs: 3114
+        quiescenceBetaCutoffs: 61935
+        qsearchStandPatCutoffs: 87657
+        qsearchDeltaPruneChecks: 68577
+        qsearchDeltaPruneSkips: 67969
+        qsearchNodesWithMoves: 122041
+        qsearchGeneratedMoves: 476058
+        pvsResearches: 166
+        negamaxFrontierFutilityChecks: 7071
+        negamaxFrontierFutilitySkips: 0
+        nullMoveAttempts: 0
+        nullMoveCutoffs: 0
+  depths:
+  - 3
+- mode: search
+  filter: harvested-hexchess-game-20260329-210806-ply-020-qsearch-heavy
+  repeat: 1
+  cases:
+  - name: harvested-hexchess-game-20260329-210806-ply-020-qsearch-heavy
+    category: harvested
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 20 (b10 f11k3).
+      tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=74173.1,
+      negamaxNodes=611349, quiescenceNodes=2680684, ttHits=283244, movegenCalls=1546842.'
+    summaries:
+    - name: harvested-hexchess-game-20260329-210806-ply-020-qsearch-heavy
+      category: harvested
+      mode: search
+      medianMs: 1613.3069
+      units: 55227
+      unitsLabel: evals
+      unitsPerMs: 34.232172
+      notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 20 (b10
+        f11k3). tags: slow-search, qsearch-heavy, movegen-heavy, pruning-heavy. wallMs=74173.1,
+        negamaxNodes=611349, quiescenceNodes=2680684, ttHits=283244, movegenCalls=1546842.'
+      depth: 3
+      topMoves:
+      - san: f11k3
+        score: -10.480000000000004
+      - san: i4k3
+        score: -0.8000000000000002
+      - san: c8d8
+        score: -0.8000000000000002
+      metrics:
+        wallMs: 1610.0366000027861
+        evalsPerMs: 34.30170469410722
+        rootMoves: 53
+        negamaxNodes: 13221
+        quiescenceNodes: 57909
+        movegenCalls: 32183
+        tacticalMovegenCalls: 27939
+        legalContextCalls: 32183
+        ttHits: 5261
+        ttCutoffs: 4082
+        betaCutoffs: 15800
+        ttEntries: 57134
+        negamaxTtHits: 1736
+        quiescenceTtHits: 3525
+        negamaxTtCutoffs: 1400
+        quiescenceTtCutoffs: 2682
+        negamaxBetaCutoffs: 3780
+        quiescenceBetaCutoffs: 12020
+        qsearchStandPatCutoffs: 27288
+        qsearchDeltaPruneChecks: 14879
+        qsearchDeltaPruneSkips: 14673
+        qsearchNodesWithMoves: 26750
+        qsearchGeneratedMoves: 108199
+        pvsResearches: 165
+        negamaxFrontierFutilityChecks: 7956
+        negamaxFrontierFutilitySkips: 3583
+        nullMoveAttempts: 0
+        nullMoveCutoffs: 0
+  depths:
+  - 3
+- mode: search
+  filter: harvested-hexchess-game-20260329-210806-ply-058-wide-root
+  repeat: 1
+  cases:
+  - name: harvested-hexchess-game-20260329-210806-ply-058-wide-root
+    category: harvested
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 58 (b29 i4i3).
+      tags: wide-root. wallMs=34068.7, negamaxNodes=519873, quiescenceNodes=888734,
+      ttHits=160009, movegenCalls=604623.'
+    summaries:
+    - name: harvested-hexchess-game-20260329-210806-ply-058-wide-root
+      category: harvested
+      mode: search
+      medianMs: 1279.2621
+      units: 43138
+      unitsLabel: evals
+      unitsPerMs: 33.721002
+      notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 58 (b29
+        i4i3). tags: wide-root. wallMs=34068.7, negamaxNodes=519873, quiescenceNodes=888734,
+        ttHits=160009, movegenCalls=604623.'
+      depth: 3
+      topMoves:
+      - san: i4i3
+        score: -12.160000000000004
+      - san: e7e5
+        score: -11.920000000000002
+      - san: e7e6
+        score: -11.68
+      metrics:
+        wallMs: 1276.587300002575
+        evalsPerMs: 33.79165686507534
+        rootMoves: 61
+        negamaxNodes: 19370
+        quiescenceNodes: 44728
+        movegenCalls: 30795
+        tacticalMovegenCalls: 25201
+        legalContextCalls: 30795
+        ttHits: 6587
+        ttCutoffs: 5899
+        betaCutoffs: 14485
+        ttEntries: 44256
+        negamaxTtHits: 4598
+        quiescenceTtHits: 1989
+        negamaxTtCutoffs: 4307
+        quiescenceTtCutoffs: 1592
+        negamaxBetaCutoffs: 3906
+        quiescenceBetaCutoffs: 10579
+        qsearchStandPatCutoffs: 17935
+        qsearchDeltaPruneChecks: 9647
+        qsearchDeltaPruneSkips: 9347
+        qsearchNodesWithMoves: 22598
+        qsearchGeneratedMoves: 60415
+        pvsResearches: 258
+        negamaxFrontierFutilityChecks: 10930
+        negamaxFrontierFutilitySkips: 1299
+        nullMoveAttempts: 0
+        nullMoveCutoffs: 0
+  depths:
+  - 3
+- mode: search
+  filter: harvested-hexchess-game-20260329-210806-ply-042-node-heavy
+  repeat: 1
+  cases:
+  - name: harvested-hexchess-game-20260329-210806-ply-042-node-heavy
+    category: harvested
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 42 (b21 e9c7).
+      tags: node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy. wallMs=68709.9,
+      negamaxNodes=699350, quiescenceNodes=2098881, ttHits=404581, movegenCalls=1147819.'
+    summaries:
+    - name: harvested-hexchess-game-20260329-210806-ply-042-node-heavy
+      category: harvested
+      mode: search
+      medianMs: 1940.4387
+      units: 70485
+      unitsLabel: evals
+      unitsPerMs: 36.32426
+      notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 42 (b21
+        e9c7). tags: node-heavy, qsearch-heavy, tt-heavy, movegen-heavy, pruning-heavy.
+        wallMs=68709.9, negamaxNodes=699350, quiescenceNodes=2098881, ttHits=404581,
+        movegenCalls=1147819.'
+      depth: 3
+      topMoves:
+      - san: e9c7
+        score: -11.36
+      - san: e10f10
+        score: -11.04
+      - san: i4i3
+        score: -1.2800000000000011
+      metrics:
+        wallMs: 1935.8198999834713
+        evalsPerMs: 36.410928516956474
+        rootMoves: 55
+        negamaxNodes: 19749
+        quiescenceNodes: 74102
+        movegenCalls: 40282
+        tacticalMovegenCalls: 35524
+        legalContextCalls: 40282
+        ttHits: 10238
+        ttCutoffs: 8369
+        betaCutoffs: 19704
+        ttEntries: 71138
+        negamaxTtHits: 5544
+        quiescenceTtHits: 4694
+        negamaxTtCutoffs: 4752
+        quiescenceTtCutoffs: 3617
+        negamaxBetaCutoffs: 4125
+        quiescenceBetaCutoffs: 15579
+        qsearchStandPatCutoffs: 34961
+        qsearchDeltaPruneChecks: 20926
+        qsearchDeltaPruneSkips: 20068
+        qsearchNodesWithMoves: 32895
+        qsearchGeneratedMoves: 114523
+        pvsResearches: 247
+        negamaxFrontierFutilityChecks: 11726
+        negamaxFrontierFutilitySkips: 1324
+        nullMoveAttempts: 0
+        nullMoveCutoffs: 0
+  depths:
+  - 3
+- mode: search
+  filter: harvested-hexchess-game-20260329-210806-ply-028-low-throughput
+  repeat: 1
+  cases:
+  - name: harvested-hexchess-game-20260329-210806-ply-028-low-throughput
+    category: harvested
+    notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 28 (b14 h4i1).
+      tags: low-throughput. wallMs=44083.7, negamaxNodes=651597, quiescenceNodes=891456,
+      ttHits=198530, movegenCalls=608259.'
+    summaries:
+    - name: harvested-hexchess-game-20260329-210806-ply-028-low-throughput
+      category: harvested
+      mode: search
+      medianMs: 1248.0406
+      units: 46614
+      unitsLabel: evals
+      unitsPerMs: 37.349746
+      notes: 'Harvested from hexchess-game-20260329-210806.yaml before ply 28 (b14
+        h4i1). tags: low-throughput. wallMs=44083.7, negamaxNodes=651597, quiescenceNodes=891456,
+        ttHits=198530, movegenCalls=608259.'
+      depth: 3
+      topMoves:
+      - san: h4i1
+        score: -10.96
+      - san: b7b5
+        score: -10.24
+      - san: e7e5
+        score: -10.24
+      metrics:
+        wallMs: 1244.9820000038017
+        evalsPerMs: 37.44150517827379
+        rootMoves: 58
+        negamaxNodes: 14879
+        quiescenceNodes: 48740
+        movegenCalls: 21631
+        tacticalMovegenCalls: 17392
+        legalContextCalls: 21631
+        ttHits: 4853
+        ttCutoffs: 3893
+        betaCutoffs: 10325
+        ttEntries: 49232
+        negamaxTtHits: 2121
+        quiescenceTtHits: 2732
+        negamaxTtCutoffs: 1767
+        quiescenceTtCutoffs: 2126
+        negamaxBetaCutoffs: 3793
+        quiescenceBetaCutoffs: 6532
+        qsearchStandPatCutoffs: 29222
+        qsearchDeltaPruneChecks: 11802
+        qsearchDeltaPruneSkips: 11181
+        qsearchNodesWithMoves: 16634
+        qsearchGeneratedMoves: 75023
+        pvsResearches: 147
+        negamaxFrontierFutilityChecks: 9209
+        negamaxFrontierFutilitySkips: 3383
+        nullMoveAttempts: 0
+        nullMoveCutoffs: 0
+  depths:
+  - 3

@@ -60,6 +60,8 @@ Useful endpoints:
 
 The API wrapper delegates engine work to `execute_command(...)` in [pyengine2/native_engine.py](pyengine2/native_engine.py).
 
+For `hexchess/evaluate`, callers may optionally provide `options.positionHistory` as a list of earlier FEN strings from the same game. `pyengine2` uses that prior-position history to score threefold-repetition lines as draws instead of treating them as ordinary fresh positions.
+
 ### Run the benchmark suite
 
 Search benchmarks:
@@ -98,6 +100,24 @@ Stage 1 baseline suite with YAML report output:
 python pyengine2/benchmark.py --suite stage1-baseline --output results/2.1.003/stage1-baseline.yaml
 ```
 
+Harvested diagnostic suite with engine counters enabled:
+
+```powershell
+python pyengine2/benchmark.py --suite harvested-diagnostics --diagnostics --output results/2.1.003/harvested-diagnostics.yaml
+```
+
+Historical harvested diagnostic suite for the March 24 and March 26 positions:
+
+```powershell
+python pyengine2/benchmark.py --suite harvested-history-diagnostics --diagnostics --output results/2.1.003/harvested-history-diagnostics.yaml
+```
+
+Clean search-comparison suite for keep-or-revert decisions on search changes:
+
+```powershell
+python pyengine2/benchmark.py --suite clean-search-comparison --output results/2.1.003/clean-search-comparison.yaml
+```
+
 Saved game analysis:
 
 ```powershell
@@ -125,13 +145,19 @@ This suite reruns the current Stage 1 comparison set in one command:
 - qsearch-heavy search at depths 4 and 5
 - opening baseline at depths 4 and 5
 
+The harvested diagnostic suite is separate on purpose. It samples the March 29 harvested stress positions for TT-heavy, qsearch-heavy, wide-root, node-heavy, and low-throughput behavior at depth 3 with single-run diagnostics, so those cases stay easy to rerun without changing the official clean baseline.
+
+The historical harvested diagnostic suite extends that same depth-3 single-run diagnostic pass across the March 24 and March 26 harvested positions, so the full harvested corpus can be rerun with two commands instead of one large ad hoc filter list.
+
+The clean search-comparison suite is the search-only keep-or-revert set. It keeps the Stage 1 baseline intact, but adds the March 29 TT-heavy position alongside the existing clean comparison cases so search regressions are less likely to hide behind opening-only or qsearch-only behavior.
+
 When `--output` is provided, the benchmark runner writes a YAML report for either a suite run or a regular filtered benchmark run. This is intended for versioned baseline snapshots under `results/<pyengine2-version>/`.
 
 The benchmark runner currently supports these benchmark features:
 
 - filtered runs by benchmark name with `--filter`
 - four measurement modes: `search`, `moves`, `tactical-moves`, and `eval`
-- predefined Stage 1 suite execution with `--suite stage1-baseline`
+- predefined suite execution with `--suite stage1-baseline`, `--suite clean-search-comparison`, `--suite harvested-diagnostics`, or `--suite harvested-history-diagnostics`
 - YAML report output for suite and non-suite runs with `--output`
 - search summaries that include top moves and engine metrics in the saved YAML output
 - a benchmark corpus that can be extended manually or by harvested-game extraction
