@@ -109,7 +109,11 @@ const navForwardBtn = document.getElementById('nav-forward')
 const navEndBtn = document.getElementById('nav-end')
 
 const START_FEN = Hexchess.init().toString()
-const DEFAULT_LOCAL_ENGINE_URL = 'http://127.0.0.1:8000'
+const ENGINE_TYPES = ['pyengine2', 'pyrustengine']
+const DEFAULT_LOCAL_ENGINE_URLS = {
+  pyengine2: 'http://127.0.0.1:8000',
+  pyrustengine: 'http://127.0.0.1:8081',
+}
 const ENGINE_URL_STORAGE_KEY = 'hexchess-board.engine-url'
 
 let startFen = START_FEN
@@ -158,7 +162,24 @@ function sanitizeEngineUrl(raw) {
   return raw.trim().replace(/\/$/, '')
 }
 
-function getRuntimeEngineUrl() {
+function isEngineType(value) {
+  return ENGINE_TYPES.includes(value)
+}
+
+function getSideValue(turn) {
+  return turn === 'w' ? whiteSideEl.value : blackSideEl.value
+}
+
+function getTurnEngineType(turn) {
+  const value = getSideValue(turn)
+  return isEngineType(value) ? value : null
+}
+
+function isEngineMoveSource(value) {
+  return isEngineType(value)
+}
+
+function getRuntimeGlobalEngineUrl() {
   const configured = window?.HEXCHESS_CONFIG?.engineUrl
   if (typeof configured !== 'string') {
     return null
@@ -166,6 +187,21 @@ function getRuntimeEngineUrl() {
 
   const sanitized = sanitizeEngineUrl(configured)
   return sanitized.length > 0 ? sanitized : null
+}
+
+function getRuntimeEngineUrl(engineType) {
+  const engineUrls = window?.HEXCHESS_CONFIG?.engineUrls
+  if (engineUrls && typeof engineUrls === 'object') {
+    const configured = engineUrls[engineType]
+    if (typeof configured === 'string') {
+      const sanitized = sanitizeEngineUrl(configured)
+      if (sanitized.length > 0) {
+        return sanitized
+      }
+    }
+  }
+
+  return getRuntimeGlobalEngineUrl()
 }
 
 function getStoredEngineUrl() {
@@ -187,7 +223,7 @@ function isGitHubPagesHost() {
 }
 
 function resolveInitialEngineUrl() {
-  const runtime = getRuntimeEngineUrl()
+  const runtime = getRuntimeGlobalEngineUrl()
   if (runtime) {
     return runtime
   }
@@ -197,7 +233,7 @@ function resolveInitialEngineUrl() {
     return stored
   }
 
-  return isGitHubPagesHost() ? '' : DEFAULT_LOCAL_ENGINE_URL
+  return ''
 }
 
 function persistEngineUrl(value) {
@@ -224,11 +260,35 @@ function getEngineDepth() {
 }
 
 function sideIsEngine(turn) {
-  if (turn === 'w') {
-    return whiteSideEl.value === 'pyengine2'
+  return getTurnEngineType(turn) !== null
+}
+
+function getPreferredEngineType() {
+  return getTurnEngineType(currentGame.turn) || getTurnEngineType('w') || getTurnEngineType('b') || ENGINE_TYPES[0]
+}
+
+function engineSourceTag(source) {
+  return isEngineMoveSource(source)
+    ? `<span class="engine-tag">[${source}]</span>`
+    : ''
+}
+
+function resolveEngineUrl(engineType) {
+  const explicit = sanitizeEngineUrl(engineUrlEl.value)
+  if (explicit) {
+    return explicit
   }
 
-  return blackSideEl.value === 'pyengine2'
+  const runtime = getRuntimeEngineUrl(engineType)
+  if (runtime) {
+    return runtime
+  }
+
+  if (isGitHubPagesHost()) {
+    return ''
+  }
+
+  return DEFAULT_LOCAL_ENGINE_URLS[engineType] || ''
 }
 
 function boardMoveToSan(boardMove) {
@@ -308,7 +368,7 @@ function renderHistory() {
         const details = white.evaluations != null && white.duration != null
           ? ` <span class="muted">(${white.evaluations.toLocaleString()} evals, ${Math.round(white.duration)}ms)</span>`
           : ''
-        const source = white.source === 'pyengine2' ? '<span class="engine-tag">[E]</span>' : ''
+        const source = engineSourceTag(white.source)
         html.push(`<td class="${activeClass}"><button data-jump="${row.whiteIndex}">${white.san}</button>${source}${details}</td>`)
       } else {
         html.push('<td></td>')
@@ -319,7 +379,7 @@ function renderHistory() {
         const details = black.evaluations != null && black.duration != null
           ? ` <span class="muted">(${black.evaluations.toLocaleString()} evals, ${Math.round(black.duration)}ms)</span>`
           : ''
-        const source = black.source === 'pyengine2' ? '<span class="engine-tag">[E]</span>' : ''
+        const source = engineSourceTag(black.source)
         html.push(`<td class="${activeClass}"><button data-jump="${row.blackIndex}">${black.san}</button>${source}${details}</td>`)
       } else {
         html.push('<td></td>')
@@ -460,10 +520,10 @@ function setBusy(nextBusy) {
   toggleMatchBtn.disabled = false
 }
 
-async function executeEngine(command, options = {}) {
-  const engineUrl = sanitizeEngineUrl(engineUrlEl.value)
+async function executeEngine(engineType, command, options = {}) {
+  const engineUrl = resolveEngineUrl(engineType)
   if (!engineUrl) {
-    throw new Error('Engine URL is required.')
+    throw new Error(`Engine URL is required for ${engineType}.`)
   }
 
   const response = await fetch(`${engineUrl}/execute`, {
@@ -483,8 +543,9 @@ async function executeEngine(command, options = {}) {
 async function pingEngine() {
   setBusy(true)
   try {
-    const data = await executeEngine('hexchess/ping', {})
-    setStatus(`Engine is reachable. Timestamp: ${data.response?.now ?? 'n/a'}`)
+    const engineType = getPreferredEngineType()
+    const data = await executeEngine(engineType, 'hexchess/ping', {})
+    setStatus(`${engineType} is reachable. Timestamp: ${data.response?.now ?? 'n/a'}`)
   } catch (error) {
     setStatus(String(error.message || error), true)
   } finally {
@@ -498,7 +559,8 @@ async function playEngineMove() {
   }
 
   const turn = currentGame.turn
-  if (!sideIsEngine(turn)) {
+  const engineType = getTurnEngineType(turn)
+  if (!engineType) {
     setStatus(`Turn ${turn === 'w' ? 'white' : 'black'} is set to Human.`)
     return false
   }
@@ -507,7 +569,7 @@ async function playEngineMove() {
 
   try {
     const startedAt = performance.now()
-    const data = await executeEngine('hexchess/evaluate', {
+    const data = await executeEngine(engineType, 'hexchess/evaluate', {
       depth: getEngineDepth(),
       position: currentGame.toString(),
       diagnostics: true,
@@ -530,14 +592,14 @@ async function playEngineMove() {
     }
 
     appendMove(best.san, {
-      source: 'pyengine2',
+      source: engineType,
       evaluations: data.response?.evaluations ?? null,
       duration,
       metrics: data.response?.metrics ?? null,
     })
 
     evaluation = data.response
-    setStatus(`Engine played ${best.san} (${Math.round(duration)}ms).`)
+    setStatus(`${engineType} played ${best.san} (${Math.round(duration)}ms).`)
     return true
   } catch (error) {
     setStatus(String(error.message || error), true)
@@ -654,7 +716,7 @@ async function loadGameFile(file) {
 
   const loadedMoves = parsed.moves.map((move) => ({
     san: String(move.san),
-    source: move.source === 'pyengine2' ? 'pyengine2' : 'manual',
+    source: isEngineMoveSource(move.source) ? String(move.source) : 'manual',
     beforeFen: typeof move.beforeFen === 'string' ? move.beforeFen : null,
     evaluations: Number.isFinite(move.evaluations) ? move.evaluations : null,
     duration: Number.isFinite(move.duration) ? move.duration : null,
@@ -676,11 +738,11 @@ async function loadGameFile(file) {
     engineUrlEl.value = sanitizeEngineUrl(parsed.engineUrl)
   }
 
-  if (parsed.whiteSide === 'human' || parsed.whiteSide === 'pyengine2') {
+  if (parsed.whiteSide === 'human' || isEngineType(parsed.whiteSide)) {
     whiteSideEl.value = parsed.whiteSide
   }
 
-  if (parsed.blackSide === 'human' || parsed.blackSide === 'pyengine2') {
+  if (parsed.blackSide === 'human' || isEngineType(parsed.blackSide)) {
     blackSideEl.value = parsed.blackSide
   }
 

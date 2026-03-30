@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hexagonal chess (Python powered)</title>
+  <title>Hexagonal chess (engine powered)</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <main class="app">
     <header class="panel">
-      <h1>Hexagonal chess (Python powered)</h1>
+      <h1>Hexagonal chess (engine powered)</h1>
       <p class="muted">Client based on <a href="https://hexagonchess.github.io/hexchess-board" target="_blank" rel="noopener noreferrer">hexchess-board</a>.</p>
-      <p class="muted">Engine: pyengine2 - Pure Python implementation evolved from the Rust engine by <a href="https://github.com/scottbedard/hexchess" target="_blank" rel="noopener noreferrer">hexchess</a></p>
+      <p class="muted">Engines: pyengine2 and pyrustengine from <a href="https://github.com/scottbedard/hexchess" target="_blank" rel="noopener noreferrer">hexchess</a></p>
     </header>
 
     <section class="panel controls-grid">
@@ -23,6 +23,7 @@
         <select id="white-side">
           <option value="human">Human</option>
           <option value="pyengine2">pyengine2</option>
+          <option value="pyrustengine">pyrustengine</option>
         </select>
       </label>
 
@@ -31,6 +32,7 @@
         <select id="black-side">
           <option value="human">Human</option>
           <option value="pyengine2">pyengine2</option>
+          <option value="pyrustengine">pyrustengine</option>
         </select>
       </label>
 

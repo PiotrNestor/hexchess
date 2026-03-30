@@ -1,0 +1,2492 @@
+version: 1
+startFen: b/qbk/n1b1n/r5r/ppppppppp/11/5P5/4P1P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 1
+historyIndex: 118
+engineUrl: ""
+whiteSide: pyengine2
+blackSide: pyrustengine
+depth: 4
+moves:
+  - san: d3d5
+    source: pyengine2
+    beforeFen: b/qbk/n1b1n/r5r/ppppppppp/11/5P5/4P1P4/3P1B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 1
+    evaluations: 134821
+    duration: 4233.699999988079
+    metrics:
+      wallMs: 4220.591799996328
+      evalsPerMs: 31.94362458840898
+      rootMoves: 51
+      negamaxNodes: 155774
+      quiescenceNodes: 136519
+      movegenCalls: 40073
+      tacticalMovegenCalls: 28246
+      legalContextCalls: 40073
+      ttHits: 35137
+      ttCutoffs: 33924
+      betaCutoffs: 18648
+      ttEntries: 136337
+      negamaxTtHits: 32861
+      quiescenceTtHits: 2276
+      negamaxTtCutoffs: 32226
+      quiescenceTtCutoffs: 1698
+      negamaxBetaCutoffs: 8274
+      quiescenceBetaCutoffs: 10374
+      qsearchStandPatCutoffs: 106575
+      qsearchDeltaPruneChecks: 1206
+      qsearchDeltaPruneSkips: 1177
+      qsearchNodesWithMoves: 19316
+      qsearchGeneratedMoves: 37747
+      pvsResearches: 738
+      negamaxFrontierFutilityChecks: 139389
+      negamaxFrontierFutilitySkips: 6899
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e7e6
+    source: pyrustengine
+    beforeFen: b/qbk/n1b1n/r5r/ppppppppp/11/3P1P5/4P1P4/5B1P3/2P2B2P2/1PRNQBKNRP1 b d4 0 1
+    evaluations: 709376
+    duration: 10254.5
+    metrics: null
+  - san: e4e5
+    source: pyengine2
+    beforeFen: b/qbk/n1b1n/r5r/ppp1ppppp/4p6/3P1P5/4P1P4/5B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 2
+    evaluations: 159802
+    duration: 4231.699999988079
+    metrics:
+      wallMs: 4218.610899988562
+      evalsPerMs: 37.8802415744086
+      rootMoves: 54
+      negamaxNodes: 195124
+      quiescenceNodes: 160938
+      movegenCalls: 30526
+      tacticalMovegenCalls: 20688
+      legalContextCalls: 30526
+      ttHits: 49033
+      ttCutoffs: 48193
+      betaCutoffs: 14548
+      ttEntries: 164565
+      negamaxTtHits: 47466
+      quiescenceTtHits: 1567
+      negamaxTtCutoffs: 47057
+      quiescenceTtCutoffs: 1136
+      negamaxBetaCutoffs: 5956
+      quiescenceBetaCutoffs: 8592
+      qsearchStandPatCutoffs: 139114
+      qsearchDeltaPruneChecks: 2230
+      qsearchDeltaPruneSkips: 2158
+      qsearchNodesWithMoves: 16683
+      qsearchGeneratedMoves: 42568
+      pvsResearches: 209
+      negamaxFrontierFutilityChecks: 185068
+      negamaxFrontierFutilitySkips: 13923
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e6d5
+    source: pyrustengine
+    beforeFen: b/qbk/n1b1n/r5r/ppp1ppppp/4p6/3PPP5/6P4/5B1P3/2P2B2P2/1PRNQBKNRP1 b - 0 2
+    evaluations: 1368602
+    duration: 20364.5
+    metrics: null
+  - san: e5d5
+    source: pyengine2
+    beforeFen: b/qbk/n1b1n/r5r/ppp1ppppp/11/3pPP5/6P4/5B1P3/2P2B2P2/1PRNQBKNRP1 w - 0 3
+    evaluations: 254170
+    duration: 7896.900000035763
+    metrics:
+      wallMs: 7870.555400033481
+      evalsPerMs: 32.29378196091711
+      rootMoves: 62
+      negamaxNodes: 222652
+      quiescenceNodes: 258649
+      movegenCalls: 87018
+      tacticalMovegenCalls: 70741
+      legalContextCalls: 87018
+      ttHits: 56674
+      ttCutoffs: 54790
+      betaCutoffs: 40888
+      ttEntries: 259079
+      negamaxTtHits: 51050
+      quiescenceTtHits: 5624
+      negamaxTtCutoffs: 50311
+      quiescenceTtCutoffs: 4479
+      negamaxBetaCutoffs: 9557
+      quiescenceBetaCutoffs: 31331
+      qsearchStandPatCutoffs: 183429
+      qsearchDeltaPruneChecks: 14584
+      qsearchDeltaPruneSkips: 13551
+      qsearchNodesWithMoves: 63580
+      qsearchGeneratedMoves: 176944
+      pvsResearches: 421
+      negamaxFrontierFutilityChecks: 212766
+      negamaxFrontierFutilitySkips: 21990
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e10e1
+    source: pyrustengine
+    beforeFen: b/qbk/n1b1n/r5r/ppp1ppppp/11/3P1P5/6P4/5B1P3/2P2B2P2/1PRNQBKNRP1 b - 0 3
+    evaluations: 1478619
+    duration: 21917.600000023842
+    metrics: null
+  - san: g1e1
+    source: pyengine2
+    beforeFen: b/1bk/n1b1n/r5r/ppp1ppppp/11/3P1P5/6P4/5B1P3/2P2B2P2/1PRNqBKNRP1 w - 0 4
+    evaluations: 11655
+    duration: 412.9000000357628
+    metrics:
+      wallMs: 405.4821999743581
+      evalsPerMs: 28.743555205967215
+      rootMoves: 5
+      negamaxNodes: 13629
+      quiescenceNodes: 11714
+      movegenCalls: 3685
+      tacticalMovegenCalls: 2197
+      legalContextCalls: 3685
+      ttHits: 2829
+      ttCutoffs: 2584
+      betaCutoffs: 1534
+      ttEntries: 11864
+      negamaxTtHits: 2649
+      quiescenceTtHits: 180
+      negamaxTtCutoffs: 2525
+      quiescenceTtCutoffs: 59
+      negamaxBetaCutoffs: 776
+      quiescenceBetaCutoffs: 758
+      qsearchStandPatCutoffs: 9458
+      qsearchDeltaPruneChecks: 102
+      qsearchDeltaPruneSkips: 100
+      qsearchNodesWithMoves: 1487
+      qsearchGeneratedMoves: 2615
+      pvsResearches: 43
+      negamaxFrontierFutilityChecks: 16075
+      negamaxFrontierFutilitySkips: 4726
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h7h5
+    source: pyrustengine
+    beforeFen: b/1bk/n1b1n/r5r/ppp1ppppp/11/3P1P5/6P4/5B1P3/2P2B2P2/1PRNKB1NRP1 b - 0 4
+    evaluations: 688739
+    duration: 9338.300000011921
+    metrics: null
+  - san: g4g5
+    source: pyengine2
+    beforeFen: b/1bk/n1b1n/r5r/ppp1pp1pp/11/3P1P1p3/6P4/5B1P3/2P2B2P2/1PRNKB1NRP1 w h6 0 5
+    evaluations: 182984
+    duration: 5397.600000023842
+    metrics:
+      wallMs: 5380.248699977528
+      evalsPerMs: 34.010323723653194
+      rootMoves: 55
+      negamaxNodes: 189071
+      quiescenceNodes: 185943
+      movegenCalls: 59549
+      tacticalMovegenCalls: 41213
+      legalContextCalls: 59549
+      ttHits: 42458
+      ttCutoffs: 36690
+      betaCutoffs: 26098
+      ttEntries: 183126
+      negamaxTtHits: 36456
+      quiescenceTtHits: 6002
+      negamaxTtCutoffs: 33731
+      quiescenceTtCutoffs: 2959
+      negamaxBetaCutoffs: 9555
+      quiescenceBetaCutoffs: 16543
+      qsearchStandPatCutoffs: 141771
+      qsearchDeltaPruneChecks: 1312
+      qsearchDeltaPruneSkips: 1265
+      qsearchNodesWithMoves: 31860
+      qsearchGeneratedMoves: 73555
+      pvsResearches: 937
+      negamaxFrontierFutilityChecks: 168276
+      negamaxFrontierFutilitySkips: 10082
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: c8e8
+    source: pyrustengine
+    beforeFen: b/1bk/n1b1n/r5r/ppp1pp1pp/11/3P1PPp3/11/5B1P3/2P2B2P2/1PRNKB1NRP1 b - 0 5
+    evaluations: 804132
+    duration: 10561.100000023842
+    metrics: null
+  - san: e1d2
+    source: pyengine2
+    beforeFen: b/1bk/n1b1n/2r3r/ppp1pp1pp/11/3P1PPp3/11/5B1P3/2P2B2P2/1PRNKB1NRP1 w - 1 6
+    evaluations: 37805
+    duration: 1080.5999999642372
+    metrics:
+      wallMs: 1072.5856000208296
+      evalsPerMs: 35.246604093198556
+      rootMoves: 9
+      negamaxNodes: 34283
+      quiescenceNodes: 38296
+      movegenCalls: 14205
+      tacticalMovegenCalls: 11047
+      legalContextCalls: 14205
+      ttHits: 9691
+      ttCutoffs: 8640
+      betaCutoffs: 6285
+      ttEntries: 37476
+      negamaxTtHits: 8605
+      quiescenceTtHits: 1086
+      negamaxTtCutoffs: 8148
+      quiescenceTtCutoffs: 492
+      negamaxBetaCutoffs: 1490
+      quiescenceBetaCutoffs: 4795
+      qsearchStandPatCutoffs: 26757
+      qsearchDeltaPruneChecks: 168
+      qsearchDeltaPruneSkips: 143
+      qsearchNodesWithMoves: 9456
+      qsearchGeneratedMoves: 22497
+      pvsResearches: 185
+      negamaxFrontierFutilityChecks: 29579
+      negamaxFrontierFutilitySkips: 499
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h5g5
+    source: pyrustengine
+    beforeFen: b/1bk/n1b1n/2r3r/ppp1pp1pp/11/3P1PPp3/11/5B1P3/2PK1B2P2/1PRN1B1NRP1 b - 2 6
+    evaluations: 709100
+    duration: 10113.199999988079
+    metrics: null
+  - san: f5g5
+    source: pyengine2
+    beforeFen: b/1bk/n1b1n/2r3r/ppp1pp1pp/11/3P1Pp4/11/5B1P3/2PK1B2P2/1PRN1B1NRP1 w - 0 7
+    evaluations: 165631
+    duration: 4793
+    metrics:
+      wallMs: 4777.928200026508
+      evalsPerMs: 34.66586207785229
+      rootMoves: 57
+      negamaxNodes: 192315
+      quiescenceNodes: 167936
+      movegenCalls: 46134
+      tacticalMovegenCalls: 28715
+      legalContextCalls: 46134
+      ttHits: 55092
+      ttCutoffs: 51833
+      betaCutoffs: 18982
+      ttEntries: 170018
+      negamaxTtHits: 50999
+      quiescenceTtHits: 4093
+      negamaxTtCutoffs: 49514
+      quiescenceTtCutoffs: 2319
+      negamaxBetaCutoffs: 7127
+      quiescenceBetaCutoffs: 11855
+      qsearchStandPatCutoffs: 136902
+      qsearchDeltaPruneChecks: 806
+      qsearchDeltaPruneSkips: 665
+      qsearchNodesWithMoves: 24621
+      qsearchGeneratedMoves: 59196
+      pvsResearches: 486
+      negamaxFrontierFutilityChecks: 189722
+      negamaxFrontierFutilitySkips: 22307
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: g7g6
+    source: pyrustengine
+    beforeFen: b/1bk/n1b1n/2r3r/ppp1pp1pp/11/3P2P4/11/5B1P3/2PK1B2P2/1PRN1B1NRP1 b - 0 7
+    evaluations: 903253
+    duration: 12237
+    metrics: null
+  - san: h3h5
+    source: pyengine2
+    beforeFen: b/1bk/n1b1n/2r3r/ppp1p2pp/6p4/3P2P4/11/5B1P3/2PK1B2P2/1PRN1B1NRP1 w - 0 8
+    evaluations: 292525
+    duration: 8768
+    metrics:
+      wallMs: 8747.416199999861
+      evalsPerMs: 33.44130350171341
+      rootMoves: 55
+      negamaxNodes: 266408
+      quiescenceNodes: 297941
+      movegenCalls: 109864
+      tacticalMovegenCalls: 76840
+      legalContextCalls: 109864
+      ttHits: 57289
+      ttCutoffs: 50769
+      betaCutoffs: 45372
+      ttEntries: 290613
+      negamaxTtHits: 48226
+      quiescenceTtHits: 9063
+      negamaxTtCutoffs: 45341
+      quiescenceTtCutoffs: 5428
+      negamaxBetaCutoffs: 12985
+      quiescenceBetaCutoffs: 32387
+      qsearchStandPatCutoffs: 215673
+      qsearchDeltaPruneChecks: 1784
+      qsearchDeltaPruneSkips: 1511
+      qsearchNodesWithMoves: 62420
+      qsearchGeneratedMoves: 167190
+      pvsResearches: 1394
+      negamaxFrontierFutilityChecks: 237146
+      negamaxFrontierFutilitySkips: 17413
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: f9h8
+    source: pyrustengine
+    beforeFen: b/1bk/n1b1n/2r3r/ppp1p2pp/6p4/3P2PP3/11/5B5/2PK1B2P2/1PRN1B1NRP1 b h4 0 8
+    evaluations: 711777
+    duration: 11014.5
+    metrics: null
+  - san: d2c3
+    source: pyengine2
+    beforeFen: b/1bk/n3n/2r2br/ppp1p2pp/6p4/3P2PP3/11/5B5/2PK1B2P2/1PRN1B1NRP1 w - 1 9
+    evaluations: 16246
+    duration: 446.80000001192093
+    metrics:
+      wallMs: 440.9402000019327
+      evalsPerMs: 36.843998347006675
+      rootMoves: 5
+      negamaxNodes: 18027
+      quiescenceNodes: 16369
+      movegenCalls: 3763
+      tacticalMovegenCalls: 1986
+      legalContextCalls: 3763
+      ttHits: 3421
+      ttCutoffs: 3390
+      betaCutoffs: 1372
+      ttEntries: 16899
+      negamaxTtHits: 3279
+      quiescenceTtHits: 142
+      negamaxTtCutoffs: 3267
+      quiescenceTtCutoffs: 123
+      negamaxBetaCutoffs: 557
+      quiescenceBetaCutoffs: 815
+      qsearchStandPatCutoffs: 14260
+      qsearchDeltaPruneChecks: 19
+      qsearchDeltaPruneSkips: 19
+      qsearchNodesWithMoves: 1764
+      qsearchGeneratedMoves: 3784
+      pvsResearches: 41
+      negamaxFrontierFutilityChecks: 16420
+      negamaxFrontierFutilitySkips: 497
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e8e5
+    source: pyrustengine
+    beforeFen: b/1bk/n3n/2r2br/ppp1p2pp/6p4/3P2PP3/11/2K2B5/2P2B2P2/1PRN1B1NRP1 b - 2 9
+    evaluations: 1269281
+    duration: 17523.100000023842
+    metrics: null
+  - san: c3b3
+    source: pyengine2
+    beforeFen: b/1bk/n3n/5br/ppp1p2pp/6p4/3Pr1PP3/11/2K2B5/2P2B2P2/1PRN1B1NRP1 w - 3 10
+    evaluations: 29000
+    duration: 946.1000000238419
+    metrics:
+      wallMs: 936.6957999882288
+      evalsPerMs: 30.959891141141483
+      rootMoves: 6
+      negamaxNodes: 27139
+      quiescenceNodes: 29205
+      movegenCalls: 9656
+      tacticalMovegenCalls: 5610
+      legalContextCalls: 9656
+      ttHits: 4608
+      ttCutoffs: 4153
+      betaCutoffs: 3338
+      ttEntries: 29340
+      negamaxTtHits: 4147
+      quiescenceTtHits: 461
+      negamaxTtCutoffs: 3946
+      quiescenceTtCutoffs: 207
+      negamaxBetaCutoffs: 994
+      quiescenceBetaCutoffs: 2344
+      qsearchStandPatCutoffs: 23388
+      qsearchDeltaPruneChecks: 297
+      qsearchDeltaPruneSkips: 239
+      qsearchNodesWithMoves: 4841
+      qsearchGeneratedMoves: 12007
+      pvsResearches: 99
+      negamaxFrontierFutilityChecks: 24750
+      negamaxFrontierFutilitySkips: 1452
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: g6h5
+    source: pyrustengine
+    beforeFen: b/1bk/n3n/5br/ppp1p2pp/6p4/3Pr1PP3/11/1K3B5/2P2B2P2/1PRN1B1NRP1 b - 4 10
+    evaluations: 734800
+    duration: 10573.900000035763
+    metrics: null
+  - san: g5h5
+    source: pyengine2
+    beforeFen: b/1bk/n3n/5br/ppp1p2pp/11/3Pr1Pp3/11/1K3B5/2P2B2P2/1PRN1B1NRP1 w - 0 11
+    evaluations: 239507
+    duration: 7524.199999988079
+    metrics:
+      wallMs: 7507.568300003186
+      evalsPerMs: 31.90207407102755
+      rootMoves: 68
+      negamaxNodes: 267178
+      quiescenceNodes: 241336
+      movegenCalls: 70000
+      tacticalMovegenCalls: 29212
+      legalContextCalls: 70000
+      ttHits: 47426
+      ttCutoffs: 44387
+      betaCutoffs: 22139
+      ttEntries: 246793
+      negamaxTtHits: 44006
+      quiescenceTtHits: 3420
+      negamaxTtCutoffs: 42558
+      quiescenceTtCutoffs: 1829
+      negamaxBetaCutoffs: 10641
+      quiescenceBetaCutoffs: 11498
+      qsearchStandPatCutoffs: 210295
+      qsearchDeltaPruneChecks: 3083
+      qsearchDeltaPruneSkips: 2655
+      qsearchNodesWithMoves: 22863
+      qsearchGeneratedMoves: 55903
+      pvsResearches: 423
+      negamaxFrontierFutilityChecks: 286339
+      negamaxFrontierFutilitySkips: 59737
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: f11k3
+    source: pyrustengine
+    beforeFen: b/1bk/n3n/5br/ppp1p2pp/11/3Pr2P3/11/1K3B5/2P2B2P2/1PRN1B1NRP1 b - 0 11
+    evaluations: 717057
+    duration: 10638
+    metrics: null
+  - san: b3a4
+    source: pyengine2
+    beforeFen: 1/1bk/n3n/5br/ppp1p2pp/11/3Pr2P3/11/1K3B3b1/2P2B2P2/1PRN1B1NRP1 w - 1 12
+    evaluations: 37601
+    duration: 1191.0999999642372
+    metrics:
+      wallMs: 1179.7743000206538
+      evalsPerMs: 31.87135030771711
+      rootMoves: 9
+      negamaxNodes: 38439
+      quiescenceNodes: 37958
+      movegenCalls: 13513
+      tacticalMovegenCalls: 7076
+      legalContextCalls: 13513
+      ttHits: 6159
+      ttCutoffs: 5699
+      betaCutoffs: 4696
+      ttEntries: 38295
+      negamaxTtHits: 5564
+      quiescenceTtHits: 595
+      negamaxTtCutoffs: 5319
+      quiescenceTtCutoffs: 380
+      negamaxBetaCutoffs: 1790
+      quiescenceBetaCutoffs: 2906
+      qsearchStandPatCutoffs: 30502
+      qsearchDeltaPruneChecks: 791
+      qsearchDeltaPruneSkips: 750
+      qsearchNodesWithMoves: 5639
+      qsearchGeneratedMoves: 12128
+      pvsResearches: 104
+      negamaxFrontierFutilityChecks: 42154
+      negamaxFrontierFutilitySkips: 10651
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: f10g8
+    source: pyrustengine
+    beforeFen: 1/1bk/n3n/5br/ppp1p2pp/11/3Pr2P3/K10/5B3b1/2P2B2P2/1PRN1B1NRP1 b - 2 12
+    evaluations: 1665649
+    duration: 25591.5
+    metrics: null
+  - san: i1g3
+    source: pyengine2
+    beforeFen: 1/2k/n3n/4bbr/ppp1p2pp/11/3Pr2P3/K10/5B3b1/2P2B2P2/1PRN1B1NRP1 w - 3 13
+    evaluations: 316864
+    duration: 9282.699999988079
+    metrics:
+      wallMs: 9258.206000027712
+      evalsPerMs: 34.22520518543782
+      rootMoves: 65
+      negamaxNodes: 302981
+      quiescenceNodes: 321687
+      movegenCalls: 110633
+      tacticalMovegenCalls: 68655
+      legalContextCalls: 110633
+      ttHits: 51872
+      ttCutoffs: 45938
+      betaCutoffs: 43429
+      ttEntries: 318648
+      negamaxTtHits: 43897
+      quiescenceTtHits: 7975
+      negamaxTtCutoffs: 41113
+      quiescenceTtCutoffs: 4825
+      negamaxBetaCutoffs: 14288
+      quiescenceBetaCutoffs: 29141
+      qsearchStandPatCutoffs: 248207
+      qsearchDeltaPruneChecks: 6238
+      qsearchDeltaPruneSkips: 5716
+      qsearchNodesWithMoves: 55470
+      qsearchGeneratedMoves: 135459
+      pvsResearches: 713
+      negamaxFrontierFutilityChecks: 279126
+      negamaxFrontierFutilitySkips: 27045
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h9g7
+    source: pyrustengine
+    beforeFen: 1/2k/n3n/4bbr/ppp1p2pp/11/3Pr2P3/K10/5BR2b1/2P2B2P2/1PRN1B1N1P1 b - 4 13
+    evaluations: 941540
+    duration: 16593.600000023842
+    metrics: null
+  - san: g3k3
+    source: pyengine2
+    beforeFen: 1/2k/n4/4bbr/ppp1pn1pp/11/3Pr2P3/K10/5BR2b1/2P2B2P2/1PRN1B1N1P1 w - 5 14
+    evaluations: 357597
+    duration: 11022.199999988079
+    metrics:
+      wallMs: 10976.788399973884
+      evalsPerMs: 32.57756157537398
+      rootMoves: 70
+      negamaxNodes: 328886
+      quiescenceNodes: 364534
+      movegenCalls: 131298
+      tacticalMovegenCalls: 84529
+      legalContextCalls: 131298
+      ttHits: 60315
+      ttCutoffs: 54003
+      betaCutoffs: 52927
+      ttEntries: 361756
+      negamaxTtHits: 49916
+      quiescenceTtHits: 10399
+      negamaxTtCutoffs: 47065
+      quiescenceTtCutoffs: 6938
+      negamaxBetaCutoffs: 17938
+      quiescenceBetaCutoffs: 34989
+      qsearchStandPatCutoffs: 273067
+      qsearchDeltaPruneChecks: 7551
+      qsearchDeltaPruneSkips: 6877
+      qsearchNodesWithMoves: 69950
+      qsearchGeneratedMoves: 183072
+      pvsResearches: 1017
+      negamaxFrontierFutilityChecks: 295067
+      negamaxFrontierFutilitySkips: 28962
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9e7
+    source: pyrustengine
+    beforeFen: 1/2k/n4/4bbr/ppp1pn1pp/11/3Pr2P3/K10/5B3R1/2P2B2P2/1PRN1B1N1P1 b - 0 14
+    evaluations: 1922028
+    duration: 27650.80000001192
+    metrics: null
+  - san: f1d3
+    source: pyengine2
+    beforeFen: 1/2k/5/4bbr/pppnpn1pp/11/3Pr2P3/K10/5B3R1/2P2B2P2/1PRN1B1N1P1 w - 1 15
+    evaluations: 257419
+    duration: 8465.299999952316
+    metrics:
+      wallMs: 8432.948599976953
+      evalsPerMs: 30.525384679885693
+      rootMoves: 69
+      negamaxNodes: 265915
+      quiescenceNodes: 262262
+      movegenCalls: 80861
+      tacticalMovegenCalls: 44976
+      legalContextCalls: 80861
+      ttHits: 47990
+      ttCutoffs: 40208
+      betaCutoffs: 32808
+      ttEntries: 264941
+      negamaxTtHits: 38709
+      quiescenceTtHits: 9281
+      negamaxTtCutoffs: 35361
+      quiescenceTtCutoffs: 4847
+      negamaxBetaCutoffs: 16432
+      quiescenceBetaCutoffs: 16376
+      qsearchStandPatCutoffs: 212439
+      qsearchDeltaPruneChecks: 7881
+      qsearchDeltaPruneSkips: 7277
+      qsearchNodesWithMoves: 36826
+      qsearchGeneratedMoves: 88425
+      pvsResearches: 939
+      negamaxFrontierFutilityChecks: 262232
+      negamaxFrontierFutilitySkips: 50028
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e5f6
+    source: pyrustengine
+    beforeFen: 1/2k/5/4bbr/pppnpn1pp/11/3Pr2P3/K10/3B1B3R1/2P2B2P2/1PRN3N1P1 b - 2 15
+    evaluations: 1461574
+    duration: 21201.599999964237
+    metrics: null
+  - san: f2e3
+    source: pyengine2
+    beforeFen: 1/2k/5/4bbr/pppnpn1pp/5r5/3P3P3/K10/3B1B3R1/2P2B2P2/1PRN3N1P1 w - 3 16
+    evaluations: 251855
+    duration: 8002.199999988079
+    metrics:
+      wallMs: 7983.958300028462
+      evalsPerMs: 31.545129688252775
+      rootMoves: 70
+      negamaxNodes: 255610
+      quiescenceNodes: 256773
+      movegenCalls: 89963
+      tacticalMovegenCalls: 50087
+      legalContextCalls: 89963
+      ttHits: 50658
+      ttCutoffs: 43447
+      betaCutoffs: 35472
+      ttEntries: 260222
+      negamaxTtHits: 41789
+      quiescenceTtHits: 8869
+      negamaxTtCutoffs: 38493
+      quiescenceTtCutoffs: 4954
+      negamaxBetaCutoffs: 16400
+      quiescenceBetaCutoffs: 19072
+      qsearchStandPatCutoffs: 201732
+      qsearchDeltaPruneChecks: 5497
+      qsearchDeltaPruneSkips: 5115
+      qsearchNodesWithMoves: 42227
+      qsearchGeneratedMoves: 108169
+      pvsResearches: 765
+      negamaxFrontierFutilityChecks: 279723
+      negamaxFrontierFutilitySkips: 76738
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: f6c6
+    source: pyrustengine
+    beforeFen: 1/2k/5/4bbr/pppnpn1pp/5r5/3P3P3/K10/3BBB3R1/2P5P2/1PRN3N1P1 b - 4 16
+    evaluations: 1654785
+    duration: 23028.69999998808
+    metrics: null
+  - san: a4b4
+    source: pyengine2
+    beforeFen: 1/2k/5/4bbr/pppnpn1pp/2r8/3P3P3/K10/3BBB3R1/2P5P2/1PRN3N1P1 w - 5 17
+    evaluations: 21038
+    duration: 681.6999999880791
+    metrics:
+      wallMs: 675.0553000019863
+      evalsPerMs: 31.1648541977792
+      rootMoves: 5
+      negamaxNodes: 18788
+      quiescenceNodes: 21484
+      movegenCalls: 8669
+      tacticalMovegenCalls: 5451
+      legalContextCalls: 8669
+      ttHits: 5590
+      ttCutoffs: 4111
+      betaCutoffs: 3397
+      ttEntries: 20885
+      negamaxTtHits: 4130
+      quiescenceTtHits: 1460
+      negamaxTtCutoffs: 3658
+      quiescenceTtCutoffs: 453
+      negamaxBetaCutoffs: 1188
+      quiescenceBetaCutoffs: 2209
+      qsearchStandPatCutoffs: 15580
+      qsearchDeltaPruneChecks: 1246
+      qsearchDeltaPruneSkips: 1195
+      qsearchNodesWithMoves: 4995
+      qsearchGeneratedMoves: 14001
+      pvsResearches: 54
+      negamaxFrontierFutilityChecks: 18688
+      negamaxFrontierFutilitySkips: 3369
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: i8h9
+    source: pyrustengine
+    beforeFen: 1/2k/5/4bbr/pppnpn1pp/2r8/3P3P3/1K9/3BBB3R1/2P5P2/1PRN3N1P1 b - 6 17
+    evaluations: 1400981
+    duration: 19807.69999998808
+    metrics: null
+  - san: c2c4
+    source: pyengine2
+    beforeFen: 1/2k/4r/4bb1/pppnpn1pp/2r8/3P3P3/1K9/3BBB3R1/2P5P2/1PRN3N1P1 w - 7 18
+    evaluations: 259937
+    duration: 7711.600000023842
+    metrics:
+      wallMs: 7685.290300054476
+      evalsPerMs: 33.82266509804548
+      rootMoves: 63
+      negamaxNodes: 238425
+      quiescenceNodes: 264604
+      movegenCalls: 95405
+      tacticalMovegenCalls: 55340
+      legalContextCalls: 95405
+      ttHits: 43090
+      ttCutoffs: 34785
+      betaCutoffs: 36670
+      ttEntries: 267660
+      negamaxTtHits: 33752
+      quiescenceTtHits: 9338
+      negamaxTtCutoffs: 30030
+      quiescenceTtCutoffs: 4755
+      negamaxBetaCutoffs: 15143
+      quiescenceBetaCutoffs: 21527
+      qsearchStandPatCutoffs: 204509
+      qsearchDeltaPruneChecks: 8224
+      qsearchDeltaPruneSkips: 8080
+      qsearchNodesWithMoves: 49811
+      qsearchGeneratedMoves: 133577
+      pvsResearches: 879
+      negamaxFrontierFutilityChecks: 228730
+      negamaxFrontierFutilitySkips: 35599
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: c6g5
+    source: pyrustengine
+    beforeFen: 1/2k/4r/4bb1/pppnpn1pp/2r8/3P3P3/1KP8/3BBB3R1/8P2/1PRN3N1P1 b c3 0 18
+    evaluations: 1882804
+    duration: 25253.80000001192
+    metrics: null
+  - san: b4c3
+    source: pyengine2
+    beforeFen: 1/2k/4r/4bb1/pppnpn1pp/11/3P2rP3/1KP8/3BBB3R1/8P2/1PRN3N1P1 w - 1 19
+    evaluations: 222975
+    duration: 6803.200000047684
+    metrics:
+      wallMs: 6783.58119999757
+      evalsPerMs: 32.86980629052982
+      rootMoves: 66
+      negamaxNodes: 203308
+      quiescenceNodes: 226359
+      movegenCalls: 82011
+      tacticalMovegenCalls: 51987
+      legalContextCalls: 82011
+      ttHits: 39014
+      ttCutoffs: 35727
+      betaCutoffs: 34070
+      ttEntries: 230435
+      negamaxTtHits: 33643
+      quiescenceTtHits: 5371
+      negamaxTtCutoffs: 32309
+      quiescenceTtCutoffs: 3418
+      negamaxBetaCutoffs: 11295
+      quiescenceBetaCutoffs: 22775
+      qsearchStandPatCutoffs: 170954
+      qsearchDeltaPruneChecks: 6099
+      qsearchDeltaPruneSkips: 5863
+      qsearchNodesWithMoves: 46126
+      qsearchGeneratedMoves: 134497
+      pvsResearches: 442
+      negamaxFrontierFutilityChecks: 244667
+      negamaxFrontierFutilitySkips: 87067
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e7h6
+    source: pyrustengine
+    beforeFen: 1/2k/4r/4bb1/pppnpn1pp/11/3P2rP3/2P8/2KBBB3R1/8P2/1PRN3N1P1 b - 2 19
+    evaluations: 1840487
+    duration: 25887.900000035763
+    metrics: null
+  - san: k3g3
+    source: pyengine2
+    beforeFen: 1/2k/4r/4bb1/ppp1pn1pp/7n3/3P2rP3/2P8/2KBBB3R1/8P2/1PRN3N1P1 w - 3 20
+    evaluations: 67365
+    duration: 2781.300000011921
+    metrics:
+      wallMs: 2769.9509999947622
+      evalsPerMs: 24.319924792939435
+      rootMoves: 63
+      negamaxNodes: 71807
+      quiescenceNodes: 68168
+      movegenCalls: 35155
+      tacticalMovegenCalls: 17320
+      legalContextCalls: 35155
+      ttHits: 12645
+      ttCutoffs: 10722
+      betaCutoffs: 14196
+      ttEntries: 72834
+      negamaxTtHits: 10917
+      quiescenceTtHits: 1728
+      negamaxTtCutoffs: 9919
+      quiescenceTtCutoffs: 803
+      negamaxBetaCutoffs: 7135
+      quiescenceBetaCutoffs: 7061
+      qsearchStandPatCutoffs: 50045
+      qsearchDeltaPruneChecks: 468
+      qsearchDeltaPruneSkips: 422
+      qsearchNodesWithMoves: 12900
+      qsearchGeneratedMoves: 28668
+      pvsResearches: 263
+      negamaxFrontierFutilityChecks: 213367
+      negamaxFrontierFutilitySkips: 172616
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: g7d6
+    source: pyrustengine
+    beforeFen: 1/2k/4r/4bb1/ppp1pn1pp/7n3/3P2rP3/2P8/2KBBBR4/8P2/1PRN3N1P1 b - 4 20
+    evaluations: 1480116
+    duration: 26606.80000001192
+    metrics: null
+  - san: c3b4
+    source: pyengine2
+    beforeFen: 1/2k/4r/4bb1/ppp1p2pp/3n3n3/3P2rP3/2P8/2KBBBR4/8P2/1PRN3N1P1 w - 5 21
+    evaluations: 11042
+    duration: 324.80000001192093
+    metrics:
+      wallMs: 317.4297999939881
+      evalsPerMs: 34.785643944611145
+      rootMoves: 5
+      negamaxNodes: 15754
+      quiescenceNodes: 11043
+      movegenCalls: 1803
+      tacticalMovegenCalls: 346
+      legalContextCalls: 1803
+      ttHits: 4038
+      ttCutoffs: 4033
+      betaCutoffs: 588
+      ttEntries: 11850
+      negamaxTtHits: 4037
+      quiescenceTtHits: 1
+      negamaxTtCutoffs: 4032
+      quiescenceTtCutoffs: 1
+      negamaxBetaCutoffs: 515
+      quiescenceBetaCutoffs: 73
+      qsearchStandPatCutoffs: 10696
+      qsearchDeltaPruneChecks: 303
+      qsearchDeltaPruneSkips: 299
+      qsearchNodesWithMoves: 306
+      qsearchGeneratedMoves: 579
+      pvsResearches: 5
+      negamaxFrontierFutilityChecks: 15078
+      negamaxFrontierFutilitySkips: 943
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h8d8
+    source: pyrustengine
+    beforeFen: 1/2k/4r/4bb1/ppp1p2pp/3n3n3/3P2rP3/1KP8/3BBBR4/8P2/1PRN3N1P1 b - 6 21
+    evaluations: 1458519
+    duration: 27532.100000023842
+    metrics: null
+  - san: b4c5
+    source: pyengine2
+    beforeFen: 1/2k/4r/1b2b2/ppp1p2pp/3n3n3/3P2rP3/1KP8/3BBBR4/8P2/1PRN3N1P1 w - 7 22
+    evaluations: 5743
+    duration: 190.69999998807907
+    metrics:
+      wallMs: 182.29750002501532
+      evalsPerMs: 31.50344902816512
+      rootMoves: 3
+      negamaxNodes: 7548
+      quiescenceNodes: 5766
+      movegenCalls: 1615
+      tacticalMovegenCalls: 599
+      legalContextCalls: 1615
+      ttHits: 1748
+      ttCutoffs: 1716
+      betaCutoffs: 563
+      ttEntries: 6159
+      negamaxTtHits: 1708
+      quiescenceTtHits: 40
+      negamaxTtCutoffs: 1692
+      quiescenceTtCutoffs: 24
+      negamaxBetaCutoffs: 351
+      quiescenceBetaCutoffs: 212
+      qsearchStandPatCutoffs: 5143
+      qsearchDeltaPruneChecks: 294
+      qsearchDeltaPruneSkips: 289
+      qsearchNodesWithMoves: 464
+      qsearchGeneratedMoves: 1110
+      pvsResearches: 12
+      negamaxFrontierFutilityChecks: 10211
+      negamaxFrontierFutilitySkips: 3800
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: b7b5
+    source: pyrustengine
+    beforeFen: 1/2k/4r/1b2b2/ppp1p2pp/3n3n3/2KP2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 b - 8 22
+    evaluations: 1188966
+    duration: 21630.19999998808
+    metrics: null
+  - san: c5b5
+    source: pyengine2
+    beforeFen: 1/2k/4r/1b2b2/1pp1p2pp/3n3n3/1pKP2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 w - 0 23
+    evaluations: 5764
+    duration: 160.9000000357628
+    metrics:
+      wallMs: 156.3728000037372
+      evalsPerMs: 36.860630492401775
+      rootMoves: 2
+      negamaxNodes: 7241
+      quiescenceNodes: 5787
+      movegenCalls: 1248
+      tacticalMovegenCalls: 454
+      legalContextCalls: 1248
+      ttHits: 1761
+      ttCutoffs: 1757
+      betaCutoffs: 392
+      ttEntries: 6062
+      negamaxTtHits: 1733
+      quiescenceTtHits: 28
+      negamaxTtCutoffs: 1732
+      quiescenceTtCutoffs: 25
+      negamaxBetaCutoffs: 199
+      quiescenceBetaCutoffs: 193
+      qsearchStandPatCutoffs: 5308
+      qsearchDeltaPruneChecks: 122
+      qsearchDeltaPruneSkips: 121
+      qsearchNodesWithMoves: 412
+      qsearchGeneratedMoves: 1175
+      pvsResearches: 5
+      negamaxFrontierFutilityChecks: 7051
+      negamaxFrontierFutilitySkips: 482
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: c7c6
+    source: pyrustengine
+    beforeFen: 1/2k/4r/1b2b2/1pp1p2pp/3n3n3/1K1P2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 b - 0 23
+    evaluations: 1716477
+    duration: 32955.39999997616
+    metrics: null
+  - san: b5c5
+    source: pyengine2
+    beforeFen: 1/2k/4r/1b2b2/2p1p2pp/2pn3n3/1K1P2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 w - 0 24
+    evaluations: 7425
+    duration: 241.5
+    metrics:
+      wallMs: 232.58050001459196
+      evalsPerMs: 31.924430464007774
+      rootMoves: 4
+      negamaxNodes: 10015
+      quiescenceNodes: 7448
+      movegenCalls: 1782
+      tacticalMovegenCalls: 739
+      legalContextCalls: 1782
+      ttHits: 2497
+      ttCutoffs: 2459
+      betaCutoffs: 710
+      ttEntries: 8007
+      negamaxTtHits: 2452
+      quiescenceTtHits: 45
+      negamaxTtCutoffs: 2436
+      quiescenceTtCutoffs: 23
+      negamaxBetaCutoffs: 460
+      quiescenceBetaCutoffs: 250
+      qsearchStandPatCutoffs: 6686
+      qsearchDeltaPruneChecks: 297
+      qsearchDeltaPruneSkips: 290
+      qsearchNodesWithMoves: 604
+      qsearchGeneratedMoves: 1257
+      pvsResearches: 20
+      negamaxFrontierFutilityChecks: 11941
+      negamaxFrontierFutilitySkips: 3462
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d6b7
+    source: pyrustengine
+    beforeFen: 1/2k/4r/1b2b2/2p1p2pp/2pn3n3/2KP2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 b - 1 24
+    evaluations: 1447150
+    duration: 25942.5
+    metrics: null
+  - san: c5b6
+    source: pyengine2
+    beforeFen: 1/2k/4r/1b2b2/n1p1p2pp/2p4n3/2KP2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 w - 2 25
+    evaluations: 6784
+    duration: 208.60000002384186
+    metrics:
+      wallMs: 200.52479999139905
+      evalsPerMs: 33.83122686216857
+      rootMoves: 4
+      negamaxNodes: 8846
+      quiescenceNodes: 6807
+      movegenCalls: 1631
+      tacticalMovegenCalls: 559
+      legalContextCalls: 1631
+      ttHits: 1876
+      ttCutoffs: 1843
+      betaCutoffs: 598
+      ttEntries: 7332
+      negamaxTtHits: 1835
+      quiescenceTtHits: 41
+      negamaxTtCutoffs: 1820
+      quiescenceTtCutoffs: 23
+      negamaxBetaCutoffs: 408
+      quiescenceBetaCutoffs: 190
+      qsearchStandPatCutoffs: 6225
+      qsearchDeltaPruneChecks: 228
+      qsearchDeltaPruneSkips: 219
+      qsearchNodesWithMoves: 456
+      qsearchGeneratedMoves: 969
+      pvsResearches: 9
+      negamaxFrontierFutilityChecks: 9826
+      negamaxFrontierFutilitySkips: 2361
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h6e7
+    source: pyrustengine
+    beforeFen: 1/2k/4r/1b2b2/n1p1p2pp/1Kp4n3/3P2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 b - 3 25
+    evaluations: 1156736
+    duration: 21009.099999964237
+    metrics: null
+  - san: b6a5
+    source: pyengine2
+    beforeFen: 1/2k/4r/1b2b2/n1pnp2pp/1Kp8/3P2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 w - 4 26
+    evaluations: 1950
+    duration: 73.60000002384186
+    metrics:
+      wallMs: 67.21340003423393
+      evalsPerMs: 29.012071982771335
+      rootMoves: 1
+      negamaxNodes: 2621
+      quiescenceNodes: 1955
+      movegenCalls: 422
+      tacticalMovegenCalls: 106
+      legalContextCalls: 422
+      ttHits: 562
+      ttCutoffs: 559
+      betaCutoffs: 139
+      ttEntries: 2116
+      negamaxTtHits: 555
+      quiescenceTtHits: 7
+      negamaxTtCutoffs: 554
+      quiescenceTtCutoffs: 5
+      negamaxBetaCutoffs: 112
+      quiescenceBetaCutoffs: 27
+      qsearchStandPatCutoffs: 1844
+      qsearchDeltaPruneChecks: 73
+      qsearchDeltaPruneSkips: 72
+      qsearchNodesWithMoves: 97
+      qsearchGeneratedMoves: 192
+      pvsResearches: 2
+      negamaxFrontierFutilityChecks: 2203
+      negamaxFrontierFutilitySkips: 41
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: b7d6
+    source: pyrustengine
+    beforeFen: 1/2k/4r/1b2b2/n1pnp2pp/2p8/K2P2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 b - 5 26
+    evaluations: 1637669
+    duration: 30679.899999976158
+    metrics: null
+  - san: a5b4
+    source: pyengine2
+    beforeFen: 1/2k/4r/1b2b2/2pnp2pp/2pn7/K2P2rP3/2P8/3BBBR4/8P2/1PRN3N1P1 w - 6 27
+    evaluations: 2226
+    duration: 73.30000001192093
+    metrics:
+      wallMs: 67.08880001679063
+      evalsPerMs: 33.179904834232964
+      rootMoves: 1
+      negamaxNodes: 3189
+      quiescenceNodes: 2227
+      movegenCalls: 356
+      tacticalMovegenCalls: 100
+      legalContextCalls: 356
+      ttHits: 850
+      ttCutoffs: 846
+      betaCutoffs: 141
+      ttEntries: 2407
+      negamaxTtHits: 846
+      quiescenceTtHits: 4
+      negamaxTtCutoffs: 845
+      quiescenceTtCutoffs: 1
+      negamaxBetaCutoffs: 118
+      quiescenceBetaCutoffs: 23
+      qsearchStandPatCutoffs: 2126
+      qsearchDeltaPruneChecks: 79
+      qsearchDeltaPruneSkips: 78
+      qsearchNodesWithMoves: 95
+      qsearchGeneratedMoves: 204
+      pvsResearches: 2
+      negamaxFrontierFutilityChecks: 2783
+      negamaxFrontierFutilitySkips: 99
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: k7k5
+    source: pyrustengine
+    beforeFen: 1/2k/4r/1b2b2/2pnp2pp/2pn7/3P2rP3/1KP8/3BBBR4/8P2/1PRN3N1P1 b - 7 27
+    evaluations: 3455506
+    duration: 72229.5
+    metrics: null
+  - san: c4c5
+    source: pyengine2
+    beforeFen: 1/2k/4r/1b2b2/2pnp2p1/2pn7/3P2rP1p1/1KP8/3BBBR4/8P2/1PRN3N1P1 w k6 0 28
+    evaluations: 137753
+    duration: 4380.900000035763
+    metrics:
+      wallMs: 4364.861799986102
+      evalsPerMs: 31.559532996082172
+      rootMoves: 63
+      negamaxNodes: 152412
+      quiescenceNodes: 139452
+      movegenCalls: 38065
+      tacticalMovegenCalls: 22950
+      legalContextCalls: 38065
+      ttHits: 38531
+      ttCutoffs: 37321
+      betaCutoffs: 17392
+      ttEntries: 146742
+      negamaxTtHits: 36066
+      quiescenceTtHits: 2465
+      negamaxTtCutoffs: 35614
+      quiescenceTtCutoffs: 1707
+      negamaxBetaCutoffs: 7494
+      quiescenceBetaCutoffs: 9898
+      qsearchStandPatCutoffs: 114795
+      qsearchDeltaPruneChecks: 4376
+      qsearchDeltaPruneSkips: 3986
+      qsearchNodesWithMoves: 21074
+      qsearchGeneratedMoves: 60883
+      pvsResearches: 205
+      negamaxFrontierFutilityChecks: 187214
+      negamaxFrontierFutilitySkips: 69663
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d6e9
+    source: pyrustengine
+    beforeFen: 1/2k/4r/1b2b2/2pnp2p1/2pn7/2PP2rP1p1/1K9/3BBBR4/8P2/1PRN3N1P1 b - 0 28
+    evaluations: 3236422
+    duration: 63401.39999997616
+    metrics: null
+  - san: f3g4
+    source: pyengine2
+    beforeFen: 1/2k/1n2r/1b2b2/2pnp2p1/2p8/2PP2rP1p1/1K9/3BBBR4/8P2/1PRN3N1P1 w - 1 29
+    evaluations: 129702
+    duration: 4013
+    metrics:
+      wallMs: 3999.2533999611624
+      evalsPerMs: 32.431553349747624
+      rootMoves: 69
+      negamaxNodes: 141720
+      quiescenceNodes: 131349
+      movegenCalls: 41498
+      tacticalMovegenCalls: 25207
+      legalContextCalls: 41498
+      ttHits: 34135
+      ttCutoffs: 32556
+      betaCutoffs: 18603
+      ttEntries: 137873
+      negamaxTtHits: 31563
+      quiescenceTtHits: 2572
+      negamaxTtCutoffs: 30906
+      quiescenceTtCutoffs: 1650
+      negamaxBetaCutoffs: 8164
+      quiescenceBetaCutoffs: 10439
+      qsearchStandPatCutoffs: 104492
+      qsearchDeltaPruneChecks: 2338
+      qsearchDeltaPruneSkips: 1944
+      qsearchNodesWithMoves: 22138
+      qsearchGeneratedMoves: 56220
+      pvsResearches: 266
+      negamaxFrontierFutilityChecks: 162641
+      negamaxFrontierFutilitySkips: 53637
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: g5d3
+    source: pyrustengine
+    beforeFen: 1/2k/1n2r/1b2b2/2pnp2p1/2p8/2PP2rP1p1/1K4B4/3BB1R4/8P2/1PRN3N1P1 b - 2 29
+    evaluations: 1173126
+    duration: 20520.5
+    metrics: null
+  - san: g4e7
+    source: pyengine2
+    beforeFen: 1/2k/1n2r/1b2b2/2pnp2p1/2p8/2PP3P1p1/1K4B4/3rB1R4/8P2/1PRN3N1P1 w - 0 30
+    evaluations: 203007
+    duration: 6563.5
+    metrics:
+      wallMs: 6546.699600003194
+      evalsPerMs: 31.00905989330883
+      rootMoves: 58
+      negamaxNodes: 143865
+      quiescenceNodes: 209591
+      movegenCalls: 101044
+      tacticalMovegenCalls: 78277
+      legalContextCalls: 101044
+      ttHits: 32314
+      ttCutoffs: 24121
+      betaCutoffs: 45752
+      ttEntries: 200609
+      negamaxTtHits: 20798
+      quiescenceTtHits: 11516
+      negamaxTtCutoffs: 17502
+      quiescenceTtCutoffs: 6619
+      negamaxBetaCutoffs: 10588
+      quiescenceBetaCutoffs: 35164
+      qsearchStandPatCutoffs: 124695
+      qsearchDeltaPruneChecks: 6123
+      qsearchDeltaPruneSkips: 4812
+      qsearchNodesWithMoves: 67821
+      qsearchGeneratedMoves: 175087
+      pvsResearches: 667
+      negamaxFrontierFutilityChecks: 105415
+      negamaxFrontierFutilitySkips: 14464
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7e7
+    source: pyrustengine
+    beforeFen: 1/2k/1n2r/1b2b2/2pBp2p1/2p8/2PP3P1p1/1K9/3rB1R4/8P2/1PRN3N1P1 b - 0 30
+    evaluations: 84066
+    duration: 1173.699999988079
+    metrics: null
+  - san: g3g8
+    source: pyengine2
+    beforeFen: 1/2k/1n2r/1b2b2/3pp2p1/2p8/2PP3P1p1/1K9/3rB1R4/8P2/1PRN3N1P1 w - 0 31
+    evaluations: 100102
+    duration: 3797.599999964237
+    metrics:
+      wallMs: 3782.905599975493
+      evalsPerMs: 26.46167009841549
+      rootMoves: 55
+      negamaxNodes: 93971
+      quiescenceNodes: 102832
+      movegenCalls: 51035
+      tacticalMovegenCalls: 33287
+      legalContextCalls: 51035
+      ttHits: 22121
+      ttCutoffs: 16314
+      betaCutoffs: 22612
+      ttEntries: 101992
+      negamaxTtHits: 16166
+      quiescenceTtHits: 5955
+      negamaxTtCutoffs: 13575
+      quiescenceTtCutoffs: 2739
+      negamaxBetaCutoffs: 9469
+      quiescenceBetaCutoffs: 13143
+      qsearchStandPatCutoffs: 66806
+      qsearchDeltaPruneChecks: 3808
+      qsearchDeltaPruneSkips: 2967
+      qsearchNodesWithMoves: 27309
+      qsearchGeneratedMoves: 56993
+      pvsResearches: 438
+      negamaxFrontierFutilityChecks: 70442
+      negamaxFrontierFutilitySkips: 11369
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: g10e10
+    source: pyrustengine
+    beforeFen: 1/2k/1n2r/1b2R2/3pp2p1/2p8/2PP3P1p1/1K9/3rB6/8P2/1PRN3N1P1 b - 0 31
+    evaluations: 36939
+    duration: 430.30000001192093
+    metrics: null
+  - san: i2i4
+    source: pyengine2
+    beforeFen: 1/k2/1n2r/1b2R2/3pp2p1/2p8/2PP3P1p1/1K9/3rB6/8P2/1PRN3N1P1 w - 1 32
+    evaluations: 91056
+    duration: 3165.5
+    metrics:
+      wallMs: 3153.8600999629125
+      evalsPerMs: 28.871286967063238
+      rootMoves: 55
+      negamaxNodes: 73343
+      quiescenceNodes: 93718
+      movegenCalls: 50467
+      tacticalMovegenCalls: 34147
+      legalContextCalls: 50467
+      ttHits: 15908
+      ttCutoffs: 11378
+      betaCutoffs: 22243
+      ttEntries: 91070
+      negamaxTtHits: 10633
+      quiescenceTtHits: 5275
+      negamaxTtCutoffs: 8716
+      quiescenceTtCutoffs: 2662
+      negamaxBetaCutoffs: 8474
+      quiescenceBetaCutoffs: 13769
+      qsearchStandPatCutoffs: 56909
+      qsearchDeltaPruneChecks: 4234
+      qsearchDeltaPruneSkips: 3758
+      qsearchNodesWithMoves: 26557
+      qsearchGeneratedMoves: 68964
+      pvsResearches: 416
+      negamaxFrontierFutilityChecks: 65519
+      negamaxFrontierFutilitySkips: 23114
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h9f9
+    source: pyrustengine
+    beforeFen: 1/k2/1n2r/1b2R2/3pp2p1/2p8/2PP3P1p1/1K6P2/3rB6/11/1PRN3N1P1 b i3 0 32
+    evaluations: 587598
+    duration: 7462.699999988079
+    metrics: null
+  - san: g8f9
+    source: pyengine2
+    beforeFen: 1/k2/1nr2/1b2R2/3pp2p1/2p8/2PP3P1p1/1K6P2/3rB6/11/1PRN3N1P1 w - 1 33
+    evaluations: 39199
+    duration: 1533.6000000238419
+    metrics:
+      wallMs: 1525.433900009375
+      evalsPerMs: 25.696950880506254
+      rootMoves: 55
+      negamaxNodes: 37031
+      quiescenceNodes: 39677
+      movegenCalls: 25681
+      tacticalMovegenCalls: 16289
+      legalContextCalls: 25681
+      ttHits: 6780
+      ttCutoffs: 5477
+      betaCutoffs: 11203
+      ttEntries: 39817
+      negamaxTtHits: 5651
+      quiescenceTtHits: 1129
+      negamaxTtCutoffs: 4998
+      quiescenceTtCutoffs: 479
+      negamaxBetaCutoffs: 4509
+      quiescenceBetaCutoffs: 6694
+      qsearchStandPatCutoffs: 22909
+      qsearchDeltaPruneChecks: 676
+      qsearchDeltaPruneSkips: 569
+      qsearchNodesWithMoves: 11103
+      qsearchGeneratedMoves: 22644
+      pvsResearches: 269
+      negamaxFrontierFutilityChecks: 47206
+      negamaxFrontierFutilitySkips: 32258
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e10f9
+    source: pyrustengine
+    beforeFen: 1/k2/1nR2/1b5/3pp2p1/2p8/2PP3P1p1/1K6P2/3rB6/11/1PRN3N1P1 b - 0 33
+    evaluations: 138165
+    duration: 1290.8999999761581
+    metrics: null
+  - san: b4c4
+    source: pyengine2
+    beforeFen: 1/3/1nk2/1b5/3pp2p1/2p8/2PP3P1p1/1K6P2/3rB6/11/1PRN3N1P1 w - 0 34
+    evaluations: 50808
+    duration: 1530.6000000238419
+    metrics:
+      wallMs: 1521.8113000155427
+      evalsPerMs: 33.386530905297576
+      rootMoves: 38
+      negamaxNodes: 50752
+      quiescenceNodes: 51364
+      movegenCalls: 26255
+      tacticalMovegenCalls: 16245
+      legalContextCalls: 26255
+      ttHits: 10117
+      ttCutoffs: 8040
+      betaCutoffs: 10590
+      ttEntries: 49944
+      negamaxTtHits: 8487
+      quiescenceTtHits: 1630
+      negamaxTtCutoffs: 7484
+      quiescenceTtCutoffs: 556
+      negamaxBetaCutoffs: 4052
+      quiescenceBetaCutoffs: 6538
+      qsearchStandPatCutoffs: 34563
+      qsearchDeltaPruneChecks: 802
+      qsearchDeltaPruneSkips: 537
+      qsearchNodesWithMoves: 11304
+      qsearchGeneratedMoves: 21146
+      pvsResearches: 247
+      negamaxFrontierFutilityChecks: 39638
+      negamaxFrontierFutilitySkips: 5057
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d3g5
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/1b5/3pp2p1/2p8/2PP3P1p1/2K5P2/3rB6/11/1PRN3N1P1 b - 1 34
+    evaluations: 147792
+    duration: 1233.3999999761581
+    metrics: null
+  - san: k1k3
+    source: pyengine2
+    beforeFen: 1/3/1nk2/1b5/3pp2p1/2p8/2PP2rP1p1/2K5P2/4B6/11/1PRN3N1P1 w - 2 35
+    evaluations: 65236
+    duration: 2162
+    metrics:
+      wallMs: 2149.8939000302926
+      evalsPerMs: 30.34382301335001
+      rootMoves: 40
+      negamaxNodes: 72573
+      quiescenceNodes: 65798
+      movegenCalls: 25926
+      tacticalMovegenCalls: 14274
+      legalContextCalls: 25926
+      ttHits: 13486
+      ttCutoffs: 11722
+      betaCutoffs: 10520
+      ttEntries: 67168
+      negamaxTtHits: 12043
+      quiescenceTtHits: 1443
+      negamaxTtCutoffs: 11160
+      quiescenceTtCutoffs: 562
+      negamaxBetaCutoffs: 5809
+      quiescenceBetaCutoffs: 4711
+      qsearchStandPatCutoffs: 50962
+      qsearchDeltaPruneChecks: 822
+      qsearchDeltaPruneSkips: 679
+      qsearchNodesWithMoves: 9697
+      qsearchGeneratedMoves: 16746
+      pvsResearches: 362
+      negamaxFrontierFutilityChecks: 60200
+      negamaxFrontierFutilitySkips: 6824
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e7e6
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/1b5/3pp2p1/2p8/2PP2rP1p1/2K5P2/4B4P1/11/1PRN3N3 b k2 0 35
+    evaluations: 330080
+    duration: 2951.300000011921
+    metrics: null
+  - san: b1b3
+    source: pyengine2
+    beforeFen: 1/3/1nk2/1b5/4p2p1/2p1p6/2PP2rP1p1/2K5P2/4B4P1/11/1PRN3N3 w - 0 36
+    evaluations: 65723
+    duration: 1833.699999988079
+    metrics:
+      wallMs: 1824.710100016091
+      evalsPerMs: 36.0183242255416
+      rootMoves: 40
+      negamaxNodes: 77022
+      quiescenceNodes: 66358
+      movegenCalls: 19914
+      tacticalMovegenCalls: 9283
+      legalContextCalls: 19914
+      ttHits: 17087
+      ttCutoffs: 16549
+      betaCutoffs: 6893
+      ttEntries: 68655
+      negamaxTtHits: 16167
+      quiescenceTtHits: 920
+      negamaxTtCutoffs: 15914
+      quiescenceTtCutoffs: 635
+      negamaxBetaCutoffs: 3120
+      quiescenceBetaCutoffs: 3773
+      qsearchStandPatCutoffs: 56440
+      qsearchDeltaPruneChecks: 9
+      qsearchDeltaPruneSkips: 8
+      qsearchNodesWithMoves: 7413
+      qsearchGeneratedMoves: 14949
+      pvsResearches: 245
+      negamaxFrontierFutilityChecks: 69791
+      negamaxFrontierFutilitySkips: 6525
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e6d5
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/1b5/4p2p1/2p1p6/2PP2rP1p1/2K5P2/1P2B4P1/11/2RN3N3 b - 0 36
+    evaluations: 529712
+    duration: 5030.300000011921
+    metrics: null
+  - san: c4d5
+    source: pyengine2
+    beforeFen: 1/3/1nk2/1b5/4p2p1/2p8/2Pp2rP1p1/2K5P2/1P2B4P1/11/2RN3N3 w - 0 37
+    evaluations: 13424
+    duration: 389.19999998807907
+    metrics:
+      wallMs: 383.4490000153892
+      evalsPerMs: 35.00856697881921
+      rootMoves: 6
+      negamaxNodes: 13764
+      quiescenceNodes: 13902
+      movegenCalls: 6011
+      tacticalMovegenCalls: 3690
+      legalContextCalls: 6011
+      ttHits: 2852
+      ttCutoffs: 2429
+      betaCutoffs: 2434
+      ttEntries: 13711
+      negamaxTtHits: 2162
+      quiescenceTtHits: 690
+      negamaxTtCutoffs: 1951
+      quiescenceTtCutoffs: 478
+      negamaxBetaCutoffs: 1193
+      quiescenceBetaCutoffs: 1241
+      qsearchStandPatCutoffs: 9734
+      qsearchDeltaPruneChecks: 252
+      qsearchDeltaPruneSkips: 220
+      qsearchNodesWithMoves: 2772
+      qsearchGeneratedMoves: 4776
+      pvsResearches: 101
+      negamaxFrontierFutilityChecks: 10533
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d8e7
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/1b5/4p2p1/2p8/2PK2rP1p1/8P2/1P2B4P1/11/2RN3N3 b - 0 37
+    evaluations: 266772
+    duration: 2783.7000000476837
+    metrics: null
+  - san: d5b4
+    source: pyengine2
+    beforeFen: 1/3/1nk2/7/3bp2p1/2p8/2PK2rP1p1/8P2/1P2B4P1/11/2RN3N3 w - 1 38
+    evaluations: 8018
+    duration: 222.89999997615814
+    metrics:
+      wallMs: 217.799499980174
+      evalsPerMs: 36.81367496587397
+      rootMoves: 4
+      negamaxNodes: 9821
+      quiescenceNodes: 8058
+      movegenCalls: 2555
+      tacticalMovegenCalls: 1092
+      legalContextCalls: 2555
+      ttHits: 1818
+      ttCutoffs: 1704
+      betaCutoffs: 921
+      ttEntries: 8386
+      negamaxTtHits: 1736
+      quiescenceTtHits: 82
+      negamaxTtCutoffs: 1664
+      quiescenceTtCutoffs: 40
+      negamaxBetaCutoffs: 619
+      quiescenceBetaCutoffs: 302
+      qsearchStandPatCutoffs: 6926
+      qsearchDeltaPruneChecks: 90
+      qsearchDeltaPruneSkips: 70
+      qsearchNodesWithMoves: 698
+      qsearchGeneratedMoves: 930
+      pvsResearches: 45
+      negamaxFrontierFutilityChecks: 8272
+      negamaxFrontierFutilitySkips: 156
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: g5h4
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/7/3bp2p1/2p8/2P3rP1p1/1K6P2/1P2B4P1/11/2RN3N3 b - 2 38
+    evaluations: 334219
+    duration: 3164
+    metrics: null
+  - san: d1f4
+    source: pyengine2
+    beforeFen: 1/3/1nk2/7/3bp2p1/2p8/2P4P1p1/1K5rP2/1P2B4P1/11/2RN3N3 w - 3 39
+    evaluations: 38410
+    duration: 1160.4000000357628
+    metrics:
+      wallMs: 1152.6604000246152
+      evalsPerMs: 33.32291106658973
+      rootMoves: 37
+      negamaxNodes: 48536
+      quiescenceNodes: 38732
+      movegenCalls: 15590
+      tacticalMovegenCalls: 7551
+      legalContextCalls: 15590
+      ttHits: 12199
+      ttCutoffs: 11030
+      betaCutoffs: 6038
+      ttEntries: 40083
+      negamaxTtHits: 11349
+      quiescenceTtHits: 850
+      negamaxTtCutoffs: 10708
+      quiescenceTtCutoffs: 322
+      negamaxBetaCutoffs: 3352
+      quiescenceBetaCutoffs: 2686
+      qsearchStandPatCutoffs: 30859
+      qsearchDeltaPruneChecks: 460
+      qsearchDeltaPruneSkips: 441
+      qsearchNodesWithMoves: 4920
+      qsearchGeneratedMoves: 8101
+      pvsResearches: 245
+      negamaxFrontierFutilityChecks: 54829
+      negamaxFrontierFutilitySkips: 19725
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: i7i5
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/7/3bp2p1/2p8/2P4P1p1/1K3N1rP2/1P2B4P1/11/2R4N3 b - 4 39
+    evaluations: 349138
+    duration: 3405.199999988079
+    metrics: null
+  - san: h5i5
+    source: pyengine2
+    beforeFen: 1/3/1nk2/7/3bp4/2p8/2P4Ppp1/1K3N1rP2/1P2B4P1/11/2R4N3 w i6 0 40
+    evaluations: 65057
+    duration: 1813.5
+    metrics:
+      wallMs: 1804.2077000136487
+      evalsPerMs: 36.05848705750887
+      rootMoves: 44
+      negamaxNodes: 72362
+      quiescenceNodes: 66012
+      movegenCalls: 26113
+      tacticalMovegenCalls: 14220
+      legalContextCalls: 26113
+      ttHits: 18420
+      ttCutoffs: 15325
+      betaCutoffs: 10076
+      ttEntries: 66820
+      negamaxTtHits: 15830
+      quiescenceTtHits: 2590
+      negamaxTtCutoffs: 14370
+      quiescenceTtCutoffs: 955
+      negamaxBetaCutoffs: 4412
+      quiescenceBetaCutoffs: 5664
+      qsearchStandPatCutoffs: 50837
+      qsearchDeltaPruneChecks: 1955
+      qsearchDeltaPruneSkips: 1553
+      qsearchNodesWithMoves: 11932
+      qsearchGeneratedMoves: 22304
+      pvsResearches: 237
+      negamaxFrontierFutilityChecks: 61717
+      negamaxFrontierFutilitySkips: 8074
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e7f6
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/7/3bp4/2p8/2P5Pp1/1K3N1rP2/1P2B4P1/11/2R4N3 b - 0 40
+    evaluations: 365361
+    duration: 3318.699999988079
+    metrics: null
+  - san: b4a5
+    source: pyengine2
+    beforeFen: 1/3/1nk2/7/4p4/2p2b5/2P5Pp1/1K3N1rP2/1P2B4P1/11/2R4N3 w - 1 41
+    evaluations: 11130
+    duration: 316.2999999523163
+    metrics:
+      wallMs: 310.2917000069283
+      evalsPerMs: 35.869473787895345
+      rootMoves: 7
+      negamaxNodes: 13264
+      quiescenceNodes: 11210
+      movegenCalls: 4617
+      tacticalMovegenCalls: 2665
+      legalContextCalls: 4617
+      ttHits: 2873
+      ttCutoffs: 2706
+      betaCutoffs: 1838
+      ttEntries: 10985
+      negamaxTtHits: 2715
+      quiescenceTtHits: 158
+      negamaxTtCutoffs: 2626
+      quiescenceTtCutoffs: 80
+      negamaxBetaCutoffs: 734
+      quiescenceBetaCutoffs: 1104
+      qsearchStandPatCutoffs: 8465
+      qsearchDeltaPruneChecks: 158
+      qsearchDeltaPruneSkips: 118
+      qsearchNodesWithMoves: 1570
+      qsearchGeneratedMoves: 2274
+      pvsResearches: 23
+      negamaxFrontierFutilityChecks: 11551
+      negamaxFrontierFutilitySkips: 1396
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: k5i5
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/7/4p4/2p2b5/K1P5Pp1/5N1rP2/1P2B4P1/11/2R4N3 b - 2 41
+    evaluations: 354709
+    duration: 3649.300000011921
+    metrics: null
+  - san: e3i2
+    source: pyengine2
+    beforeFen: 1/3/1nk2/7/4p4/2p2b5/K1P5p2/5N1rP2/1P2B4P1/11/2R4N3 w - 0 42
+    evaluations: 62839
+    duration: 1979.3999999761581
+    metrics:
+      wallMs: 1967.750600015279
+      evalsPerMs: 31.934433154034906
+      rootMoves: 42
+      negamaxNodes: 70163
+      quiescenceNodes: 64190
+      movegenCalls: 31631
+      tacticalMovegenCalls: 20454
+      legalContextCalls: 31631
+      ttHits: 17775
+      ttCutoffs: 15675
+      betaCutoffs: 13505
+      ttEntries: 61766
+      negamaxTtHits: 15400
+      quiescenceTtHits: 2375
+      negamaxTtCutoffs: 14324
+      quiescenceTtCutoffs: 1351
+      negamaxBetaCutoffs: 5297
+      quiescenceBetaCutoffs: 8208
+      qsearchStandPatCutoffs: 42385
+      qsearchDeltaPruneChecks: 1073
+      qsearchDeltaPruneSkips: 861
+      qsearchNodesWithMoves: 13501
+      qsearchGeneratedMoves: 22554
+      pvsResearches: 382
+      negamaxFrontierFutilityChecks: 57832
+      negamaxFrontierFutilitySkips: 7980
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h4h6
+    source: pyrustengine
+    beforeFen: 1/3/1nk2/7/4p4/2p2b5/K1P5p2/5N1rP2/1P7P1/8B2/2R4N3 b - 1 42
+    evaluations: 286183
+    duration: 2640
+    metrics: null
+  - san: i2e9
+    source: pyengine2
+    beforeFen: 1/3/1nk2/7/4p4/2p2b1r3/K1P5p2/5N2P2/1P7P1/8B2/2R4N3 w - 2 43
+    evaluations: 45791
+    duration: 1189.300000011921
+    metrics:
+      wallMs: 1181.195100012701
+      evalsPerMs: 38.76666945156446
+      rootMoves: 39
+      negamaxNodes: 57647
+      quiescenceNodes: 46163
+      movegenCalls: 16475
+      tacticalMovegenCalls: 7457
+      legalContextCalls: 16475
+      ttHits: 13490
+      ttCutoffs: 12569
+      betaCutoffs: 6009
+      ttEntries: 47943
+      negamaxTtHits: 12648
+      quiescenceTtHits: 842
+      negamaxTtCutoffs: 12195
+      quiescenceTtCutoffs: 374
+      negamaxBetaCutoffs: 3293
+      quiescenceBetaCutoffs: 2716
+      qsearchStandPatCutoffs: 38332
+      qsearchDeltaPruneChecks: 882
+      qsearchDeltaPruneSkips: 717
+      qsearchNodesWithMoves: 5225
+      qsearchGeneratedMoves: 9014
+      pvsResearches: 148
+      negamaxFrontierFutilityChecks: 52423
+      negamaxFrontierFutilitySkips: 6197
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: f9e9
+    source: pyrustengine
+    beforeFen: 1/3/1Bk2/7/4p4/2p2b1r3/K1P5p2/5N2P2/1P7P1/11/2R4N3 b - 0 43
+    evaluations: 207206
+    duration: 1748.300000011921
+    metrics: null
+  - san: a5c6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/4p4/2p2b1r3/K1P5p2/5N2P2/1P7P1/11/2R4N3 w - 0 44
+    evaluations: 38376
+    duration: 1109.5
+    metrics:
+      wallMs: 1101.6321999486536
+      evalsPerMs: 34.83558305738402
+      rootMoves: 33
+      negamaxNodes: 50135
+      quiescenceNodes: 38892
+      movegenCalls: 18060
+      tacticalMovegenCalls: 8110
+      legalContextCalls: 18060
+      ttHits: 14318
+      ttCutoffs: 12976
+      betaCutoffs: 6099
+      ttEntries: 39529
+      negamaxTtHits: 13187
+      quiescenceTtHits: 1131
+      negamaxTtCutoffs: 12459
+      quiescenceTtCutoffs: 517
+      negamaxBetaCutoffs: 3371
+      quiescenceBetaCutoffs: 2728
+      qsearchStandPatCutoffs: 30265
+      qsearchDeltaPruneChecks: 489
+      qsearchDeltaPruneSkips: 392
+      qsearchNodesWithMoves: 5321
+      qsearchGeneratedMoves: 8382
+      pvsResearches: 246
+      negamaxFrontierFutilityChecks: 41778
+      negamaxFrontierFutilitySkips: 2814
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: h6e8
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/4p4/2K2b1r3/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 0 44
+    evaluations: 138292
+    duration: 1406.5
+    metrics: null
+  - san: c6c7
+    source: pyengine2
+    beforeFen: 1/3/1k3/2r4/4p4/2K2b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 1 45
+    evaluations: 4989
+    duration: 211.19999998807907
+    metrics:
+      wallMs: 205.30030003283173
+      evalsPerMs: 24.30098737898657
+      rootMoves: 5
+      negamaxNodes: 6971
+      quiescenceNodes: 5012
+      movegenCalls: 1933
+      tacticalMovegenCalls: 751
+      legalContextCalls: 1933
+      ttHits: 1765
+      ttCutoffs: 1726
+      betaCutoffs: 654
+      ttEntries: 5152
+      negamaxTtHits: 1737
+      quiescenceTtHits: 28
+      negamaxTtCutoffs: 1702
+      quiescenceTtCutoffs: 24
+      negamaxBetaCutoffs: 405
+      quiescenceBetaCutoffs: 249
+      qsearchStandPatCutoffs: 4237
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 340
+      qsearchGeneratedMoves: 442
+      pvsResearches: 16
+      negamaxFrontierFutilityChecks: 5843
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: e8d7
+    source: pyrustengine
+    beforeFen: 1/3/1k3/2r4/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 2 45
+    evaluations: 159347
+    duration: 1394.5999999642372
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 3 46
+    evaluations: 2619
+    duration: 63.5
+    metrics:
+      wallMs: 58.377599983941764
+      evalsPerMs: 44.86309818698306
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 4 46
+    evaluations: 138774
+    duration: 1351.9000000357628
+    metrics: null
+  - san: a6c7
+    source: pyengine2
+    beforeFen: 1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 5 47
+    evaluations: 4244
+    duration: 172.19999998807907
+    metrics:
+      wallMs: 166.7324000154622
+      evalsPerMs: 25.453960955437733
+      rootMoves: 4
+      negamaxNodes: 5688
+      quiescenceNodes: 4262
+      movegenCalls: 2282
+      tacticalMovegenCalls: 1093
+      legalContextCalls: 2282
+      ttHits: 1357
+      ttCutoffs: 1231
+      betaCutoffs: 825
+      ttEntries: 4237
+      negamaxTtHits: 1280
+      quiescenceTtHits: 77
+      negamaxTtCutoffs: 1213
+      quiescenceTtCutoffs: 18
+      negamaxBetaCutoffs: 520
+      quiescenceBetaCutoffs: 305
+      qsearchStandPatCutoffs: 3151
+      qsearchDeltaPruneChecks: 37
+      qsearchDeltaPruneSkips: 28
+      qsearchNodesWithMoves: 472
+      qsearchGeneratedMoves: 596
+      pvsResearches: 50
+      negamaxFrontierFutilityChecks: 4309
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9d7
+    source: pyrustengine
+    beforeFen: 1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 6 47
+    evaluations: 77524
+    duration: 661
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 7 48
+    evaluations: 2619
+    duration: 88.89999997615814
+    metrics:
+      wallMs: 82.37930003087968
+      evalsPerMs: 31.791967144880743
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 8 48
+    evaluations: 138774
+    duration: 1144.800000011921
+    metrics: null
+  - san: a6c7
+    source: pyengine2
+    beforeFen: 1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 9 49
+    evaluations: 4244
+    duration: 147.60000002384186
+    metrics:
+      wallMs: 141.95509999990463
+      evalsPerMs: 29.896777220422873
+      rootMoves: 4
+      negamaxNodes: 5688
+      quiescenceNodes: 4262
+      movegenCalls: 2282
+      tacticalMovegenCalls: 1093
+      legalContextCalls: 2282
+      ttHits: 1357
+      ttCutoffs: 1231
+      betaCutoffs: 825
+      ttEntries: 4237
+      negamaxTtHits: 1280
+      quiescenceTtHits: 77
+      negamaxTtCutoffs: 1213
+      quiescenceTtCutoffs: 18
+      negamaxBetaCutoffs: 520
+      quiescenceBetaCutoffs: 305
+      qsearchStandPatCutoffs: 3151
+      qsearchDeltaPruneChecks: 37
+      qsearchDeltaPruneSkips: 28
+      qsearchNodesWithMoves: 472
+      qsearchGeneratedMoves: 596
+      pvsResearches: 50
+      negamaxFrontierFutilityChecks: 4309
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9d7
+    source: pyrustengine
+    beforeFen: 1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 10 49
+    evaluations: 77524
+    duration: 616.1999999880791
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 11 50
+    evaluations: 2619
+    duration: 69.5
+    metrics:
+      wallMs: 63.79739998374134
+      evalsPerMs: 41.05182970885095
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 12 50
+    evaluations: 138774
+    duration: 1397.300000011921
+    metrics: null
+  - san: a6c7
+    source: pyengine2
+    beforeFen: 1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 13 51
+    evaluations: 4244
+    duration: 108.5
+    metrics:
+      wallMs: 103.55090000666678
+      evalsPerMs: 40.98467516677078
+      rootMoves: 4
+      negamaxNodes: 5688
+      quiescenceNodes: 4262
+      movegenCalls: 2282
+      tacticalMovegenCalls: 1093
+      legalContextCalls: 2282
+      ttHits: 1357
+      ttCutoffs: 1231
+      betaCutoffs: 825
+      ttEntries: 4237
+      negamaxTtHits: 1280
+      quiescenceTtHits: 77
+      negamaxTtCutoffs: 1213
+      quiescenceTtCutoffs: 18
+      negamaxBetaCutoffs: 520
+      quiescenceBetaCutoffs: 305
+      qsearchStandPatCutoffs: 3151
+      qsearchDeltaPruneChecks: 37
+      qsearchDeltaPruneSkips: 28
+      qsearchNodesWithMoves: 472
+      qsearchGeneratedMoves: 596
+      pvsResearches: 50
+      negamaxFrontierFutilityChecks: 4309
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9d7
+    source: pyrustengine
+    beforeFen: 1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 14 51
+    evaluations: 77524
+    duration: 631.1999999880791
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 15 52
+    evaluations: 2619
+    duration: 63.30000001192093
+    metrics:
+      wallMs: 57.58289998630062
+      evalsPerMs: 45.48225255454447
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 16 52
+    evaluations: 138774
+    duration: 1281.2000000476837
+    metrics: null
+  - san: a6c7
+    source: pyengine2
+    beforeFen: 1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 17 53
+    evaluations: 4244
+    duration: 130.60000002384186
+    metrics:
+      wallMs: 125.13800000306219
+      evalsPerMs: 33.914558326776415
+      rootMoves: 4
+      negamaxNodes: 5688
+      quiescenceNodes: 4262
+      movegenCalls: 2282
+      tacticalMovegenCalls: 1093
+      legalContextCalls: 2282
+      ttHits: 1357
+      ttCutoffs: 1231
+      betaCutoffs: 825
+      ttEntries: 4237
+      negamaxTtHits: 1280
+      quiescenceTtHits: 77
+      negamaxTtCutoffs: 1213
+      quiescenceTtCutoffs: 18
+      negamaxBetaCutoffs: 520
+      quiescenceBetaCutoffs: 305
+      qsearchStandPatCutoffs: 3151
+      qsearchDeltaPruneChecks: 37
+      qsearchDeltaPruneSkips: 28
+      qsearchNodesWithMoves: 472
+      qsearchGeneratedMoves: 596
+      pvsResearches: 50
+      negamaxFrontierFutilityChecks: 4309
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9d7
+    source: pyrustengine
+    beforeFen: 1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 18 53
+    evaluations: 77524
+    duration: 708.3000000119209
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 19 54
+    evaluations: 2619
+    duration: 67.69999998807907
+    metrics:
+      wallMs: 60.77829998685047
+      evalsPerMs: 43.0910374355095
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 20 54
+    evaluations: 138774
+    duration: 1245.0999999642372
+    metrics: null
+  - san: a6c7
+    source: pyengine2
+    beforeFen: 1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 21 55
+    evaluations: 4244
+    duration: 182.5
+    metrics:
+      wallMs: 177.75309999706224
+      evalsPerMs: 23.87581426186177
+      rootMoves: 4
+      negamaxNodes: 5688
+      quiescenceNodes: 4262
+      movegenCalls: 2282
+      tacticalMovegenCalls: 1093
+      legalContextCalls: 2282
+      ttHits: 1357
+      ttCutoffs: 1231
+      betaCutoffs: 825
+      ttEntries: 4237
+      negamaxTtHits: 1280
+      quiescenceTtHits: 77
+      negamaxTtCutoffs: 1213
+      quiescenceTtCutoffs: 18
+      negamaxBetaCutoffs: 520
+      quiescenceBetaCutoffs: 305
+      qsearchStandPatCutoffs: 3151
+      qsearchDeltaPruneChecks: 37
+      qsearchDeltaPruneSkips: 28
+      qsearchNodesWithMoves: 472
+      qsearchGeneratedMoves: 596
+      pvsResearches: 50
+      negamaxFrontierFutilityChecks: 4309
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9d7
+    source: pyrustengine
+    beforeFen: 1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 22 55
+    evaluations: 77524
+    duration: 730.3000000119209
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 23 56
+    evaluations: 2619
+    duration: 108.5
+    metrics:
+      wallMs: 103.27399999368936
+      evalsPerMs: 25.359722681023648
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 24 56
+    evaluations: 138774
+    duration: 1224.800000011921
+    metrics: null
+  - san: a6c7
+    source: pyengine2
+    beforeFen: 1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 25 57
+    evaluations: 4244
+    duration: 111.39999997615814
+    metrics:
+      wallMs: 106.20169999310747
+      evalsPerMs: 39.961695531007855
+      rootMoves: 4
+      negamaxNodes: 5688
+      quiescenceNodes: 4262
+      movegenCalls: 2282
+      tacticalMovegenCalls: 1093
+      legalContextCalls: 2282
+      ttHits: 1357
+      ttCutoffs: 1231
+      betaCutoffs: 825
+      ttEntries: 4237
+      negamaxTtHits: 1280
+      quiescenceTtHits: 77
+      negamaxTtCutoffs: 1213
+      quiescenceTtCutoffs: 18
+      negamaxBetaCutoffs: 520
+      quiescenceBetaCutoffs: 305
+      qsearchStandPatCutoffs: 3151
+      qsearchDeltaPruneChecks: 37
+      qsearchDeltaPruneSkips: 28
+      qsearchNodesWithMoves: 472
+      qsearchGeneratedMoves: 596
+      pvsResearches: 50
+      negamaxFrontierFutilityChecks: 4309
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9d7
+    source: pyrustengine
+    beforeFen: 1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 26 57
+    evaluations: 77524
+    duration: 678.8999999761581
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 27 58
+    evaluations: 2619
+    duration: 63.39999997615814
+    metrics:
+      wallMs: 57.90140002500266
+      evalsPerMs: 45.232066908038114
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 28 58
+    evaluations: 138774
+    duration: 1198.300000011921
+    metrics: null
+  - san: a6c7
+    source: pyengine2
+    beforeFen: 1/3/rk3/7/4p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 29 59
+    evaluations: 4244
+    duration: 142.19999998807907
+    metrics:
+      wallMs: 136.79159997263923
+      evalsPerMs: 31.025296881159925
+      rootMoves: 4
+      negamaxNodes: 5688
+      quiescenceNodes: 4262
+      movegenCalls: 2282
+      tacticalMovegenCalls: 1093
+      legalContextCalls: 2282
+      ttHits: 1357
+      ttCutoffs: 1231
+      betaCutoffs: 825
+      ttEntries: 4237
+      negamaxTtHits: 1280
+      quiescenceTtHits: 77
+      negamaxTtCutoffs: 1213
+      quiescenceTtCutoffs: 18
+      negamaxBetaCutoffs: 520
+      quiescenceBetaCutoffs: 305
+      qsearchStandPatCutoffs: 3151
+      qsearchDeltaPruneChecks: 37
+      qsearchDeltaPruneSkips: 28
+      qsearchNodesWithMoves: 472
+      qsearchGeneratedMoves: 596
+      pvsResearches: 50
+      negamaxFrontierFutilityChecks: 4309
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d9d7
+    source: pyrustengine
+    beforeFen: 1/3/rk3/7/1K2p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 30 59
+    evaluations: 77524
+    duration: 732.3999999761581
+    metrics: null
+  - san: c7a6
+    source: pyengine2
+    beforeFen: 1/3/1k3/7/1Kr1p4/5b5/2P5p2/5N2P2/1P7P1/11/2R4N3 w - 31 60
+    evaluations: 2619
+    duration: 78.69999998807907
+    metrics:
+      wallMs: 72.98930000979453
+      evalsPerMs: 35.88197173624837
+      rootMoves: 2
+      negamaxNodes: 3187
+      quiescenceNodes: 2629
+      movegenCalls: 1117
+      tacticalMovegenCalls: 574
+      legalContextCalls: 1117
+      ttHits: 565
+      ttCutoffs: 548
+      betaCutoffs: 421
+      ttEntries: 2600
+      negamaxTtHits: 552
+      quiescenceTtHits: 13
+      negamaxTtCutoffs: 538
+      quiescenceTtCutoffs: 10
+      negamaxBetaCutoffs: 215
+      quiescenceBetaCutoffs: 206
+      qsearchStandPatCutoffs: 2045
+      qsearchDeltaPruneChecks: 0
+      qsearchDeltaPruneSkips: 0
+      qsearchNodesWithMoves: 267
+      qsearchGeneratedMoves: 311
+      pvsResearches: 15
+      negamaxFrontierFutilityChecks: 2616
+      negamaxFrontierFutilitySkips: 0
+      nullMoveAttempts: 0
+      nullMoveCutoffs: 0
+  - san: d7d9
+    source: pyrustengine
+    beforeFen: 1/3/1k3/7/2r1p4/K4b5/2P5p2/5N2P2/1P7P1/11/2R4N3 b - 32 60
+    evaluations: 138774
+    duration: 1337.5
+    metrics: null
+evaluation:
+  depth: 4
+  evaluations: 138774
+  sans:
+    - san: d7d9
+      score: 51.36000061035156
+    - san: d7c6
+      score: 51.36000061035156
+    - san: d7a4
+      score: 51.36000061035156
+    - san: d7d3
+      score: 51.76000213623047
+    - san: e9f11
+      score: 51.91999816894531
+    - san: e9e10
+      score: 51.91999816894531
+    - san: e9f10
+      score: 51.91999816894531
+    - san: e9f9
+      score: 51.91999816894531
+    - san: e9g9
+      score: 51.91999816894531
+    - san: e9c8
+      score: 51.91999816894531
+    - san: e9d8
+      score: 51.91999816894531
+    - san: e9e8
+      score: 51.91999816894531
+    - san: e9f8
+      score: 51.91999816894531
+    - san: d7d8
+      score: 51.91999816894531
+    - san: d7e8
+      score: 51.91999816894531
+    - san: d7f9
+      score: 51.91999816894531
+    - san: d7g9
+      score: 51.91999816894531
+    - san: d7h9
+      score: 51.91999816894531
+    - san: d7d4
+      score: 51.91999816894531
+    - san: d7d2
+      score: 51.91999816894531
+    - san: f6g7
+      score: 51.91999816894531
+    - san: f6h8
+      score: 51.91999816894531
+    - san: f6e4
+      score: 51.91999816894531
+    - san: f6d2
+      score: 51.91999816894531
+    - san: f6b4
+      score: 51.91999816894531
+    - san: f6e7
+      score: 51.91999816894531
+    - san: f6d8
+      score: 51.91999816894531
+    - san: e9d9
+      score: 52.31999969482422
+    - san: d7e7
+      score: 61.68000030517578
+    - san: f6h2
+      score: 80.36000061035156
+    - san: f6d5
+      score: 80.36000061035156
+    - san: f6h5
+      score: 81.36000061035156
+    - san: f6g4
+      score: 81.36000061035156
+    - san: f6k4
+      score: 81.76000213623047
+    - san: d7d5
+      score: 100.36000061035156
+    - san: d7b7
+      score: 101.36000061035156
+    - san: d7d6
+      score: 101.76000213623047
+    - san: d7d1
+      score: 101.91999816894531
+    - san: d7c7
+      score: 101.91999816894531
+    - san: d7b5
+      score: 102.63999938964844
